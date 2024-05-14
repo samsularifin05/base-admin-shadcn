@@ -13,7 +13,7 @@ export default function GeneralError({
   const navigate = useNavigate();
   return (
     <div className={cn("h-svh w-full", className)}>
-      <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
+      <div className="flex flex-col items-center justify-center w-full h-full gap-2 m-auto">
         {!minimal && (
           <h1 className="text-[7rem] font-bold leading-tight">500</h1>
         )}
@@ -22,7 +22,7 @@ export default function GeneralError({
           We apologize for the inconvenience. <br /> Please try again later.
         </p>
         {!minimal && (
-          <div className="mt-6 flex gap-4">
+          <div className="flex gap-4 mt-6">
             <Button variant="outline" onClick={() => navigate(-1)}>
               Go Back
             </Button>
