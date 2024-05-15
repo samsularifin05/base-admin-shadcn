@@ -4,7 +4,7 @@ import { Layout, LayoutHeader } from "./ui/layout";
 import { Button } from "./custom/button";
 import Nav from "./nav";
 import { cn } from "@/components/lib/utils";
-import { sidelinks } from "@/data/sidelinks";
+import { sidelinks } from "@/router/sidelinks";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   isCollapsed: boolean;
@@ -120,7 +120,7 @@ export default function Sidebar2({
           onClick={() => setIsCollapsed((prev) => !prev)}
           size="icon"
           variant="outline"
-          className="absolute -right-5 top-1/2 hidden rounded-full md:inline-flex"
+          className="absolute hidden rounded-full -right-5 top-1/2 md:inline-flex"
         >
           <IconChevronsLeft
             stroke={1.5}

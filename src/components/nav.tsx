@@ -22,7 +22,7 @@ import {
 } from "./ui/tooltip";
 import { cn } from "@/components/lib/utils";
 import useCheckActiveNav from "@/hooks/use-check-active-nav";
-import { SideLink } from "@/data/sidelinks";
+import { SideLink } from "@/router/sidelinks";
 
 interface NavProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed: boolean;
@@ -217,7 +217,7 @@ function NavLinkIconDropdown({ title, icon, label, sub }: NavLinkProps) {
             <Button
               variant={isChildActive ? "secondary" : "ghost"}
               size="icon"
-              className="h-12 w-12"
+              className="w-12 h-12"
             >
               {icon}
             </Button>
