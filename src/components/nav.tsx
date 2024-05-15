@@ -224,7 +224,7 @@ function NavLinkIconDropdown({ title, icon, label, sub }: NavLinkProps) {
           </DropdownMenuTrigger>
         </TooltipTrigger>
         <TooltipContent side="right" className="flex items-center gap-4">
-          {title}{" "}
+          {title}
           {label && (
             <span className="ml-auto text-muted-foreground">{label}</span>
           )}
@@ -239,16 +239,61 @@ function NavLinkIconDropdown({ title, icon, label, sub }: NavLinkProps) {
           {title} {label ? `(${label})` : ""}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {sub!.map(({ title, icon, label, href }) => (
-          <DropdownMenuItem key={`${title}-${href}`} asChild>
-            <Link
-              to={href}
-              className={`${checkActiveNav(href) ? "bg-secondary" : ""}`}
-            >
-              {icon} <span className="ml-2 max-w-52 text-wrap">{title}</span>
-              {label && <span className="ml-auto text-xs">{label}</span>}
-            </Link>
-          </DropdownMenuItem>
+        {sub!.map(({ title, icon, label, href, sub }) => (
+          <>
+            {sub ? (
+              <>
+                <DropdownMenuItem key={`${title}-${href}`} asChild>
+                  <Link
+                    to={"#"}
+                    className={`${checkActiveNav(href) ? "bg-secondary" : ""}`}
+                  >
+                    {icon}{" "}
+                    <span className="ml-2 max-w-52 text-wrap">{title}</span>
+                    {label && <span className="ml-auto text-xs">{label}</span>}
+                  </Link>
+                </DropdownMenuItem>
+                {sub!.map((list) => {
+                  return (
+                    <div className="ml-4">
+                      <DropdownMenuItem
+                        key={`${list.title}-${list.href}`}
+                        asChild
+                      >
+                        <Link
+                          to={list.href}
+                          className={`${
+                            checkActiveNav(list.href) ? "bg-secondary" : ""
+                          }`}
+                        >
+                          {list.icon}{" "}
+                          <span className="ml-2 max-w-52 text-wrap">
+                            {list.title}
+                          </span>
+                          {list.label && (
+                            <span className="ml-auto text-xs">
+                              {list.label}
+                            </span>
+                          )}
+                        </Link>
+                      </DropdownMenuItem>
+                    </div>
+                  );
+                })}
+              </>
+            ) : (
+              <DropdownMenuItem key={`${title}-${href}`} asChild>
+                <Link
+                  to={href}
+                  className={`${checkActiveNav(href) ? "bg-secondary" : ""}`}
+                >
+                  {icon}{" "}
+                  <span className="ml-2 max-w-52 text-wrap">{title}</span>
+                  {label && <span className="ml-auto text-xs">{label}</span>}
+                </Link>
+              </DropdownMenuItem>
+            )}
+          </>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
