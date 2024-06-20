@@ -1,12 +1,29 @@
-import * as React from "react"
-
-import { cn } from "@/components/lib/utils"
+import * as React from "react";
+import { cn } from "@/components/lib/utils";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type, onChange, ...props }, ref) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value, type } = event.target;
+
+      // Handle type conversion for number input
+      const newValue = type === "number" ? String(value) : value;
+
+      // Invoke onChange callback passed from parent component
+      if (onChange) {
+        onChange({
+          ...event,
+          target: {
+            ...event.target,
+            value: newValue
+          }
+        });
+      }
+    };
+
     return (
       <input
         type={type}
@@ -15,11 +32,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={ref}
+        onChange={handleChange}
         {...props}
       />
-    )
+    );
   }
-)
-Input.displayName = "Input"
+);
 
-export { Input }
+Input.displayName = "Input";
+
+export { Input };

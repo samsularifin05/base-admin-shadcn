@@ -1,40 +1,11 @@
-import {
-  legacy_createStore as createStore,
-  combineReducers,
-  Action,
-  applyMiddleware
-} from "redux";
-import utilityReducer from "./utility";
-import { TypedUseSelectorHook } from "react-redux";
-import { useSelector } from "react-redux";
-import RootAction, { RootState } from "../actions";
-import { reducer as formReducer } from "redux-form";
-import thunk, { ThunkAction, ThunkDispatch } from "redux-thunk";
-
-export type GenericState<T> = RootState<T>;
-
-export const rootReducer = combineReducers({
-  form: formReducer,
+import { combineReducers } from "redux";
+import themeReducer from "./reducerTheme";
+import utilityReducer from "./reducerUtility";
+import formReducer from "./formReducer";
+const rootReducer = combineReducers({
   utility: utilityReducer,
-  utility2: utilityReducer
+  theme: themeReducer,
+  form: formReducer,
 });
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
-
-export type AppDispatch = ThunkDispatch<
-  GenericState<string>,
-  unknown,
-  RootAction
->;
-
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  GenericState<string>,
-  unknown,
-  Action<string>
->;
-
-export const useAppSelector: TypedUseSelectorHook<GenericState<string>> =
-  useSelector;
-
-export default store;
+export { rootReducer };

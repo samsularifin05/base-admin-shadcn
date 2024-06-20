@@ -1,5 +1,5 @@
 import { GeneralError, MaintenanceError, NotFoundError } from "@/pages";
-import { SignIn, SignIn2 } from "@/pages";
+import { LoginForm } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -20,8 +20,7 @@ const router = createBrowserRouter([
       { path: "", Component: NotFoundError }
     ]
   },
-  { path: "/", Component: SignIn },
-  { path: "/sign2", Component: SignIn2 },
+  { path: "/", Component: LoginForm },
   { path: "/500", Component: GeneralError },
   { path: "/404", Component: NotFoundError },
   { path: "/503", Component: MaintenanceError },

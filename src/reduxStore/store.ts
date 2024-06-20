@@ -1,47 +1,37 @@
-import { applyMiddleware, createStore, Store } from "redux";
-import {
-  persistReducer,
-  persistStore,
-  Persistor,
-  Transform
-} from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import thunk, { ThunkMiddleware } from "redux-thunk";
-
-import { composeWithDevTools } from "redux-devtools-extension";
+import { Action, configureStore } from "@reduxjs/toolkit";
+import { ThunkAction, ThunkDispatch, thunk } from "redux-thunk";
 import { rootReducer } from "./reducers";
-import RootAction, { RootState } from "./actions";
+import { useSelector } from "react-redux";
+import { persistStore, persistReducer, PersistConfig } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-const dataTransform: Transform<RootState<string>, RootState<string>> = {
-  in: (inboundState: RootState<string>) => inboundState, // Fungsi untuk memodifikasi data saat menyimpan ke Redux Persist (tidak ada perubahan yang diperlukan)
-  out: (outboundState: RootState<string>) => outboundState // Fungsi untuk memodifikasi data saat mengambil dari Redux Persist (tidak ada perubahan yang diperlukan)
-};
-
-const persistConfig = {
-  blacklist: [
-    "form",
-    "utility",
-    "theme",
-    "gadai",
-    "kasGadai",
-    "member",
-    "lelang",
-    "dashboard",
-    "datamaster"
-  ],
+const persistConfig: PersistConfig<ReturnType<typeof rootReducer>> = {
+  blacklist: ["form", "utility"],
   key: "root",
-  storage,
-  transforms: [dataTransform] // Gunakan transform yang telah dibuat
+  storage
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+const store = configureStore({
+  reducer: persistedReducer,
 
-const middleware = applyMiddleware(
-  thunk as unknown as ThunkMiddleware<RootState<string>, RootAction>
-);
-const store: Store<RootState<string>, RootAction> = createStore(
-  persistedReducer,
-  composeWithDevTools(middleware)
-);
-const persistor: Persistor = persistStore(store);
+  devTools: true,
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false
+    }).concat(thunk)
+});
 
-export { store, persistor };
+export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppDispatch = ThunkDispatch<RootState, unknown, Action>;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
+
+export const useAppSelector = useSelector.withTypes<RootState>();
+
+export { store };

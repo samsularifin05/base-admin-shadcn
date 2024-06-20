@@ -10,4 +10,5 @@ export * from "./sidebar";
 export * from "./top-nav";
 export * from "./user-nav";
 export * from "./top-nav";
+export * from "./form";
 export { ThemeProvider, ThemeSwitch, AppShell, cn };
