@@ -1,3 +1,5 @@
 import LoginForm from "./loginForm";
-export * from "./dto";
-export { LoginForm };
+import { FormLoginDto, intitalFormLogin } from "./dto";
+
+export { LoginForm, intitalFormLogin };
+export type { FormLoginDto };

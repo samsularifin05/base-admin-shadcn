@@ -1,4 +1,4 @@
-import { FormLoginDto, intitalFormLogin } from "@/pages";
+import { FormLoginDto, intitalFormLogin } from "@/pages/login/dto";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface FormState {
