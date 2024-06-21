@@ -6,6 +6,7 @@ import { UserNav } from "./user-nav";
 
 import { Breadcrumbs } from "./BreadcrumbGenerate";
 import { useLocation } from "react-router-dom";
+import ThemeSelector from "./theme/themeSelector";
 interface Props {
   children: React.ReactNode;
 }
@@ -18,6 +19,7 @@ const PanelAdmin = (props: Props) => {
         <div className="flex items-center ml-auto space-x-4">
           <Search />
           <ThemeSwitch />
+          <ThemeSelector />
           <UserNav />
         </div>
       </LayoutHeader>
