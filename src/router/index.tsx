@@ -6,7 +6,7 @@ const router = createBrowserRouter([
   {
     path: "/admin",
     lazy: async () => {
-      const AppShell = await import("../components/app-shell");
+      const AppShell = await import("../components/theme/app-shell");
       return { Component: AppShell.default };
     },
     errorElement: <NotFoundError />,

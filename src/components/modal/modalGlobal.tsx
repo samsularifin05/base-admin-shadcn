@@ -29,7 +29,7 @@ const ModalGlobal = (props: Props) => {
       }
     >
       <DialogOverlay className="grid place-items-start">
-        <DialogContent className="">
+        <DialogContent className="overflow-auto">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription></DialogDescription>

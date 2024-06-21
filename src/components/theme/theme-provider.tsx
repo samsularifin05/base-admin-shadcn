@@ -1,4 +1,8 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
+import { cn } from "../lib/utils";
+import "./theme.css";
+import { useAppSelector } from "@/reduxStore";
 
 type Theme = "dark" | "light" | "system";
 
@@ -55,15 +59,15 @@ export function ThemeProvider({
       setTheme(theme);
     }
   };
+  const themeColor = useAppSelector((state) => state.theme.themeColor);
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
+      <div className={cn(themeColor && `theme-${themeColor}`)}>{children}</div>
     </ThemeProviderContext.Provider>
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
 

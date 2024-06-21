@@ -23,10 +23,10 @@ import { useState } from "react";
 import { DataTablePagination } from "./dataTablePagination";
 import { DataTableViewOptions } from "./dataTableViewOptions";
 import { GlobalFilter } from "./globalFilter";
-import { Button } from "../ui";
 import { AppDispatch, utilityActions } from "@/reduxStore";
 import { useDispatch } from "react-redux";
 import { PlusIcon } from "@radix-ui/react-icons";
+import { Button } from "../custom";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
         <DataTableViewOptions table={table} />
         {titleButton && (
           <Button
-            variant="outline"
+            // variant="outline"
             size="sm"
             onClick={() =>
               dispatch(

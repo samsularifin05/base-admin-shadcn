@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Sidebar from "./sidebar";
+import Sidebar from "../navtiagtion/sidebar";
 import useIsCollapsed from "@/hooks/use-is-collapsed";
-import { ProtectedRoute } from "./ProtectedRoute";
+import { ProtectedRoute } from "../panelAdmin/ProtectedRoute";
 
 export default function AppShell() {
   const [isCollapsed, setIsCollapsed] = useIsCollapsed();

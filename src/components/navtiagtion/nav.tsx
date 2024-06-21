@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useLocation } from "react-router-dom";
 import { IconChevronDown } from "@tabler/icons-react";
-import { Button, buttonVariants } from "./custom/button";
+import { Button, buttonVariants } from "../custom/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger
-} from "./ui/collapsible";
+} from "../ui/collapsible";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,13 +14,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from "./ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger
-} from "./ui/tooltip";
+} from "../ui/tooltip";
 import { cn } from "@/components/lib/utils";
 import useCheckActiveNav from "@/hooks/use-check-active-nav";
 import { SideLink } from "@/router/sidelinks";

@@ -8,6 +8,7 @@ interface ThemeState {
   appSidebarEndMobileToggled: boolean;
   appSidebarMinify: boolean;
   getIsLogin: boolean;
+  themeColor: string;
 }
 
 const initialState: ThemeState = {
@@ -18,6 +19,7 @@ const initialState: ThemeState = {
   appSidebarEndMobileToggled: false,
   appSidebarMinify: false,
   getIsLogin: false,
+  themeColor: "zinc"
 };
 
 const themeSlice = createSlice({
@@ -45,7 +47,10 @@ const themeSlice = createSlice({
     setIsLogin(state, action: PayloadAction<boolean>) {
       state.getIsLogin = action.payload;
     },
-  },
+    setThemeColor(state, action: PayloadAction<string>) {
+      state.themeColor = action.payload;
+    }
+  }
 });
 
 const {
@@ -56,6 +61,7 @@ const {
   toggleSidebar,
   minifySidebar,
   setIsLogin,
+  setThemeColor
 } = themeSlice.actions;
 
 export const themesActions = {
@@ -66,6 +72,7 @@ export const themesActions = {
   toggleSidebar,
   minifySidebar,
   setIsLogin,
+  setThemeColor
 };
 
 export default themeSlice.reducer;

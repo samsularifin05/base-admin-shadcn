@@ -28,7 +28,7 @@ export function UserNav() {
         <Button variant="ghost" className="relative w-8 h-8 rounded-full">
           <Avatar className="w-8 h-8">
             <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>SN</AvatarFallback>
+            <AvatarFallback className="text-white bg-black">SN</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { IconChevronsLeft, IconMenu2, IconX } from "@tabler/icons-react";
-import { Layout, LayoutHeader } from "./ui/layout";
-import { Button } from "./custom/button";
+import { Layout, LayoutHeader } from "../ui/layout";
+import { Button } from "../custom/button";
 import Nav from "./nav";
 import { cn } from "@/components/lib/utils";
 import { sidelinks } from "@/router/sidelinks";
@@ -11,7 +11,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Sidebar2({
+export default function Sidebar({
   className,
   isCollapsed,
   setIsCollapsed

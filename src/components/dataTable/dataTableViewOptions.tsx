@@ -24,7 +24,7 @@ export function DataTableViewOptions<TData>({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="outline"
+          // variant="outline"
           size="sm"
           className="hidden h-8 ml-auto lg:flex"
         >
