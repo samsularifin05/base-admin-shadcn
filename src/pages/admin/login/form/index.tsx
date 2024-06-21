@@ -16,7 +16,7 @@ const FormLogin = () => {
   const navigate = useNavigate();
 
   function onSubmit(data: FormLoginDto) {
-    if (data.email === "samsul026@gmail.com" && data.password === "123456") {
+    if (data.email === "admin" && data.password === "admin") {
       navigate("/admin/dashboard");
       dispatch(themesActions.setIsLogin(true));
     } else {
