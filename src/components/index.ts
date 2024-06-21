@@ -12,5 +12,7 @@ export * from "./top-nav";
 export * from "./user-nav";
 export * from "./top-nav";
 export * from "./form";
+export * from "./dataTable";
+export * from "./modal";
 
 export { ThemeProvider, ThemeSwitch, AppShell, cn, PanelAdmin };
