@@ -38,6 +38,19 @@ export const sidelinks: SideLink[] = [
     icon: <IconApps size={18} />
   },
   {
+    title: "Master Data",
+    label: "",
+    href: "",
+    icon: <IconUserShield size={18} />,
+    sub: [
+      {
+        title: "Master User",
+        label: "",
+        href: "/admin/master-user"
+      }
+    ]
+  },
+  {
     title: "Multi Level",
     label: "",
     href: "",

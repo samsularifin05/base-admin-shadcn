@@ -1,4 +1,5 @@
 import AppShell from "./app-shell";
+import PanelAdmin from "./panelAdmin";
 import { ThemeProvider } from "./theme-provider";
 import ThemeSwitch from "./theme-switch";
 import { cn } from "@/components/lib/utils";
@@ -11,4 +12,5 @@ export * from "./top-nav";
 export * from "./user-nav";
 export * from "./top-nav";
 export * from "./form";
-export { ThemeProvider, ThemeSwitch, AppShell, cn };
+
+export { ThemeProvider, ThemeSwitch, AppShell, cn, PanelAdmin };

@@ -9,15 +9,22 @@ const router = createBrowserRouter([
       const AppShell = await import("../components/app-shell");
       return { Component: AppShell.default };
     },
+    errorElement: <NotFoundError />,
     children: [
       {
         index: true,
         path: "dashboard",
         lazy: async () => ({
-          Component: (await import("../pages/dashboard")).default
+          Component: (await import("../pages/admin/dashboard")).default
         })
       },
-      { path: "", Component: NotFoundError }
+      {
+        path: "master-user",
+        lazy: async () => ({
+          Component: (await import("../pages/admin/masterData/masterUser"))
+            .default
+        })
+      }
     ]
   },
   { path: "/", Component: LoginForm },
