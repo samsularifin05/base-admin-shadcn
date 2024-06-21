@@ -1,22 +1,38 @@
-import { useAppSelector } from "@/reduxStore";
+import { AppDispatch, themesActions, useAppSelector } from "@/reduxStore";
 import { FormLoginDto, intitalFormLogin } from "../dto";
 import { validLoginSchema } from "../validate";
 import { RenderField, cn } from "@/components";
 import { Button } from "@/components/custom";
 import FormPanel from "@/components/form/panelForm";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@radix-ui/react-toast";
 
 const FormLogin = () => {
   const utility = useAppSelector((state) => state.utility);
-
+  const theme = useAppSelector((state) => state.theme);
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   function onSubmit(data: FormLoginDto) {
     if (data.email === "samsul026@gmail.com" && data.password === "123456") {
       navigate("/admin/dashboard");
+      dispatch(themesActions.setIsLogin(true));
     } else {
-      alert("Email Dan Password Salah");
+      // alert("Email Dan Password Salah");
+      toast({
+        title: "Info",
+        description: "Username password salah",
+        position: "top-right",
+        // duration: 3000
+        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
+      });
     }
+  }
+
+  if (theme.getIsLogin) {
+    return <Navigate to={"/admin/dashboard"} />;
   }
 
   return (
@@ -36,7 +52,7 @@ const FormLogin = () => {
                 placeholder="Masukan Email"
                 name="email"
               />
-              <RenderField
+              <RenderField<FormLoginDto>
                 control={form.control}
                 label="Password"
                 placeholder="Masukan Password"

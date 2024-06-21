@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Link, useLocation } from "react-router-dom";
 import { IconChevronDown } from "@tabler/icons-react";
 import { Button, buttonVariants } from "./custom/button";
 import {
@@ -23,6 +24,7 @@ import {
 import { cn } from "@/components/lib/utils";
 import useCheckActiveNav from "@/hooks/use-check-active-nav";
 import { SideLink } from "@/router/sidelinks";
+import { useEffect } from "react";
 
 interface NavProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed: boolean;
@@ -58,6 +60,37 @@ export default function Nav({
     }
 
     return <NavLink {...rest} key={key} closeNav={closeNav} />;
+  };
+  const location = useLocation();
+
+  const { pathname } = location;
+
+  useEffect(() => {
+    setTitle(pathname, links);
+  });
+  const setTitle = (path: string, routeArray: SideLink[]) => {
+    let appTitle;
+
+    routeArray.forEach((row: SideLink) => {
+      if (row.href === path) {
+        appTitle = row.title;
+      } else if (row.sub && row.sub.length > 0) {
+        row.sub.forEach((el: any) => {
+          if (el.href === path) {
+            appTitle = el.title;
+          }
+          if (el.sub?.length > 0) {
+            el.sub.forEach((el: any) => {
+              if (el.href === path) {
+                appTitle = el.title;
+              }
+            });
+          }
+        });
+      }
+    });
+
+    document.title = (appTitle ? `${appTitle} | ` : "") + " Nagagold Store";
   };
   return (
     <div

@@ -11,9 +11,17 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { AppDispatch, themesActions } from "@/reduxStore";
 
 export function UserNav() {
   const navigae = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const logout = () => {
+    dispatch(themesActions.setIsLogin(false));
+    navigae("/");
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -50,7 +58,7 @@ export function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => navigae("/")}>
+        <DropdownMenuItem onClick={() => logout()}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
