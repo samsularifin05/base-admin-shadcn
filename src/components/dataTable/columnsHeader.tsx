@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger
-} from "@radix-ui/react-dropdown-menu";
+} from "@components";
 import { Column } from "@tanstack/react-table";
 import {
   ArrowDownIcon,

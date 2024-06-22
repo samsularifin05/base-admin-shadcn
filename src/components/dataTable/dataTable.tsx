@@ -63,6 +63,13 @@ export function DataTable<TData, TValue>({
       rowSelection
     }
   });
+  // const getSelectedRows = () => {
+  //   const selectedRows = table
+  //     .getSelectedRowModel()
+  //     .flatRows.map((row) => row.original);
+  //   console.log("Selected Rows: ", selectedRows);
+  //   return selectedRows;
+  // };
 
   return (
     <>
@@ -89,6 +96,9 @@ export function DataTable<TData, TValue>({
             {titleButton}
           </Button>
         )}
+        {/* <Button onClick={getSelectedRows} className="ml-2">
+          Get Selected Rows
+        </Button> */}
       </div>
       <div className="border rounded-md">
         <Table>
