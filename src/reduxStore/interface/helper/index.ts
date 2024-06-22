@@ -8,5 +8,3 @@ export interface LocalStorageItem<T> {
   nama: string;
   data: T;
 }
-
-export * from "./tabel-interface";
