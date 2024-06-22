@@ -62,7 +62,7 @@ const MasterData = () => {
                 />
 
                 <Button type="submit" className="mt-2">
-                  Login
+                  Simpan
                 </Button>
               </div>
             </>
