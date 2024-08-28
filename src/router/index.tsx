@@ -1,5 +1,4 @@
 import { GeneralError, MaintenanceError, NotFoundError } from "@/pages";
-import { LoginForm } from "@/pages";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -11,6 +10,7 @@ const router = createBrowserRouter([
     },
     errorElement: <NotFoundError />,
     children: [
+      { path: "*", Component: NotFoundError },
       {
         index: true,
         path: "dashboard",
@@ -27,7 +27,12 @@ const router = createBrowserRouter([
       }
     ]
   },
-  { path: "/", Component: LoginForm },
+  {
+    path: "/",
+    lazy: async () => ({
+      Component: (await import("../pages/admin/login/loginForm")).default
+    })
+  },
   { path: "/500", Component: GeneralError },
   { path: "/404", Component: NotFoundError },
   { path: "/503", Component: MaintenanceError },

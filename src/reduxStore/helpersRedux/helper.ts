@@ -1,6 +1,21 @@
-import { AppDispatch, AppThunk, utilityActions } from "@/reduxStore";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useFormReset } from "@/components/form/FormResetContext";
+import {
+  AppDispatch,
+  AppThunk,
+  resetDefaultForm,
+  utilityActions
+} from "@/reduxStore";
 
 export const utilityController = <T>() => {
+  const { reset } = useFormReset();
+
+  const resetForm = (): AppThunk => {
+    return async (dispatch: AppDispatch) => {
+      reset();
+      dispatch(resetDefaultForm("LoginForm"));
+    };
+  };
   const showModal = (namaForm: string, data?: T): AppThunk => {
     return async (dispatch: AppDispatch) => {
       dispatch(
@@ -8,7 +23,7 @@ export const utilityController = <T>() => {
           isModalShow: true,
           isEdit: namaForm === "EDIT" ? true : false,
           data: data || [],
-          namaForm: namaForm,
+          namaForm: namaForm
         })
       );
     };
@@ -20,7 +35,7 @@ export const utilityController = <T>() => {
           isModalShow: false,
           isEdit: false,
           data: [],
-          namaForm: "",
+          namaForm: ""
         })
       );
     };
@@ -31,7 +46,7 @@ export const utilityController = <T>() => {
       dispatch(
         utilityActions.simpanDataTmp({
           data: data,
-          namaForm: namaForm,
+          namaForm: namaForm
         })
       );
     };
@@ -41,5 +56,6 @@ export const utilityController = <T>() => {
     simpanDataTmp,
     showModal,
     hideModal,
+    resetForm
   };
 };

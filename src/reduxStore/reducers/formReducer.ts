@@ -1,14 +1,17 @@
-import { FormLoginDto, intitalFormLogin } from "@/pages";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { FormLoginDto, intitalFormLogin } from "@/pages";
 
+// Define the state interface
 export interface FormState {
   LoginForm: FormLoginDto;
 }
 
+// Define the initial state
 export const initialState: FormState = {
   LoginForm: intitalFormLogin
 };
 
+// Create the slice
 const formsSlice = createSlice({
   name: "forms",
   initialState,
@@ -28,15 +31,25 @@ const formsSlice = createSlice({
 
       state[form] = { ...state[form], ...validValues };
     },
-    resetForm: <T extends keyof FormState>(
+    resetDefaultForm: (
       state: FormState,
-      action: PayloadAction<keyof FormState>
+      action: PayloadAction<keyof FormState | "all">
     ) => {
-      const form = action.payload as T;
-      state[form] = { ...initialState[form] };
+      const form = action.payload;
+
+      if (form === "all") {
+        // Reset all forms to their initial state
+        Object.keys(state).forEach((key) => {
+          const formKey = key as keyof FormState;
+          state[formKey] = { ...initialState[formKey] };
+        });
+      } else {
+        // Reset a specific form to its initial state
+        state[form] = { ...initialState[form] };
+      }
     }
   }
 });
 
-export const { updateForm, resetForm } = formsSlice.actions;
+export const { updateForm, resetDefaultForm } = formsSlice.actions;
 export default formsSlice.reducer;

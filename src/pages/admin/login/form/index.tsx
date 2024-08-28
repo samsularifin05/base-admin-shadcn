@@ -1,32 +1,20 @@
-import { AppDispatch, themesActions, useAppSelector } from "@/reduxStore";
+import { AppDispatch, useAppSelector } from "@/reduxStore";
 import { FormLoginDto, intitalFormLogin } from "../dto";
 import { validLoginSchema } from "../validate";
-import { FormPanel, Button, toast, RenderField, cn } from "@/components";
-import { Navigate, useNavigate } from "react-router-dom";
+import { FormPanel, Button, RenderField, cn } from "@/components";
+import { Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ToastAction } from "@radix-ui/react-toast";
+import { serviceLogin } from "../redux";
 
 const FormLogin = () => {
   const utility = useAppSelector((state) => state.utility);
   const theme = useAppSelector((state) => state.theme);
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+  const service = serviceLogin();
 
-  function onSubmit(data: FormLoginDto) {
-    if (data.email === "admin@admin.com" && data.password === "admin1234") {
-      navigate("/admin/dashboard");
-      dispatch(themesActions.setIsLogin(true));
-    } else {
-      // alert("Email Dan Password Salah");
-      toast({
-        title: "Info",
-        description: "Username password salah",
-        position: "top-right",
-        // duration: 3000
-        action: <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
-      });
-    }
-  }
+  const handleSubmit = () => {
+    dispatch(service.login());
+  };
 
   if (theme.getIsLogin) {
     return <Navigate to={"/admin/dashboard"} />;
@@ -36,7 +24,7 @@ const FormLogin = () => {
     <div className={cn("grid gap-6")}>
       <FormPanel
         formName={"LoginForm"}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         validate={validLoginSchema}
         intitalFormLogin={intitalFormLogin}
       >
