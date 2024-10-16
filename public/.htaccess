@@ -1,0 +1,51 @@
+# Aktifkan Gzip Compression
+<IfModule mod_deflate.c>
+    # Kompresi untuk berbagai jenis file
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json application/xml application/xhtml+xml application/rss+xml image/svg+xml
+
+    # Jangan kompresi file yang lebih kecil dari 256 byte
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:pdf)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:zip|tar|gz|bz2|7z)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:doc|xls|ppt|odt|ods|odp)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:mp3|mp4|avi|mov|mpeg|wav)$ no-gzip dont-vary
+
+    # Pastikan Gzip berfungsi pada semua browser
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+
+    # Beberapa browser lebih baik menampilkan teks yang tidak terkompresi
+    Header append Vary Accept-Encoding
+</IfModule>
+
+# Konfigurasi Caching untuk CSS dan JS
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Cache untuk file CSS
+    ExpiresByType text/css "access plus 1 month"
+
+    # Cache untuk file JavaScript
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+
+    # Cache untuk file gambar (opsional)
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+
+    # Cache untuk file font (opsional)
+    ExpiresByType font/woff2 "access plus 1 month"
+    ExpiresByType font/woff "access plus 1 month"
+</IfModule>
+
+# Pastikan browser untuk menggunakan cache
+<IfModule mod_headers.c>
+    <filesMatch "\.(css|js)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </filesMatch>
+</IfModule>

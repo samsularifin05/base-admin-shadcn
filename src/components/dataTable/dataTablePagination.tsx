@@ -14,14 +14,39 @@ import {
   SelectTrigger,
   SelectValue
 } from "@components";
+import { useState } from "react";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
+  total: number; // Total baris dari backend
+  page: number;
+  limit: number;
+  onPageChange: (page: number, limit: number) => void;
 }
 
 export function DataTablePagination<TData>({
-  table
+  table,
+  total,
+  page,
+  limit,
+  onPageChange
 }: DataTablePaginationProps<TData>) {
+  const totalPages = Math.ceil(total / limit);
+
+  const [newPage, setNewPage] = useState(page);
+
+  const handlePageSizeChange = (value: string) => {
+    const newPageSize = Number(value);
+    // Set new page size and reset to first page
+    table.setPageSize(newPageSize);
+    onPageChange(1, newPageSize); // Notify parent about page size change
+  };
+
+  const handlePageChange = (newPage: number) => {
+    table.setPageIndex(newPage);
+    onPageChange(newPage, limit); // Notify parent about page change
+    setNewPage(newPage);
+  };
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
@@ -37,12 +62,7 @@ export function DataTablePagination<TData>({
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
-          <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value));
-            }}
-          >
+          <Select value={`${limit}`} onValueChange={handlePageSizeChange}>
             <SelectTrigger className="h-8 w-[70px]">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
@@ -56,15 +76,14 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
+          Page {Number(newPage)} of {totalPages}
         </div>
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
             className="hidden w-8 h-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => handlePageChange(1)}
+            disabled={newPage === 0}
           >
             <span className="sr-only">Go to first page</span>
             <DoubleArrowLeftIcon className="w-4 h-4" />
@@ -72,8 +91,8 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="w-8 h-8 p-0"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => handlePageChange(newPage - 1)}
+            disabled={newPage === 1}
           >
             <span className="sr-only">Go to previous page</span>
             <ChevronLeftIcon className="w-4 h-4" />
@@ -81,8 +100,8 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="w-8 h-8 p-0"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => handlePageChange(newPage + 1)}
+            disabled={newPage >= totalPages}
           >
             <span className="sr-only">Go to next page</span>
             <ChevronRightIcon className="w-4 h-4" />
@@ -90,8 +109,8 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden w-8 h-8 p-0 lg:flex"
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
+            onClick={() => handlePageChange(totalPages)}
+            disabled={newPage >= totalPages - 1}
           >
             <span className="sr-only">Go to last page</span>
             <DoubleArrowRightIcon className="w-4 h-4" />

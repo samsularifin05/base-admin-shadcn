@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useNavigate } from "react-router-dom";
 // import { FormLoginDto } from "../dto";
-import { toast } from "@/components";
 import {
   AppDispatch,
   AppThunk,
   themesActions,
   utilityController
 } from "@/reduxStore";
+import { toast } from "react-toastify";
 
 export const serviceLogin = () => {
   const utility = utilityController();
@@ -22,11 +22,7 @@ export const serviceLogin = () => {
         dispatch(themesActions.setIsLogin(true));
         dispatch(utility.resetForm());
       } else {
-        toast({
-          title: "Info",
-          description: "Username password salah",
-          position: "top-right"
-        });
+        toast.info("Username password salah");
       }
     };
   };

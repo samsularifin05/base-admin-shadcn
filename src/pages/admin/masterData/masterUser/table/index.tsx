@@ -18,7 +18,15 @@ const TableMasterUser = () => {
   ];
 
   return (
-    <DataTable columns={columns} data={data} titleButton="Tambah Data User" />
+    <DataTable
+      columns={columns}
+      data={data}
+      titleButton="Tambah Data User"
+      total={0}
+      page={0}
+      limit={0}
+      onPageChange={() => console.log()}
+    />
   );
 };
 

@@ -20,23 +20,33 @@ import {
   TableRow
 } from "@/components/ui/table";
 import { useState } from "react";
-import { DataTablePagination } from "./dataTablePagination";
-import { DataTableViewOptions } from "./dataTableViewOptions";
 import { GlobalFilter } from "./globalFilter";
-import { AppDispatch, utilityActions } from "@/reduxStore";
+import { AppDispatch, useAppSelector, utilityActions } from "@/reduxStore";
 import { useDispatch } from "react-redux";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Button } from "../custom";
+import { DataTableViewOptions } from "./dataTableViewOptions";
+import { DataTablePagination } from "./dataTablePagination";
+import { Loader2 } from "lucide-react";
+import { cn } from "../lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   titleButton?: string;
+  total: number;
+  page: number;
+  limit: number;
+  onPageChange: (page: number, limit: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  total,
+  page,
+  limit,
+  onPageChange,
   titleButton
 }: DataTableProps<TData, TValue>) {
   const dispatch = useDispatch<AppDispatch>();
@@ -63,13 +73,7 @@ export function DataTable<TData, TValue>({
       rowSelection
     }
   });
-  // const getSelectedRows = () => {
-  //   const selectedRows = table
-  //     .getSelectedRowModel()
-  //     .flatRows.map((row) => row.original);
-  //   console.log("Selected Rows: ", selectedRows);
-  //   return selectedRows;
-  // };
+  const loading = useAppSelector((state) => state.utility.getLoading);
 
   return (
     <>
@@ -121,7 +125,23 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {loading.table ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center "
+                >
+                  <div className="flex justify-center">
+                    <Loader2
+                      className={cn(
+                        "h-5 w-5 text-primary/60 animate-spin mr-2"
+                      )}
+                    />
+                    Loading...
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -151,7 +171,13 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="mt-4">
-        <DataTablePagination table={table} />
+        <DataTablePagination
+          total={total}
+          limit={limit}
+          page={page}
+          onPageChange={onPageChange}
+          table={table}
+        />
       </div>
     </>
   );

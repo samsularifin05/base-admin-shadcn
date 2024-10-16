@@ -6,7 +6,8 @@ import {
   FieldValues,
   UseFormReturn,
   DefaultValues,
-  Resolver
+  Resolver,
+  Path
 } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppDispatch, FormState, updateForm } from "@/reduxStore";
@@ -17,13 +18,14 @@ import { useFormReset } from "./FormResetContext";
 interface FormPanelProps<FormValues extends FieldValues> {
   formName: keyof FormState;
   onSubmit: (values: FormValues, reset: () => void) => void;
-  initialValues?: FormValues;
   children: (props: {
     form: UseFormReturn<FormValues>;
     reset: () => void;
+    setValue: (name: Path<FormValues>, value: any) => void; // Added setValue here
   }) => React.ReactNode;
-  validate: yup.ObjectSchema<FormValues>;
-  intitalFormLogin: DefaultValues<FormValues>;
+  validate?: yup.ObjectSchema<FormValues>;
+  initialValues?: DefaultValues<FormValues>;
+  className?: string;
 }
 
 const FormPanel = <FormValues extends FieldValues>({
@@ -31,13 +33,16 @@ const FormPanel = <FormValues extends FieldValues>({
   children,
   validate,
   formName,
-  intitalFormLogin
+  initialValues,
+  className
 }: FormPanelProps<FormValues>): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
-  const { setResetRef } = useFormReset();
+  const { setResetRef, setSetValueRef } = useFormReset();
   const form = useForm<FormValues>({
-    resolver: yupResolver(validate) as unknown as Resolver<FormValues>,
-    defaultValues: intitalFormLogin
+    resolver: validate
+      ? (yupResolver(validate) as unknown as Resolver<FormValues>)
+      : undefined,
+    defaultValues: initialValues
   });
 
   const resetRef = useRef<() => void>(() => form.reset());
@@ -49,21 +54,30 @@ const FormPanel = <FormValues extends FieldValues>({
   useEffect(() => {
     resetRef.current = form.reset;
     setResetRef(form.reset);
-  }, [form.reset, setResetRef]);
+    setSetValueRef(form.setValue);
+  }, [form.reset, form.setValue, setResetRef, setSetValueRef]);
 
   useEffect(() => {
-    const watchSubscription = form.watch(async (values) => {
-      try {
-        const validValues = await validate.validate(values);
-        dispatch(updateForm({ form: formName, values: validValues }));
-      } catch (error) {
-        console.log();
-      }
-    });
+    if (validate) {
+      const watchSubscription = form.watch(async (values) => {
+        try {
+          if (values) {
+            dispatch(
+              updateForm({
+                form: formName,
+                values: values as Partial<FormState[keyof FormState]>
+              })
+            );
+          }
+        } catch (error) {
+          console.log();
+        }
+      });
 
-    return () => {
-      watchSubscription.unsubscribe(); // Ensure proper cleanup
-    };
+      return () => {
+        watchSubscription.unsubscribe(); // Ensure proper cleanup
+      };
+    }
   }, [form, dispatch, validate, formName]);
 
   return (
@@ -73,9 +87,13 @@ const FormPanel = <FormValues extends FieldValues>({
           e.preventDefault();
           form.handleSubmit((values) => onSubmit(values, handleReset))(e);
         }}
+        className={className}
       >
-        {/* {children({ form, reset: handleReset })} */}
-        {children({ form, reset: () => resetRef.current() })}
+        {children({
+          form,
+          reset: () => resetRef.current(),
+          setValue: form.setValue
+        })}
       </form>
     </Form>
   );
