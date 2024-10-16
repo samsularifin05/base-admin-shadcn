@@ -6,6 +6,7 @@ import * as path from "path";
 import Inspect from "vite-plugin-inspect";
 import viteImagemin from "@vheemstra/vite-plugin-imagemin";
 import imageminWebp from "imagemin-webp";
+const isProduction = process.env.NODE_ENV === "production";
 
 export default defineConfig(() => {
   const timestamp = new Date().getTime();
@@ -16,10 +17,14 @@ export default defineConfig(() => {
       compression({
         algorithm: "gzip"
       }),
-      Inspect({
-        build: true,
-        outputDir: ".vite-inspect"
-      }),
+      ...(isProduction
+        ? []
+        : [
+            Inspect({
+              build: true,
+              outputDir: ".vite-inspect"
+            })
+          ]),
       viteImagemin({
         plugins: {
           jpg: imageminWebp(),
