@@ -1,9 +1,16 @@
-import { FormLoginDto, intitalFormLogin } from "@/pages";
+import {
+  FormLoginDto,
+  IFormMasterUserRequestDto,
+  intitalFormLogin,
+  intitalFormMasterUser
+} from "@/pages";
 
-export interface FormState {
+export interface FormStateReduxFom {
   LoginForm: FormLoginDto;
+  FormMasterUser: IFormMasterUserRequestDto;
 }
 
-export const initialState: FormState = {
-  LoginForm: intitalFormLogin
+export const initialState: FormStateReduxFom = {
+  LoginForm: intitalFormLogin,
+  FormMasterUser: intitalFormMasterUser
 };

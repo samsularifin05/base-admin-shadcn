@@ -21,8 +21,9 @@ const router = createBrowserRouter([
       {
         path: "master-user",
         lazy: async () => ({
-          Component: (await import("../pages/admin/masterData/masterUser"))
-            .default
+          Component: (
+            await import("../pages/admin/masterData/masterUser/masterUser")
+          ).default
         })
       }
     ]

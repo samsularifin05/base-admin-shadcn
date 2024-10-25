@@ -10,13 +10,13 @@ import {
   Path
 } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { AppDispatch, FormState, updateForm } from "@/reduxStore";
+import { AppDispatch, FormStateReduxFom, updateForm } from "@/reduxStore";
 import { Form } from "../ui";
 import * as yup from "yup";
 import { useFormReset } from "./FormResetContext";
 
 interface FormPanelProps<FormValues extends FieldValues> {
-  formName: keyof FormState;
+  formName: keyof FormStateReduxFom;
   onSubmit: (values: FormValues, reset: () => void) => void;
   children: (props: {
     form: UseFormReturn<FormValues>;
@@ -65,7 +65,9 @@ const FormPanel = <FormValues extends FieldValues>({
             dispatch(
               updateForm({
                 form: formName,
-                values: values as Partial<FormState[keyof FormState]>
+                values: values as Partial<
+                  FormStateReduxFom[keyof FormStateReduxFom]
+                >
               })
             );
           }

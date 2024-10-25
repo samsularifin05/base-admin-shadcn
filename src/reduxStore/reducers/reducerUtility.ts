@@ -72,7 +72,7 @@ const utilitySlice = createSlice({
       };
     },
     hideModal(state) {
-      state.hideModal = {
+      state.getModal = {
         isModalShow: false,
         isEdit: false,
         data: [],

@@ -48,19 +48,7 @@ const ModalGlobal = (props: Props) => {
   }, [top]);
 
   return (
-    <Dialog
-      open={utility.getModal.isModalShow}
-      // onOpenChange={() =>
-      //   dispatch(
-      //     utilityActions.showModal({
-      //       isModalShow: false,
-      //       isEdit: false,
-      //       data: [],
-      //       namaForm: ""
-      //     })
-      //   )
-      // }
-    >
+    <Dialog open={utility.getModal.isModalShow}>
       <DialogOverlay className="grid place-items-center">
         <DialogContent
           style={{ top: modalTop, paddingBottom: padding }}
@@ -83,7 +71,8 @@ const ModalGlobal = (props: Props) => {
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          {children}
+          <div className="mt-1 outline outline-[0.5px]"></div>
+          <div className="mt-5">{children}</div>
         </DialogContent>
       </DialogOverlay>
     </Dialog>

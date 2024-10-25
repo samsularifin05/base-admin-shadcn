@@ -3,6 +3,7 @@ import { useFormReset } from "@/components/form/FormResetContext";
 import {
   AppDispatch,
   AppThunk,
+  FormStateReduxFom,
   resetDefaultForm,
   utilityActions
 } from "@/reduxStore";
@@ -10,10 +11,10 @@ import {
 export const utilityController = <T>() => {
   const { reset } = useFormReset();
 
-  const resetForm = (): AppThunk => {
+  const resetForm = (form: keyof FormStateReduxFom): AppThunk => {
     return async (dispatch: AppDispatch) => {
       reset();
-      dispatch(resetDefaultForm("LoginForm"));
+      dispatch(resetDefaultForm(form));
     };
   };
   const showModal = (namaForm: string, data?: T): AppThunk => {

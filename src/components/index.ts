@@ -15,5 +15,6 @@ export * from "./form";
 export * from "./dataTable";
 export * from "./modal";
 export * from "./custom";
+export * from "./lib";
 
 export { ThemeProvider, ThemeSwitch, AppShell, cn, PanelAdmin };

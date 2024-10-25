@@ -19,8 +19,8 @@ export const serviceLogin = () => {
 
       if (data.email === "admin@admin.com" && data.password === "admin1234") {
         navigate("/admin/dashboard");
+        dispatch(utility.resetForm("LoginForm"));
         dispatch(themesActions.setIsLogin(true));
-        dispatch(utility.resetForm());
       } else {
         toast.info("Username password salah");
       }

@@ -9,15 +9,54 @@ import {
 } from "@components";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { IMasterUserResponseDto } from "../dto";
+import { useDispatch } from "react-redux";
+import { AppDispatch, utilityActions } from "@/reduxStore";
 
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+const ActionsCell: React.FC<{ user: IMasterUserResponseDto }> = ({ user }) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="w-8 h-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="w-4 h-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => navigator.clipboard.writeText(user._id)}
+        >
+          Copy user ID
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="cursor-pointer">
+          View customer
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() =>
+            dispatch(
+              utilityActions.showModal({
+                data: user,
+                isEdit: true,
+                isModalShow: true,
+                namaForm: "FormMasterUser"
+              })
+            )
+          }
+        >
+          View user details
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 };
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<IMasterUserResponseDto>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -30,10 +69,7 @@ export const columns: ColumnDef<Payment>[] = [
         aria-label="Select all"
       />
     ),
-    cell: ({ row, table }) => {
-      console.log(
-        table.getSelectedRowModel().flatRows.map((row) => row.original)
-      );
+    cell: ({ row }) => {
       return (
         <Checkbox
           checked={row.getIsSelected()}
@@ -47,61 +83,41 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false
   },
   {
-    accessorKey: "status",
-    header: "Status"
+    id: "no",
+    header: "No",
+    cell: ({ row }) => {
+      return row.index + 1;
+    },
+    enableSorting: false,
+    enableHiding: false
   },
   {
-    accessorKey: "email",
+    accessorKey: "nama_lengkap",
+    header: "Nama Lengkap"
+  },
+  {
+    accessorKey: "username",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Username
           <ArrowUpDown className="w-4 h-4 ml-2" />
         </Button>
       );
     }
   },
   {
-    accessorKey: "amount",
+    accessorKey: "no_hp",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
+      <DataTableColumnHeader column={column} title="No Hp" />
     )
   },
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
-              View customer
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              View payment details
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    }
+    cell: ({ row }) => <ActionsCell user={row.original} />
   }
 ];
