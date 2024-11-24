@@ -707,7 +707,6 @@ const createFolderStructure = (dataJson) => {
              import { AppDispatch, useAppSelector } from '@/reduxStore';
              import { validate${capitalcase(folderName)} } from "../validate";
              import { save${folderName}, update${folderName}ById } from '../../service';
-             import { useDispatch } from 'react-redux';
              import { Request${capitalcase(folderName)}Dto } from '../../model';
 
 
@@ -773,8 +772,6 @@ const createFolderStructure = (dataJson) => {
             `import { DataTable } from "@/components";
             import { columns } from "./column";
             import { AppDispatch, useAppSelector } from "@/reduxStore";
-            import { useEffect } from "react";
-            import { useDispatch } from "react-redux";
             import { get${capitalcase(folderName)} } from "../../service";
           
           const Table${capitalcase(folderName)} = () => {
@@ -824,7 +821,6 @@ const createFolderStructure = (dataJson) => {
             } from '@/components';
             import { Response${capitalcase(folderName)}Dto } from "../../model";
             import { MoreHorizontal } from 'lucide-react';
-            import { useDispatch } from 'react-redux';
             import { AppDispatch, utilityActions } from '@/reduxStore';
             import { delete${capitalcase(folderName)}ById } from '../../service';
 
