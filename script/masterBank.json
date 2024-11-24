@@ -1,0 +1,52 @@
+{
+    "type": "admin",
+    "page": "masterData",
+    "subFolder": "masterBank",
+    "namaFile": "masterBank",
+    "route": "master-bank",
+    "title": "Master Bank",
+    "endpoin": "bank",
+    "dto": {
+      "request_dto": {
+        "_id": "string",
+        "kode_bank": "string",
+        "nama_bank": "string"
+      },
+      "response_dto": {
+        "_id": "string",
+        "kode_bank": "string",
+        "nama_bank": "string"
+      }
+    },
+    "form": {
+      "_id": {
+        "type": "hidden",
+        "validation" : "optional",
+        "primaryKey" : true
+      },
+      "kode_bank": {
+        "type": "text",
+        "validation" : "required"
+      },
+      "nama_bank": {
+        "type": "text",
+        "validation" : "required"
+      }
+    },
+    "table": {
+      "column": {
+        "kode_bank": "string",
+        "nama_bank": "string"
+      },
+      "option": {
+        "create": true,
+        "delete": true,
+        "update": true
+      },
+      "export": {
+        "pdf": true,
+        "excel": true
+      }
+    }
+  }
+  

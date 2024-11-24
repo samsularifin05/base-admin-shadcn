@@ -7,7 +7,9 @@
     "dev": "vite --host ",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ganerate": "cd script && node index.js && cd .. && npm run format",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,json,css,md}\""
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
