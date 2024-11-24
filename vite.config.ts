@@ -81,6 +81,9 @@ export default defineConfig(() => {
           }
         }
       }
+    },
+    server: {
+      open: true // Menambahkan ini agar otomatis membuka browser
     }
   };
 });
