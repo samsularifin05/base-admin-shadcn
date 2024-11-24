@@ -1,7 +1,6 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { compression } from "vite-plugin-compression2";
-
 import * as path from "path";
 import Inspect from "vite-plugin-inspect";
 import viteImagemin from "@vheemstra/vite-plugin-imagemin";
@@ -9,7 +8,8 @@ import imageminWebp from "imagemin-webp";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd());
   const timestamp = new Date().getTime();
 
   return {
@@ -17,7 +17,6 @@ export default defineConfig(() => {
       react(),
       ...(isProduction
         ? [
-            // Hanya aktif di mode produksi
             compression({
               algorithm: "gzip"
             }),
@@ -29,7 +28,6 @@ export default defineConfig(() => {
             })
           ]
         : [
-            // Hanya aktif di mode pengembangan
             Inspect({
               build: true,
               outputDir: ".vite-inspect"
@@ -37,7 +35,10 @@ export default defineConfig(() => {
           ])
     ],
     define: {
-      "process.env": process.env
+      "process.env": {
+        ...env,
+        APP_ENV: mode
+      }
     },
     resolve: {
       alias: {
@@ -54,14 +55,25 @@ export default defineConfig(() => {
     },
     build: {
       minify: "terser",
+      terserOptions: {
+        compress: {
+          drop_console: true, // Menghapus console.log di produksi
+          drop_debugger: true // Menghapus debugger di produksi
+        },
+        format: {
+          comments: false // Menghapus komentar
+        }
+      },
       emptyOutDir: true,
       outDir: "build",
-      sourcemap: false,
+      sourcemap: isProduction ? false : true,
       cssCodeSplit: true,
       modulePreload: true,
       chunkSizeWarningLimit: 1000000,
+      assetsInlineLimit: 8192, // Inline assets kecil hingga 8KB
+      target: "esnext", // Gunakan target ES modern untuk performa terbaik
       ...(isProduction && {
-        cacheControl: "max-age=3600" // Cache control hanya saat production
+        cacheControl: "max-age=3600"
       }),
       rollupOptions: {
         output: {
@@ -87,8 +99,22 @@ export default defineConfig(() => {
         }
       }
     },
+    optimizeDeps: {
+      include: ["react", "react-dom"], // Optimisasi dependency utama
+      exclude: ["some-large-dependency"] // Jangan di-prebundle jika besar
+    },
     server: {
-      open: true
+      open: true,
+      hmr: {
+        overlay: true
+      },
+      watch: {
+        usePolling: true // Untuk mendukung WSL/VM jika perlu
+      }
+    },
+    preview: {
+      port: 5000, // Port untuk preview build
+      strictPort: true // Gagal jika port tidak tersedia
     }
   };
 });
