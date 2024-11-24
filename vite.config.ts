@@ -1,12 +1,13 @@
-import { defineConfig, loadEnv } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import { compression } from "vite-plugin-compression2";
-import * as path from "path";
-import Inspect from "vite-plugin-inspect";
-import viteImagemin from "@vheemstra/vite-plugin-imagemin";
-import imageminWebp from "imagemin-webp";
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { compression } from 'vite-plugin-compression2';
+import * as path from 'path';
+import Inspect from 'vite-plugin-inspect';
+import viteImagemin from '@vheemstra/vite-plugin-imagemin';
+import imageminWebp from 'imagemin-webp';
+import AutoImport from 'unplugin-auto-import/vite';
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
@@ -15,10 +16,21 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
+      AutoImport({
+        imports: [
+          'react',
+          'react-router-dom',
+          {
+            '@reduxjs/toolkit': ['createSlice', 'configureStore'],
+            'react-redux': ['useDispatch', 'useSelector', 'Provider']
+          }
+        ],
+        dts: './src/auto-imports.d.ts'
+      }),
       ...(isProduction
         ? [
             compression({
-              algorithm: "gzip"
+              algorithm: 'gzip'
             }),
             viteImagemin({
               plugins: {
@@ -30,31 +42,31 @@ export default defineConfig(({ mode }) => {
         : [
             Inspect({
               build: true,
-              outputDir: ".vite-inspect"
+              outputDir: '.vite-inspect'
             })
           ])
     ],
     define: {
-      "process.env": {
+      'process.env': {
         ...env,
         APP_ENV: mode
       }
     },
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "src"),
-        "@assets": path.resolve(__dirname, "src/assets"),
-        "@components": path.resolve(__dirname, "src/components/index.ts")
+        '@': path.resolve(__dirname, 'src'),
+        '@assets': path.resolve(__dirname, 'src/assets'),
+        '@components': path.resolve(__dirname, 'src/components/index.ts')
       }
     },
     css: {
       modules: {
-        localsConvention: "camelCase",
-        generateScopedName: "[local]_[hash:base64:5]"
+        localsConvention: 'camelCase',
+        generateScopedName: '[local]_[hash:base64:5]'
       }
     },
     build: {
-      minify: "terser",
+      minify: 'terser',
       terserOptions: {
         compress: {
           drop_console: true, // Menghapus console.log di produksi
@@ -65,33 +77,33 @@ export default defineConfig(({ mode }) => {
         }
       },
       emptyOutDir: true,
-      outDir: "build",
+      outDir: 'build',
       sourcemap: isProduction ? false : true,
       cssCodeSplit: true,
       modulePreload: true,
       chunkSizeWarningLimit: 1000000,
       assetsInlineLimit: 8192, // Inline assets kecil hingga 8KB
-      target: "esnext", // Gunakan target ES modern untuk performa terbaik
+      target: 'esnext', // Gunakan target ES modern untuk performa terbaik
       ...(isProduction && {
-        cacheControl: "max-age=3600"
+        cacheControl: 'max-age=3600'
       }),
       rollupOptions: {
         output: {
           manualChunks(id) {
-            if (id.includes("node_modules")) {
-              return "vendor";
+            if (id.includes('node_modules')) {
+              return 'vendor';
             }
           },
           chunkFileNames: `assets/js/[hash]-${timestamp}.js`,
           entryFileNames: `assets/js/[hash]-${timestamp}.js`,
           assetFileNames: ({ name }) => {
-            if (/\.(gif|jpe?g|png|svg|webp|avif)$/.test(name ?? "")) {
+            if (/\.(gif|jpe?g|png|svg|webp|avif)$/.test(name ?? '')) {
               return `assets/images/${name}`;
             }
-            if (/\.(ttf|woff2|svg)$/.test(name ?? "")) {
+            if (/\.(ttf|woff2|svg)$/.test(name ?? '')) {
               return `assets/font/${name}`;
             }
-            if (/\.css$/.test(name ?? "")) {
+            if (/\.css$/.test(name ?? '')) {
               return `assets/css/[hash]-${timestamp}[extname]`;
             }
             return `assets/[hash]-${timestamp}[extname]`;
@@ -100,8 +112,8 @@ export default defineConfig(({ mode }) => {
       }
     },
     optimizeDeps: {
-      include: ["react", "react-dom"], // Optimisasi dependency utama
-      exclude: ["some-large-dependency"] // Jangan di-prebundle jika besar
+      include: ['react', 'react-dom'], // Optimisasi dependency utama
+      exclude: ['some-large-dependency'] // Jangan di-prebundle jika besar
     },
     server: {
       open: true,
