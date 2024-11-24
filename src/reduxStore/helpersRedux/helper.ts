@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { AppDispatch, AppThunk, utilityActions } from "@/reduxStore";
+import { AppDispatch, AppThunk, utilityActions } from '@/reduxStore';
 
 export const utilityController = <T>() => {
   const showModal = (namaForm: string, data?: T): AppThunk => {
@@ -7,10 +7,10 @@ export const utilityController = <T>() => {
       dispatch(
         utilityActions.showModal({
           isModalShow: true,
-          isEdit: namaForm === "EDIT" ? true : false,
+          isEdit: namaForm === 'EDIT' ? true : false,
           data: data || [],
-          namaForm: namaForm,
-        }),
+          namaForm: namaForm
+        })
       );
     };
   };
@@ -21,8 +21,8 @@ export const utilityController = <T>() => {
           isModalShow: false,
           isEdit: false,
           data: [],
-          namaForm: "",
-        }),
+          namaForm: ''
+        })
       );
     };
   };
@@ -32,8 +32,8 @@ export const utilityController = <T>() => {
       dispatch(
         utilityActions.simpanDataTmp({
           data: data,
-          namaForm: namaForm,
-        }),
+          namaForm: namaForm
+        })
       );
     };
   };
@@ -41,6 +41,6 @@ export const utilityController = <T>() => {
   return {
     simpanDataTmp,
     showModal,
-    hideModal,
+    hideModal
   };
 };

@@ -1,9 +1,9 @@
-import { type ClassValue, clsx } from "clsx";
+import { type ClassValue, clsx } from 'clsx';
 // import { DeepPartial } from "redux";
-import { twMerge } from "tailwind-merge";
-import { getItem } from "./localStroage";
-import { IResponseLoginDto, ResponseLoginDto } from "@/interface";
-import CryptoJS from "crypto-js";
+import { twMerge } from 'tailwind-merge';
+import { getItem } from './localStroage';
+import { IResponseLoginDto, ResponseLoginDto } from '@/interface';
+import CryptoJS from 'crypto-js';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -17,13 +17,13 @@ export function mapFormValuesToDto<T>(formValues: T): DeepPartial<T> {
   return mappedDto;
 }
 
-export function getLastDigit(roleId: string): "user" | "admin" {
+export function getLastDigit(roleId: string): 'user' | 'admin' {
   const lastChar = roleId?.charAt(roleId?.length - 1);
-  return lastChar === "1" ? "user" : "admin";
+  return lastChar === '1' ? 'user' : 'admin';
 }
 
-export const getRole = (): "user" | "admin" => {
-  const datauser = getItem<IResponseLoginDto>("datauser");
+export const getRole = (): 'user' | 'admin' => {
+  const datauser = getItem<IResponseLoginDto>('datauser');
   const userRole = getLastDigit(datauser.role_id);
 
   return userRole;
@@ -32,15 +32,15 @@ export const getRole = (): "user" | "admin" => {
 export const formatToIndonesianDate = (dateString: string) => {
   const date = new Date(dateString);
 
-  const formatter = new Intl.DateTimeFormat("id-ID", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    timeZoneName: "short",
+  const formatter = new Intl.DateTimeFormat('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZoneName: 'short'
   });
 
   return formatter.format(date);
@@ -54,13 +54,13 @@ export const timoutDelay = (time: number = 100): Promise<void> => {
 };
 
 export const generateSignature = (timestampApp: string) => {
-  const userData = getItem<ResponseLoginDto>("userdata");
+  const userData = getItem<ResponseLoginDto>('userdata');
 
   const signature = CryptoJS.SHA256(
     VITE_APP_KEY +
       VITE_APP_SECRETKEY +
-      (userData?.access_token || "") +
-      timestampApp,
+      (userData?.access_token || '') +
+      timestampApp
   ).toString();
 
   return signature;
@@ -73,12 +73,12 @@ export const generateSecret = () => {
 
 export const calculateWindowSize = (windowWidth: number): string => {
   if (windowWidth >= 1200) {
-    return "lg";
+    return 'lg';
   } else if (windowWidth >= 992) {
-    return "md";
+    return 'md';
   } else if (windowWidth >= 768) {
-    return "sm";
+    return 'sm';
   } else {
-    return "xs";
+    return 'xs';
   }
 };

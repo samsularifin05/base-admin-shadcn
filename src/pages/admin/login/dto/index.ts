@@ -3,6 +3,6 @@ export interface FormLoginDto {
   password: string;
 }
 export const intitalFormLogin: FormLoginDto = {
-  email: "",
-  password: "",
+  email: '',
+  password: ''
 };

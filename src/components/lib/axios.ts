@@ -3,26 +3,26 @@ import axios, {
   AxiosError,
   AxiosInstance,
   AxiosRequestConfig,
-  AxiosResponse,
-} from "axios";
-import { getItem } from "./localStroage";
+  AxiosResponse
+} from 'axios';
+import { getItem } from './localStroage';
 // import { ResponseLoginDto } from "@/pages";
 
-import { VITE_APP_BE_URL, generateSecret, generateSignature } from "./utils";
+import { VITE_APP_BE_URL, generateSecret, generateSignature } from './utils';
 
 import {
   ApiResponse,
   ErrorResponse,
   RefresTokenInterFace,
-  ResponseLoginDto,
-} from "../../interface";
+  ResponseLoginDto
+} from '../../interface';
 // import Axios from "axios";
 
 const errorRegex =
   /Unauthorized|Invalid token|Invalid signature|Token Tidak Ditemukan/i;
 class ApiInstance {
   public axios: AxiosInstance;
-  public datauser = getItem<ResponseLoginDto>("userdata");
+  public datauser = getItem<ResponseLoginDto>('userdata');
   public timestamp = new Date().toISOString();
   public signature = generateSignature(this.timestamp);
   public secret = generateSecret();
@@ -32,14 +32,14 @@ class ApiInstance {
       baseURL: VITE_APP_BE_URL,
       // timeout: 120000,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         timestamp: this.timestamp,
         signature: this.signature,
         user_id: this.datauser?.user_id,
         Authorization: this.datauser.access_token
           ? `Bearer ${this.datauser.access_token}`
-          : undefined,
-      },
+          : undefined
+      }
     });
   }
   public async get<T>(endpoint: string): Promise<ApiResponse<T>> {
@@ -81,7 +81,7 @@ class ApiInstance {
 
       if (errResponse.response) {
         const { data } = errResponse.response;
-        const message = data && data.message ? data.message : "Unknown error";
+        const message = data && data.message ? data.message : 'Unknown error';
 
         if (/Token is Expired/i.test(message)) {
           this.refreshToken();
@@ -98,7 +98,7 @@ class ApiInstance {
         throw new Error(errResponse.message);
       }
     } else {
-      throw new Error("Tidak Terhubung Ke Server");
+      throw new Error('Tidak Terhubung Ke Server');
     }
   }
 
@@ -114,40 +114,40 @@ class ApiInstance {
       const url = `${VITE_APP_BE_URL}/auth/refresh`;
       const timestamp = new Date().toISOString();
       const signature = generateSignature(timestamp);
-      const datauser = getItem<ResponseLoginDto>("userdata");
+      const datauser = getItem<ResponseLoginDto>('userdata');
 
       if (!datauser) {
-        throw new Error("User data not found");
+        throw new Error('User data not found');
       }
 
       const config: AxiosRequestConfig = {
         headers: {
           timestamp: timestamp,
           signature: signature,
-          Accept: "application/json",
+          Accept: 'application/json',
           user_id: datauser.user_id,
-          Authorization: `Bearer ${datauser.access_token || ""}`,
-        },
+          Authorization: `Bearer ${datauser.access_token || ''}`
+        }
       };
 
       const bodyValue = {
         user_id: datauser.user_id,
-        refresh_token: datauser.refresh_token,
+        refresh_token: datauser.refresh_token
       };
 
       const response: AxiosResponse<RefresTokenInterFace> = await axios.post(
         url,
         bodyValue,
-        config,
+        config
       );
       return response.data; // Mengembalikan access token baru
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.response) {
         throw new Error(
-          error.response.data.message || "Failed to refresh token",
+          error.response.data.message || 'Failed to refresh token'
         );
       } else {
-        throw new Error(error.message || "Failed to connect to server");
+        throw new Error(error.message || 'Failed to connect to server');
       }
     }
   };

@@ -1,13 +1,13 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FormStateReduxFom, initialState } from "../formState";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { FormStateReduxFom, initialState } from '../formState';
 
 const formsSlice = createSlice({
-  name: "forms",
+  name: 'forms',
   initialState,
   reducers: {
     setValue: <T extends keyof FormStateReduxFom>(
       state: FormStateReduxFom,
-      action: PayloadAction<{ form: T; values: Partial<FormStateReduxFom[T]> }>,
+      action: PayloadAction<{ form: T; values: Partial<FormStateReduxFom[T]> }>
     ) => {
       const { form, values } = action.payload;
 
@@ -19,24 +19,24 @@ const formsSlice = createSlice({
           }
           return acc;
         },
-        {} as Partial<FormStateReduxFom[T]>,
+        {} as Partial<FormStateReduxFom[T]>
       );
 
       state[form] = { ...state[form], ...validValues };
     },
     resetForm: <T extends keyof FormStateReduxFom>(
       state: FormStateReduxFom,
-      action: PayloadAction<keyof FormStateReduxFom | "all">,
+      action: PayloadAction<keyof FormStateReduxFom | 'all'>
     ) => {
       const form = action.payload as T;
       state[form] = { ...initialState[form] };
-    },
-  },
+    }
+  }
 });
 
 export const { setValue, resetForm } = formsSlice.actions;
 export const formActions = {
   setValue,
-  resetForm,
+  resetForm
 };
 export default formsSlice.reducer;

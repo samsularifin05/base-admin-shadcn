@@ -1,10 +1,10 @@
-import ViteLogo from "@/assets/react.svg";
-import FormLogin from "./form";
+import ViteLogo from '@/assets/react.svg';
+import FormLogin from './form';
 
 const LoginForm = () => {
-  document.title = "Login";
+  document.title = 'Login';
 
-  console.log("MASUK");
+  console.log('MASUK');
   return (
     <div className="container relative grid flex-col items-center justify-center h-svh lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative flex-col hidden h-full p-10 text-white bg-muted dark:border-r lg:flex">

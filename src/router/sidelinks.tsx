@@ -1,4 +1,4 @@
-import { IconUserShield } from "@tabler/icons-react";
+import { IconUserShield } from '@tabler/icons-react';
 
 export interface NavLink {
   title: string;
@@ -14,9 +14,22 @@ export interface SideLink extends NavLink {
 
 export const sidelinks: SideLink[] = [
   {
-    title: "Dashboard",
-    label: "",
-    href: "/admin/dashboard",
+    title: 'Dashboard',
+    label: '',
+    href: '/admin/dashboard',
     icon: <IconUserShield size={18} />
+  },
+  {
+    title: 'Master Data',
+    label: '',
+    href: '#',
+    icon: <IconUserShield size={18} />,
+    sub: [
+      {
+        title: 'Master Bank',
+        label: '',
+        href: 'master-bank'
+      }
+    ]
   }
 ];

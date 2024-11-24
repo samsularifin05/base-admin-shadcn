@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Control, FieldValues, Path } from "react-hook-form";
-import { PasswordInput } from "../custom";
+import { Control, FieldValues, Path } from 'react-hook-form';
+import { PasswordInput } from '../custom';
 import {
   Checkbox,
   FormControl,
@@ -10,15 +10,15 @@ import {
   // FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "../ui";
-import { Input } from "../ui/input";
+  FormMessage
+} from '../ui';
+import { Input } from '../ui/input';
 import {
   ChangeEvent,
   HTMLInputTypeAttribute,
   TextareaHTMLAttributes,
-  useEffect,
-} from "react";
+  useEffect
+} from 'react';
 
 interface TypedFieldProps<FormValues extends FieldValues> {
   name: Path<FormValues>;
@@ -37,7 +37,7 @@ interface TypedFieldProps<FormValues extends FieldValues> {
   value?: string | number;
   onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
   icon?: JSX.Element | string; // Ikon yang akan ditampilkan
-  iconPosition?: "left" | "right" | "none"; // Posisi ikon: kiri atau kanan
+  iconPosition?: 'left' | 'right' | 'none'; // Posisi ikon: kiri atau kanan
   onClickIcon?: () => void;
 }
 
@@ -49,9 +49,9 @@ const ReanderField = <FormValues extends Record<string, any>>({
   readOnly,
   isTextarea = false,
   hiddenText,
-  type = "text",
-  className = "",
-  note = "",
+  type = 'text',
+  className = '',
+  note = '',
   rows = 4,
   tabIndex,
   value,
@@ -59,7 +59,7 @@ const ReanderField = <FormValues extends Record<string, any>>({
   onClickIcon,
   icon,
   maxLength,
-  iconPosition = "right",
+  iconPosition = 'right'
 }: TypedFieldProps<FormValues>) => {
   return (
     <FormField
@@ -68,12 +68,12 @@ const ReanderField = <FormValues extends Record<string, any>>({
       render={({ field }) => {
         useEffect(() => {
           if (value !== undefined) {
-            field.onChange(value || field.value || "");
+            field.onChange(value || field.value || '');
           }
         }, [field, value]);
         return (
           <FormItem className="space-y-1">
-            {type !== "checkbox" && type !== "hidden" && (
+            {type !== 'checkbox' && type !== 'hidden' && (
               <FormLabel className="gap-2">
                 {label}
                 {note && (
@@ -82,7 +82,7 @@ const ReanderField = <FormValues extends Record<string, any>>({
               </FormLabel>
             )}
             <FormControl>
-              {type === "checkbox" ? (
+              {type === 'checkbox' ? (
                 <FormLabel className="flex items-center cursor-pointer">
                   <Checkbox
                     {...field}
@@ -99,7 +99,7 @@ const ReanderField = <FormValues extends Record<string, any>>({
                     {label}
                   </span>
                 </FormLabel>
-              ) : type === "file" ? (
+              ) : type === 'file' ? (
                 <input
                   type="file"
                   readOnly={readOnly}
@@ -122,8 +122,8 @@ const ReanderField = <FormValues extends Record<string, any>>({
                   }}
                   className={`block ${
                     readOnly
-                      ? "bg-gray-200 outline-gray-200"
-                      : "bg-background focus:border-primary focus:outline-none"
+                      ? 'bg-gray-200 outline-gray-200'
+                      : 'bg-background focus:border-primary focus:outline-none'
                   } w-full border rounded-md border-input   ${className}`}
                   // className={`block w-full border rounded-md border-input bg-background focus:border-primary focus:outline-none ${className}`}
                 />
@@ -133,17 +133,17 @@ const ReanderField = <FormValues extends Record<string, any>>({
                   rows={rows}
                   readOnly={readOnly}
                   placeholder={placeholder}
-                  value={field.value ?? ""}
+                  value={field.value ?? ''}
                   className={`block ${
                     readOnly
-                      ? "bg-gray-200 outline-gray-200"
-                      : "bg-background focus:border-primary focus:outline-none"
+                      ? 'bg-gray-200 outline-gray-200'
+                      : 'bg-background focus:border-primary focus:outline-none'
                   } w-full border rounded-md border-input  px-3 py-2  ${className}`}
                 />
               ) : (
                 <div className="relative flex items-center">
                   {/* Kontainer untuk grup input */}
-                  {iconPosition === "left" && (
+                  {iconPosition === 'left' && (
                     <button
                       onClick={onClickIcon}
                       type="button"
@@ -158,21 +158,21 @@ const ReanderField = <FormValues extends Record<string, any>>({
                     readOnly={readOnly}
                     tabIndex={tabIndex}
                     placeholder={placeholder}
-                    value={field.value || ""}
+                    value={field.value || ''}
                     maxLength={maxLength}
                     onChange={(e) => {
                       field.onChange(e?.target?.value);
                       if (onChange) onChange(e);
                     }}
                     className={`block ${
-                      iconPosition === "left" ? "pl-10" : "pr-10"
+                      iconPosition === 'left' ? 'pl-10' : 'pr-10'
                     } ${
                       readOnly
-                        ? "bg-gray-200 outline-gray-200"
-                        : "bg-background focus:border-primary focus:outline-none"
+                        ? 'bg-gray-200 outline-gray-200'
+                        : 'bg-background focus:border-primary focus:outline-none'
                     } w-full border rounded-md border-input ${className}`}
                   />
-                  {iconPosition === "right" && (
+                  {iconPosition === 'right' && (
                     <button
                       onClick={onClickIcon}
                       type="button"

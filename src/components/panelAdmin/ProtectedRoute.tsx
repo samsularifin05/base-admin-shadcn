@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
-import { useAppSelector } from "@/reduxStore";
+import React, { ReactNode } from 'react';
+import { Navigate } from 'react-router-dom';
+import { useAppSelector } from '@/reduxStore';
 
 interface ProtectedRouteProps {
   children: ReactNode;

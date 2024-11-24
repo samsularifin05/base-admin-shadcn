@@ -65,10 +65,10 @@
   .collapsibleDropdown {
     overflow: hidden;
   }
-  .collapsibleDropdown[data-state="open"] {
+  .collapsibleDropdown[data-state='open'] {
     animation: slideDown 200ms ease-out;
   }
-  .collapsibleDropdown[data-state="closed"] {
+  .collapsibleDropdown[data-state='closed'] {
     animation: slideUp 200ms ease-out;
   }
 

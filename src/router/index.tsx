@@ -1,35 +1,45 @@
-import { GeneralError, MaintenanceError, NotFoundError } from "@/pages";
-import { createBrowserRouter } from "react-router-dom";
+import { GeneralError, MaintenanceError, NotFoundError } from '@/pages';
+import { createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
-    path: "/admin",
+    path: '/admin',
     lazy: async () => {
-      const AppShell = await import("../components/theme/app-shell");
+      const AppShell = await import('../components/theme/app-shell');
       return { Component: AppShell.default };
     },
     errorElement: <NotFoundError />,
     children: [
-      { path: "*", Component: NotFoundError },
+      { path: '*', Component: NotFoundError },
       {
         index: true,
-        path: "dashboard",
+        path: 'dashboard',
         lazy: async () => ({
-          Component: (await import("../pages/admin/dashboard")).default
+          Component: (await import('../pages/admin/dashboard')).default
+        })
+      },
+      {
+        path: 'master-bank',
+        lazy: async () => ({
+          Component: (
+            await import(
+              '@/pages/admin/masterData/masterBank/ui/formMasterBank'
+            )
+          ).default
         })
       }
     ]
   },
   {
-    path: "/",
+    path: '/',
     lazy: async () => ({
-      Component: (await import("../pages/admin/login/loginForm")).default
+      Component: (await import('../pages/admin/login/loginForm')).default
     })
   },
-  { path: "/500", Component: GeneralError },
-  { path: "/404", Component: NotFoundError },
-  { path: "/503", Component: MaintenanceError },
-  { path: "*", Component: NotFoundError }
+  { path: '/500', Component: GeneralError },
+  { path: '/404', Component: NotFoundError },
+  { path: '/503', Component: MaintenanceError },
+  { path: '*', Component: NotFoundError }
 ]);
 
 export default router;

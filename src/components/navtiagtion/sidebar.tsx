@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { IconChevronsLeft, IconMenu2, IconX } from "@tabler/icons-react";
-import { Layout, LayoutHeader } from "../ui/layout";
-import { Button } from "../custom/button";
-import Nav from "./nav";
-import { cn } from "@/components/lib/utils";
-import { sidelinks } from "@/router/sidelinks";
+import { useEffect, useState } from 'react';
+import { IconChevronsLeft, IconMenu2, IconX } from '@tabler/icons-react';
+import { Layout, LayoutHeader } from '../ui/layout';
+import { Button } from '../custom/button';
+import Nav from './nav';
+import { cn } from '@/components/lib/utils';
+import { sidelinks } from '@/router/sidelinks';
 
 interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   isCollapsed: boolean;
@@ -14,16 +14,16 @@ interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
 export default function Sidebar({
   className,
   isCollapsed,
-  setIsCollapsed,
+  setIsCollapsed
 }: SidebarProps) {
   const [navOpened, setNavOpened] = useState(false);
 
   /* Make body not scrollable when navBar is opened */
   useEffect(() => {
     if (navOpened) {
-      document.body.classList.add("overflow-hidden");
+      document.body.classList.add('overflow-hidden');
     } else {
-      document.body.classList.remove("overflow-hidden");
+      document.body.classList.remove('overflow-hidden');
     }
   }, [navOpened]);
 
@@ -31,28 +31,28 @@ export default function Sidebar({
     <aside
       className={cn(
         `fixed left-0 right-0 top-0 z-50 w-full border-r-2 border-r-muted transition-[width] md:bottom-0 md:right-auto md:h-svh ${
-          isCollapsed ? "md:w-14" : "md:w-64"
+          isCollapsed ? 'md:w-14' : 'md:w-64'
         }`,
-        className,
+        className
       )}
     >
       {/* Overlay in mobile */}
       <div
         onClick={() => setNavOpened(false)}
         className={`absolute inset-0 transition-[opacity] delay-100 duration-700 ${
-          navOpened ? "h-svh opacity-50" : "h-0 opacity-0"
+          navOpened ? 'h-svh opacity-50' : 'h-0 opacity-0'
         } w-full bg-black md:hidden`}
       />
 
       <Layout>
         {/* Header */}
         <LayoutHeader className="sticky top-0 justify-between px-4 py-3 shadow md:px-4">
-          <div className={`flex items-center ${!isCollapsed ? "gap-2" : ""}`}>
+          <div className={`flex items-center ${!isCollapsed ? 'gap-2' : ''}`}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 256 256"
               className={`transition-all ${
-                isCollapsed ? "h-6 w-6" : "h-8 w-8"
+                isCollapsed ? 'h-6 w-6' : 'h-8 w-8'
               }`}
             >
               <rect width="256" height="256" fill="none"></rect>
@@ -82,7 +82,7 @@ export default function Sidebar({
             </svg>
             <div
               className={`flex flex-col justify-end truncate ${
-                isCollapsed ? "invisible w-0" : "visible w-auto"
+                isCollapsed ? 'invisible w-0' : 'visible w-auto'
               }`}
             >
               <span className="font-medium">Shadcn Admin</span>
@@ -108,7 +108,7 @@ export default function Sidebar({
         <Nav
           id="sidebar-menu"
           className={`h-full flex-1 overflow-auto ${
-            navOpened ? "max-h-screen" : "max-h-0 py-0 md:max-h-screen md:py-2"
+            navOpened ? 'max-h-screen' : 'max-h-0 py-0 md:max-h-screen md:py-2'
           }`}
           closeNav={() => setNavOpened(false)}
           isCollapsed={isCollapsed}
@@ -124,7 +124,7 @@ export default function Sidebar({
         >
           <IconChevronsLeft
             stroke={1.5}
-            className={`h-5 w-5 ${isCollapsed ? "rotate-180" : ""}`}
+            className={`h-5 w-5 ${isCollapsed ? 'rotate-180' : ''}`}
           />
         </Button>
       </Layout>

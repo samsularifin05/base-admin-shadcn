@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 interface LocalStorageProps<T> {
   key: string;
@@ -7,7 +7,7 @@ interface LocalStorageProps<T> {
 
 export default function useLocalStorage<T>({
   key,
-  defaultValue,
+  defaultValue
 }: LocalStorageProps<T>) {
   const [value, setValue] = useState<T>(() => {
     const storedValue = localStorage.getItem(key);

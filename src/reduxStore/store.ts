@@ -1,14 +1,14 @@
-import { Action, configureStore } from "@reduxjs/toolkit";
-import { ThunkAction, ThunkDispatch, thunk } from "redux-thunk";
-import { rootReducer } from "./reducers";
-import { useSelector } from "react-redux";
-import { persistStore, persistReducer, PersistConfig } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import { Action, configureStore } from '@reduxjs/toolkit';
+import { ThunkAction, ThunkDispatch, thunk } from 'redux-thunk';
+import { rootReducer } from './reducers';
+import { useSelector } from 'react-redux';
+import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 const persistConfig: PersistConfig<ReturnType<typeof rootReducer>> = {
-  blacklist: ["form", "utility"],
-  key: "root",
-  storage,
+  blacklist: ['form', 'utility'],
+  key: 'root',
+  storage
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -18,8 +18,8 @@ const store = configureStore({
   // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
-    }).concat(thunk),
+      serializableCheck: false
+    }).concat(thunk)
 });
 
 export const persistor = persistStore(store);

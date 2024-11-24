@@ -1,10 +1,10 @@
-import * as React from "react";
-import { IconEye, IconEyeOff } from "@tabler/icons-react";
-import { Button } from "./button";
-import { cn } from "@/components/lib/utils";
+import * as React from 'react';
+import { IconEye, IconEyeOff } from '@tabler/icons-react';
+import { Button } from './button';
+import { cn } from '@/components/lib/utils';
 
 export interface PasswordInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {}
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'> {}
 
 const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
   ({ className, ...props }, ref) => {
@@ -12,10 +12,10 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
     return (
       <div className="relative rounded-md">
         <input
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           className={cn(
-            "flex w-full h-10 px-3 py-2 text-sm border rounded-md border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none",
-            className,
+            'flex w-full h-10 px-3 py-2 text-sm border rounded-md border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none',
+            className
           )}
           ref={ref}
           {...props}
@@ -31,8 +31,8 @@ const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
         </Button>
       </div>
     );
-  },
+  }
 );
-PasswordInput.displayName = "PasswordInput";
+PasswordInput.displayName = 'PasswordInput';
 
 export { PasswordInput };

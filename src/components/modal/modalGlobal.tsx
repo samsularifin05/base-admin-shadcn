@@ -1,9 +1,9 @@
-import React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui";
-import { AppDispatch, useAppSelector, utilityActions } from "@/reduxStore";
-import { DialogDescription, DialogOverlay } from "@radix-ui/react-dialog";
-import { useDispatch } from "react-redux";
-import { cn } from "../lib/utils";
+import React from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui';
+import { AppDispatch, useAppSelector, utilityActions } from '@/reduxStore';
+import { DialogDescription, DialogOverlay } from '@radix-ui/react-dialog';
+import { useDispatch } from 'react-redux';
+import { cn } from '../lib/utils';
 
 interface Props {
   title: string;
@@ -13,12 +13,12 @@ interface Props {
 }
 
 const ModalGlobal = (props: Props) => {
-  const { title, children, className = "max-w-lg", isFullScreen } = props;
+  const { title, children, className = 'max-w-lg', isFullScreen } = props;
 
   const utility = useAppSelector((state) => state.utility);
   const dispatch = useDispatch<AppDispatch>();
-  const top = isFullScreen ? "3%" : "10%";
-  const padding = isFullScreen ? "5%" : "0%";
+  const top = isFullScreen ? '3%' : '10%';
+  const padding = isFullScreen ? '5%' : '0%';
 
   const [modalTop, setModalTop] = React.useState(top);
 
@@ -32,7 +32,7 @@ const ModalGlobal = (props: Props) => {
     };
 
     // Add event listeners for keyboard show and hide
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       if (window.innerHeight < 500) {
         handleKeyboardShow();
       } else {
@@ -42,8 +42,8 @@ const ModalGlobal = (props: Props) => {
 
     return () => {
       // Clean up listeners
-      window.removeEventListener("resize", handleKeyboardShow);
-      window.removeEventListener("resize", handleKeyboardHide);
+      window.removeEventListener('resize', handleKeyboardShow);
+      window.removeEventListener('resize', handleKeyboardHide);
     };
   }, [top]);
 
@@ -54,7 +54,7 @@ const ModalGlobal = (props: Props) => {
           style={{ top: modalTop, paddingBottom: padding }}
           className={cn(
             `overflow-auto max-h-screen overflow-y-auto no-scrollbar`,
-            className,
+            className
           )}
           onClick={() => {
             dispatch(
@@ -62,8 +62,8 @@ const ModalGlobal = (props: Props) => {
                 isModalShow: false,
                 isEdit: false,
                 data: [],
-                namaForm: "",
-              }),
+                namaForm: ''
+              })
             );
           }}
         >

@@ -1,10 +1,10 @@
-import { AppDispatch, formActions, useAppSelector } from "@/reduxStore";
-import { validLoginSchema } from "../validate";
-import { FormPanel, Button, RenderField, cn } from "@/components";
-import { Navigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { serviceLogin } from "../redux";
-import { useEffect } from "react";
+import { AppDispatch, formActions, useAppSelector } from '@/reduxStore';
+import { validLoginSchema } from '../validate';
+import { FormPanel, Button, RenderField, cn } from '@/components';
+import { Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { serviceLogin } from '../redux';
+import { useEffect } from 'react';
 
 const FormLogin = () => {
   const utility = useAppSelector((state) => state.utility);
@@ -19,23 +19,23 @@ const FormLogin = () => {
   useEffect(() => {
     dispatch(
       formActions.setValue({
-        form: "LoginForm",
+        form: 'LoginForm',
         values: {
-          email: "admin@gmail.com",
-          password: "admin1234",
-        },
-      }),
+          email: 'admin@gmail.com',
+          password: 'admin1234'
+        }
+      })
     );
   }, [dispatch]);
 
   if (theme.getIsLogin) {
-    return <Navigate to={"/admin/dashboard"} />;
+    return <Navigate to={'/admin/dashboard'} />;
   }
 
   return (
-    <div className={cn("grid gap-6")}>
+    <div className={cn('grid gap-6')}>
       <FormPanel
-        formName={"LoginForm"}
+        formName={'LoginForm'}
         onSubmit={handleSubmit}
         validate={validLoginSchema}
       >

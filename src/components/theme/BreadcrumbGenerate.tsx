@@ -1,15 +1,15 @@
-import { SideLink, sidelinks } from "@/router/sidelinks";
+import { SideLink, sidelinks } from '@/router/sidelinks';
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import React from "react";
+  BreadcrumbSeparator
+} from '@/components/ui/breadcrumb';
+import React from 'react';
 export const Breadcrumbs: React.FC<{ currentPath: string }> = ({
-  currentPath,
+  currentPath
 }) => {
   const findBreadcrumbPath = (menu: SideLink[], path: string): SideLink[] => {
     for (const item of menu) {

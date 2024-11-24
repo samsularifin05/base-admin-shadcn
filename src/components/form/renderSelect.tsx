@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Control, FieldValues, Path } from "react-hook-form";
+import { Control, FieldValues, Path } from 'react-hook-form';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "../ui";
-import Select from "react-select";
+  FormMessage
+} from '../ui';
+import Select from 'react-select';
 // import { OptionTypeBase, Props as SelectProps } from "react-select";
 
 interface TypedSelectProps<FormValues extends FieldValues> {
@@ -27,7 +27,7 @@ const RenderSelect = <FormValues extends Record<string, any>>({
   control,
   options,
   placeholder,
-  onChange,
+  onChange
 }: TypedSelectProps<FormValues>) => {
   return (
     <FormField
@@ -37,7 +37,7 @@ const RenderSelect = <FormValues extends Record<string, any>>({
         // Convert options to the format required by react-select
         const selectOptions = options.map((option) => ({
           value: option.value,
-          label: option.label,
+          label: option.label
         }));
 
         return (
@@ -47,7 +47,7 @@ const RenderSelect = <FormValues extends Record<string, any>>({
               <Select
                 value={
                   selectOptions.find(
-                    (option) => option.value === field.value,
+                    (option) => option.value === field.value
                   ) || null
                 }
                 onChange={(selected) => {
@@ -66,38 +66,38 @@ const RenderSelect = <FormValues extends Record<string, any>>({
                 styles={{
                   control: (provided) => ({
                     ...provided,
-                    width: "100%",
-                    borderColor: "",
-                    boxShadow: "none",
-                    "&:hover": {
-                      borderColor: "gray",
-                    },
+                    width: '100%',
+                    borderColor: '',
+                    boxShadow: 'none',
+                    '&:hover': {
+                      borderColor: 'gray'
+                    }
                   }),
                   menu: (provided) => ({
                     ...provided,
-                    zIndex: 9999,
+                    zIndex: 9999
                   }),
                   option: (provided, state) => ({
                     ...provided,
                     backgroundColor: state.isSelected
-                      ? "#35A576"
+                      ? '#35A576'
                       : provided.backgroundColor,
-                    color: state.isSelected ? "white" : "black",
+                    color: state.isSelected ? 'white' : 'black'
                   }),
                   singleValue: (provided) => ({
                     ...provided,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: "16rem", // Adjust width as needed
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '16rem' // Adjust width as needed
                   }),
                   placeholder: (provided) => ({
                     ...provided,
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: "16rem", // Adjust width as needed
-                  }),
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '16rem' // Adjust width as needed
+                  })
                 }}
               />
             </FormControl>

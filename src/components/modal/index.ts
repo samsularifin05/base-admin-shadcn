@@ -1,3 +1,3 @@
-import ModalGlobal from "./modalGlobal";
+import ModalGlobal from './modalGlobal';
 
 export { ModalGlobal };

@@ -6,9 +6,9 @@ import React, {
   useContext,
   useRef,
   ReactNode,
-  useCallback,
-} from "react";
-import { Path, UseFormSetValue } from "react-hook-form";
+  useCallback
+} from 'react';
+import { Path, UseFormSetValue } from 'react-hook-form';
 
 interface FormResetContextProps {
   reset: () => void;
@@ -18,11 +18,11 @@ interface FormResetContextProps {
 }
 
 const FormResetContext = createContext<FormResetContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 export const FormResetProvider: React.FC<{ children: ReactNode }> = ({
-  children,
+  children
 }) => {
   const resetRef = useRef<() => void>(() => {});
   const setValueRef = useRef<UseFormSetValue<any> | null>(null);
@@ -45,7 +45,7 @@ export const FormResetProvider: React.FC<{ children: ReactNode }> = ({
     if (setValueRef.current) {
       setValueRef.current(name, value);
     } else {
-      console.warn("setValue function is not available.");
+      console.warn('setValue function is not available.');
     }
   }, []);
 
@@ -61,7 +61,7 @@ export const FormResetProvider: React.FC<{ children: ReactNode }> = ({
 export const useFormReset = (): FormResetContextProps => {
   const context = useContext(FormResetContext);
   if (context === undefined) {
-    throw new Error("useFormReset must be used within a FormResetProvider");
+    throw new Error('useFormReset must be used within a FormResetProvider');
   }
   return context;
 };

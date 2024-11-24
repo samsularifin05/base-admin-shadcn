@@ -1,6 +1,6 @@
 export const urlApi = {
-  auth: "auth/login",
+  auth: 'auth/login',
   masterData: {
-    masterBank: "bank",
-  },
+    masterBank: 'bank'
+  }
 };

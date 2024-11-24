@@ -2,9 +2,9 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from "@radix-ui/react-icons";
-import { Table } from "@tanstack/react-table";
+  DoubleArrowRightIcon
+} from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
 
 import {
   Button,
@@ -12,9 +12,9 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@components";
-import { useState } from "react";
+  SelectValue
+} from '@components';
+import { useState } from 'react';
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -29,7 +29,7 @@ export function DataTablePagination<TData>({
   total,
   page,
   limit,
-  onPageChange,
+  onPageChange
 }: DataTablePaginationProps<TData>) {
   const totalPages = Math.ceil(total / limit);
 
@@ -52,11 +52,11 @@ export function DataTablePagination<TData>({
       <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length ? (
           <>
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredSelectedRowModel().rows.length} of{' '}
             {table.getFilteredRowModel().rows.length} row(s) selected.
           </>
         ) : (
-          ""
+          ''
         )}
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">

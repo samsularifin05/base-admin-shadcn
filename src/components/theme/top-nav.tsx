@@ -1,13 +1,13 @@
-import { cn } from "@/components/lib/utils";
-import { Link } from "react-router-dom";
+import { cn } from '@/components/lib/utils';
+import { Link } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "../custom/button";
-import { IconMenu } from "@tabler/icons-react";
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
+import { Button } from '../custom/button';
+import { IconMenu } from '@tabler/icons-react';
 
 interface TopNavProps extends React.HTMLAttributes<HTMLElement> {
   links: {
@@ -32,7 +32,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
               <DropdownMenuItem key={`${title}-${href}`} asChild>
                 <Link
                   to={href}
-                  className={!isActive ? "text-muted-foreground" : ""}
+                  className={!isActive ? 'text-muted-foreground' : ''}
                 >
                   {title}
                 </Link>
@@ -44,8 +44,8 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
 
       <nav
         className={cn(
-          "hidden items-center space-x-4 md:flex lg:space-x-6",
-          className,
+          'hidden items-center space-x-4 md:flex lg:space-x-6',
+          className
         )}
         {...props}
       >
@@ -54,7 +54,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
             key={`${title}-${href}`}
             to={href}
             className={`text-sm font-medium transition-colors hover:text-primary ${
-              isActive ? "" : "text-muted-foreground"
+              isActive ? '' : 'text-muted-foreground'
             }`}
           >
             {title}

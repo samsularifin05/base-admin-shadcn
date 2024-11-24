@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ThemeState {
   handleSetPageSidebar: boolean;
@@ -19,11 +19,11 @@ const initialState: ThemeState = {
   appSidebarEndMobileToggled: false,
   appSidebarMinify: false,
   getIsLogin: false,
-  themeColor: "zinc",
+  themeColor: 'zinc'
 };
 
 const themeSlice = createSlice({
-  name: "theme",
+  name: 'theme',
   initialState,
   reducers: {
     setSidebar(state, action: PayloadAction<boolean>) {
@@ -49,8 +49,8 @@ const themeSlice = createSlice({
     },
     setThemeColor(state, action: PayloadAction<string>) {
       state.themeColor = action.payload;
-    },
-  },
+    }
+  }
 });
 
 const {
@@ -61,7 +61,7 @@ const {
   toggleSidebar,
   minifySidebar,
   setIsLogin,
-  setThemeColor,
+  setThemeColor
 } = themeSlice.actions;
 
 export const themesActions = {
@@ -72,7 +72,7 @@ export const themesActions = {
   toggleSidebar,
   minifySidebar,
   setIsLogin,
-  setThemeColor,
+  setThemeColor
 };
 
 export default themeSlice.reducer;

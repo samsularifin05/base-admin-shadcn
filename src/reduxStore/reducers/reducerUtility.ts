@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface LoadingState {
   table?: boolean;
@@ -27,28 +27,28 @@ const initialState = <T>(): UtilityState<T> => ({
   getLoading: {
     table: false,
     button: false,
-    screen: false,
+    screen: false
   },
   getModal: {
     isModalShow: false,
     isEdit: false,
     data: [],
-    namaForm: "",
+    namaForm: ''
   },
   hideModal: {
     isModalShow: false,
     isEdit: false,
     data: [],
-    namaForm: "",
+    namaForm: ''
   },
   setLoadingTabel: false,
   getShowButtonDelete: false,
   getDataEdit: [],
-  getDataTmp: [],
+  getDataTmp: []
 });
 
 const utilitySlice = createSlice({
-  name: "utility",
+  name: 'utility',
   initialState: initialState,
   reducers: {
     showButtonDelete(state, action: PayloadAction<boolean>) {
@@ -68,7 +68,7 @@ const utilitySlice = createSlice({
       state.getLoading = {
         screen: false,
         button: false,
-        table: false,
+        table: false
       };
     },
     hideModal(state) {
@@ -76,20 +76,20 @@ const utilitySlice = createSlice({
         isModalShow: false,
         isEdit: false,
         data: [],
-        namaForm: "",
+        namaForm: ''
       };
     },
     showModal<T>(
       state: UtilityState<T>,
-      action: PayloadAction<ModalState<T | T[]>>,
+      action: PayloadAction<ModalState<T | T[]>>
     ) {
       // console.log(action.payload);
       state.getModal = action.payload;
     },
     simpanDataTmp<T>(state: UtilityState<T>, action: PayloadAction<T | T[]>) {
       state.getDataTmp = action.payload;
-    },
-  },
+    }
+  }
 });
 
 const {
@@ -100,7 +100,7 @@ const {
   hideModal,
   showModal,
   simpanDataTmp,
-  stopLoading,
+  stopLoading
 } = utilitySlice.actions;
 
 export const utilityActions = {
@@ -111,7 +111,7 @@ export const utilityActions = {
   hideModal,
   showModal,
   simpanDataTmp,
-  stopLoading,
+  stopLoading
 };
 
 export default utilitySlice.reducer;

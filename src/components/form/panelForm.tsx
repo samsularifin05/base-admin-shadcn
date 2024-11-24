@@ -1,21 +1,21 @@
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   useForm,
   FieldValues,
   UseFormReturn,
   DefaultValues,
-  Resolver,
-} from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Form } from "../";
-import * as yup from "yup";
+  Resolver
+} from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Form } from '../';
+import * as yup from 'yup';
 import {
   AppDispatch,
   formActions,
   FormStateReduxFom,
-  useAppSelector,
-} from "@/reduxStore";
+  useAppSelector
+} from '@/reduxStore';
 
 interface FormPanelProps<FormValues extends FieldValues> {
   formName: keyof FormStateReduxFom;
@@ -28,18 +28,18 @@ const FormPanel = <FormValues extends FieldValues>({
   onSubmit,
   children,
   validate,
-  formName,
+  formName
 }: FormPanelProps<FormValues>): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
   const initialValues = useAppSelector(
-    (state) => state.form[formName as keyof FormStateReduxFom],
+    (state) => state.form[formName as keyof FormStateReduxFom]
   ) as unknown as DefaultValues<FormValues>;
 
   const form = useForm<FormValues>({
     resolver: yupResolver(validate) as unknown as Resolver<FormValues>,
     defaultValues: initialValues,
-    mode: "onChange",
+    mode: 'onChange'
   });
 
   useEffect(() => {

@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
-import { readFile } from "fs/promises";
-import path from "path";
-import readline from "readline";
-import fs from "fs";
+import { readFile } from 'fs/promises';
+import path from 'path';
+import readline from 'readline';
+import fs from 'fs';
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -11,7 +11,7 @@ const rl = readline.createInterface({
 
 // Prompt untuk nama file
 rl.question(
-  "Masukkan nama file yang ingin Anda perbarui: ",
+  'Masukkan nama file yang ingin Anda perbarui: ',
   async (fileName) => {
     try {
       const currentFileDir = path.dirname(new URL(import.meta.url).pathname);
@@ -24,7 +24,7 @@ rl.question(
       }
 
       // Reading the JSON file
-      const fileContent = await readFile(filePath, "utf8");
+      const fileContent = await readFile(filePath, 'utf8');
       const dataJson = JSON.parse(fileContent);
 
       await generateFormState(dataJson);
@@ -35,7 +35,7 @@ rl.question(
       await editSideLink(dataJson);
       rl.close();
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       rl.close();
     }
   }
@@ -48,11 +48,11 @@ const editUrlApi = async (dataJson) => {
     // Tentukan path file urlApi.ts
     const baseFolderPath = path.resolve(
       currentFileDir,
-      "../src/components/lib/urlApi.ts"
+      '../src/components/lib/urlApi.ts'
     );
 
     // Baca isi file urlApi.ts
-    let data = await fs.promises.readFile(baseFolderPath, "utf8");
+    let data = await fs.promises.readFile(baseFolderPath, 'utf8');
 
     // Ambil data dari dataJson
     const { page, subFolder, endpoin } = dataJson;
@@ -64,7 +64,7 @@ const editUrlApi = async (dataJson) => {
   },`;
 
     // Regex untuk mendeteksi apakah properti page sudah ada
-    const pageRegex = new RegExp(`${page}:\\s*{[\\s\\S]*?${subFolder}:`, "m");
+    const pageRegex = new RegExp(`${page}:\\s*{[\\s\\S]*?${subFolder}:`, 'm');
 
     if (pageRegex.test(data)) {
       console.log(
@@ -80,11 +80,11 @@ const editUrlApi = async (dataJson) => {
       );
 
       // Tulis perubahan kembali ke file urlApi.ts
-      await fs.promises.writeFile(baseFolderPath, updatedData, "utf8");
-      console.log("File urlApi.ts berhasil diperbarui.");
+      await fs.promises.writeFile(baseFolderPath, updatedData, 'utf8');
+      console.log('File urlApi.ts berhasil diperbarui.');
     }
   } catch (err) {
-    console.error("Error editing urlApi.ts:", err);
+    console.error('Error editing urlApi.ts:', err);
   }
 };
 const editReducer = async (dataJson) => {
@@ -94,11 +94,11 @@ const editReducer = async (dataJson) => {
     // Tentukan path file reducers.ts
     const baseFolderPath = path.resolve(
       currentFileDir,
-      "../src/reduxStore/reducers/reducers.ts"
+      '../src/reduxStore/reducers/reducers.ts'
     );
 
     // Baca isi file reducers.ts
-    let data = await fs.promises.readFile(baseFolderPath, "utf8");
+    let data = await fs.promises.readFile(baseFolderPath, 'utf8');
 
     // Ambil data dari dataJson
     const { namaFile, page } = dataJson;
@@ -107,7 +107,7 @@ const editReducer = async (dataJson) => {
     // 1. Tambahkan import jika belum ada
     const reducerImportRegex = new RegExp(
       `^import\\s+${fieldName}Reducer\\s+from\\s+['"]\\.\\./\\.\\./pages/admin/${page}/${namaFile}/redux['"];$`,
-      "m"
+      'm'
     );
 
     if (!reducerImportRegex.test(data)) {
@@ -135,8 +135,8 @@ const editReducer = async (dataJson) => {
       if (trimmedContent) {
         // Posisi untuk menambahkan setelah reducer tertentu (misal: "utility")
         const insertPosition =
-          trimmedContent.indexOf("utility: utilityReducer") +
-          "utility: utilityReducer".length;
+          trimmedContent.indexOf('utility: utilityReducer') +
+          'utility: utilityReducer'.length;
 
         // Memecah dan menambahkan reducer baru
         const beforeInsert = trimmedContent.slice(0, insertPosition);
@@ -150,10 +150,10 @@ const editReducer = async (dataJson) => {
     });
 
     // 3. Simpan perubahan kembali ke file reducers.ts
-    await fs.promises.writeFile(baseFolderPath, data, "utf8");
-    console.log("Reducer file updated successfully.");
+    await fs.promises.writeFile(baseFolderPath, data, 'utf8');
+    console.log('Reducer file updated successfully.');
   } catch (err) {
-    console.error("Error editing reducer file:", err);
+    console.error('Error editing reducer file:', err);
   }
 };
 
@@ -162,32 +162,32 @@ const editSideLink = async (dataJson) => {
     const currentFileDir = path.dirname(new URL(import.meta.url).pathname);
     const baseFolderPath = path.resolve(
       currentFileDir,
-      "../src/router/sidelinks.tsx"
+      '../src/router/sidelinks.tsx'
     );
 
     // Baca file sidelinks.tsx
-    let data = await fs.promises.readFile(baseFolderPath, "utf8");
+    let data = await fs.promises.readFile(baseFolderPath, 'utf8');
 
     const { page, title, subLinks, route } = dataJson;
 
     // Format untuk subfolder dan subLinks jika ada
     const newSubLinks = subLinks || [
       {
-        title: title || "Default Sub",
-        label: "",
+        title: title || 'Default Sub',
+        label: '',
         href: route
       }
     ];
 
     // Cek apakah `page` sudah ada dalam sidelinks
-    const pageRegex = new RegExp(`title:\\s*'${toPascalCase(page)}'`, "g");
+    const pageRegex = new RegExp(`title:\\s*'${toPascalCase(page)}'`, 'g');
     if (pageRegex.test(data)) {
       console.log(`Page "${toPascalCase(page)}" sudah ada di sidelinks.`);
 
       // Temukan posisi halaman di data
       const pageRegexMatch = new RegExp(
         `(title:\\s*'${toPascalCase(page)}'[\\s\\S]*?sub:\\s*\\[)([\\s\\S]*?)(\\])`,
-        "g"
+        'g'
       );
       const match = pageRegexMatch.exec(data);
 
@@ -196,13 +196,13 @@ const editSideLink = async (dataJson) => {
         const existingSubLinks = match[2].trim();
 
         // Cek jika subfolder sudah ada dalam subLinks
-        const subFolderRegex = new RegExp(`title:\\s*'${title}'`, "g");
+        const subFolderRegex = new RegExp(`title:\\s*'${title}'`, 'g');
         if (!subFolderRegex.test(existingSubLinks)) {
           // Jika subfolder belum ada, tambahkan ke sub
           const updatedSubLinks = [
             existingSubLinks.trim(),
             JSON.stringify(newSubLinks, null, 2).slice(1, -1) // Hilangkan tanda kutip ganda luar JSON
-          ].join(",\n");
+          ].join(',\n');
 
           // Perbarui data dengan menambahkan subfolder baru
           const updatedData = data.replace(
@@ -211,7 +211,7 @@ const editSideLink = async (dataJson) => {
           );
 
           // Tulis perubahan kembali ke file sidelinks.tsx
-          await fs.promises.writeFile(baseFolderPath, updatedData, "utf8");
+          await fs.promises.writeFile(baseFolderPath, updatedData, 'utf8');
           console.log(
             `Subfolder "${title}" berhasil ditambahkan ke page "${toPascalCase(page)}".`
           );
@@ -224,21 +224,21 @@ const editSideLink = async (dataJson) => {
     } else {
       // Jika `page` belum ada, tambahkan page baru dengan subfolder
 
-      const insertPosition = data.lastIndexOf("];");
+      const insertPosition = data.lastIndexOf('];');
       const newData = [
         data.slice(0, insertPosition),
         `  ,{\n    title: '${toPascalCase(page)}',\n    label: '',\n    href: '#',\n    icon: <IconUserShield size={18} />,\n    sub: ${JSON.stringify(newSubLinks, null, 2)}\n  },\n`,
         data.slice(insertPosition)
-      ].join("");
+      ].join('');
 
       // Tulis perubahan kembali ke file sidelinks.tsx
-      await fs.promises.writeFile(baseFolderPath, newData, "utf8");
+      await fs.promises.writeFile(baseFolderPath, newData, 'utf8');
       console.log(
         `Page "${toPascalCase(page)}" berhasil ditambahkan ke sidelinks.`
       );
     }
   } catch (error) {
-    console.error("Error editing sidelinks file:", error);
+    console.error('Error editing sidelinks file:', error);
   }
 };
 const editRouterFile = async (dataJson) => {
@@ -246,110 +246,98 @@ const editRouterFile = async (dataJson) => {
     const currentFileDir = path.dirname(new URL(import.meta.url).pathname);
     const baseFolderPath = path.resolve(
       currentFileDir,
-      "../src/router/index.tsx"
+      '../src/router/index.tsx'
     );
 
     // Baca file router
-    let data = await fs.promises.readFile(baseFolderPath, "utf8");
+    let data = await fs.promises.readFile(baseFolderPath, 'utf8');
 
     const { namaFile, route, type, page, subFolder } = dataJson;
     const capitalizedFileName = capitalcase(namaFile);
 
-    // const importPath = `@/pages/admin/${page}/${subFolder || ""}/index`;
-
-    // // Regex untuk mendeteksi apakah sudah ada import untuk file ini
-    // const importRegex = new RegExp(
-    //   `import\\s+\\{[^}]*\\b${capitalizedFileName}\\b[^}]*\\}\\s+from\\s+["']${importPath}["'];`,
-    //   "m"
-    // );
-    // // Normalisasi path agar konsisten
-    // if (!importRegex.test(data)) {
-    //   const importStatement = `import { ${capitalizedFileName} } from "${importPath}";\n`;
-
-    //   // Jika belum ada, tambahkan import di bagian atas
-    //   data = importStatement + data;
-
-    //   // Tulis kembali file
-    //   await fs.promises.writeFile(baseFolderPath, data, "utf8");
-    //   console.log(`${capitalizedFileName} imported successfully.`);
-    // } else {
-    //   console.log(`${capitalizedFileName} already imported.`);
-    // }
+    // Normalisasi path untuk import
+    const importPath = `@/pages/admin/${page}/${subFolder || ''}/ui/form${capitalizedFileName}`;
 
     // Cek jika tipe adalah 'admin'
-    if (type === "admin") {
-      // Tambahkan route baru di dalam children admin
+    if (type === 'admin') {
+      // Regex untuk blok admin
       const adminRouteRegex =
         /path:\s*['"]\/admin['"].*?children:\s*\[(.*?)\]/s;
 
       const match = data.match(adminRouteRegex);
       if (match) {
         const childrenContent = match[1];
-        const newRoute = `{
-          path: '${route}',
-          lazy: async () => ({
-          Component: (
-            await import(
-              "@/pages/admin/${page}/${subFolder || ""}/ui/form${capitalizedFileName}"
-            )
-          ).default
-        })
-        }`;
 
-        // Periksa apakah route sudah ada di children admin
+        // Cek apakah route sudah ada di children
         if (!childrenContent.includes(`path: '${route}'`)) {
+          const newRoute = `{
+            path: '${route}',
+            lazy: async () => ({
+              Component: (
+                await import(
+                  "${importPath}"
+                )
+              ).default
+            })
+          }`;
+
+          // Tambahkan route jika belum ada
           data = data.replace(adminRouteRegex, (match, childrenContent) =>
             match.replace(
               childrenContent,
               `${childrenContent.trim()},\n${newRoute}`
             )
           );
+          console.log(`Route "${route}" added to admin.`);
         } else {
-          console.log("Route already exists in admin.");
+          console.log(`Route "${route}" already exists in admin.`);
         }
       } else {
-        console.error("Admin route structure not found in the router file.");
+        console.error('Admin route structure not found in the router file.');
       }
     } else {
       // Jika bukan admin, tambahkan route baru di luar blok admin
-      const nonAdminRouteRegex = /children:\s*\[(.*?)\]/s; // Jika ingin menambahkan route baru di luar /admin
+      const nonAdminRouteRegex = /children:\s*\[(.*?)\]/s;
 
       const match = data.match(nonAdminRouteRegex);
       if (match) {
         const childrenContent = match[1];
-        const newRoute = `{
-          index: true,
-          path: '${route}',
-          element: (
-            <PrivateRoute role="admin">
-              <${capitalizedFileName} />
-            </PrivateRoute>
-          )
-        }`;
 
-        // Periksa apakah route sudah ada
+        // Cek apakah route sudah ada di children
         if (!childrenContent.includes(`path: '${route}'`)) {
+          const newRoute = `{
+            index: true,
+            path: '${route}',
+            element: (
+              <PrivateRoute role="admin">
+                <${capitalizedFileName} />
+              </PrivateRoute>
+            )
+          }`;
+
+          // Tambahkan route jika belum ada
           data = data.replace(nonAdminRouteRegex, (match, childrenContent) =>
             match.replace(
               childrenContent,
               `${childrenContent.trim()},\n${newRoute}`
             )
           );
+          console.log(`Route "${route}" added outside admin.`);
         } else {
-          console.log("Route already exists.");
+          console.log(`Route "${route}" already exists.`);
         }
       } else {
         console.error(
-          "Non-admin route structure not found in the router file."
+          'Non-admin route structure not found in the router file.'
         );
       }
     }
 
     // Simpan perubahan kembali ke file router
-    await fs.promises.writeFile(baseFolderPath, data, "utf8");
-    console.log("Router file updated successfully.");
+    await fs.promises.writeFile(baseFolderPath, data, 'utf8');
+    console.log('Router file updated successfully.');
   } catch (error) {
-    console.error("Error editing router file:", error);
+    console.error('Error editing router file:', error);
   }
 };
 
@@ -366,7 +354,7 @@ const generateFormState = async (dataJson) => {
 
   try {
     // Baca isi file TypeScript yang sudah ada
-    let data = await fs.promises.readFile(filePath, "utf8");
+    let data = await fs.promises.readFile(filePath, 'utf8');
 
     // Generate import path berdasarkan type dan folder
     const importPath = `@/pages/admin/${page}/${subFolder}/index`;
@@ -374,22 +362,22 @@ const generateFormState = async (dataJson) => {
     // Tambahkan atau perbarui import hanya jika belum ada
     const importRegex = new RegExp(
       `import\\s+\\{([^\\}]*?)\\}\\s+from\\s+["']${importPath}["'];`,
-      "m"
+      'm'
     );
 
     const match = data.match(importRegex);
 
-    if (type === "admin") {
+    if (type === 'admin') {
       const newImportFields = `Request${fieldName}Dto, initial${fieldName}`;
       if (match) {
-        const importedFields = match[1].split(",").map((field) => field.trim());
+        const importedFields = match[1].split(',').map((field) => field.trim());
         if (
           !importedFields.includes(`Request${fieldName}Dto`) ||
           !importedFields.includes(`initial${fieldName}`)
         ) {
           const updatedFields = [
-            ...new Set([...importedFields, ...newImportFields.split(", ")])
-          ].join(", ");
+            ...new Set([...importedFields, ...newImportFields.split(', ')])
+          ].join(', ');
           data = data.replace(
             importRegex,
             `import { ${updatedFields} } from "${importPath}";`
@@ -429,10 +417,10 @@ const generateFormState = async (dataJson) => {
     });
 
     // Tulis perubahan kembali ke file TypeScript
-    await fs.promises.writeFile(filePath, data, "utf8");
-    console.log("File updated successfully.");
+    await fs.promises.writeFile(filePath, data, 'utf8');
+    console.log('File updated successfully.');
   } catch (err) {
-    console.error("Error processing file:", err);
+    console.error('Error processing file:', err);
   }
 };
 
@@ -441,9 +429,9 @@ const createFolderStructure = (dataJson) => {
 
   //   console.log(dataJson.type)
   let pathFOlder =
-    dataJson.type === "admin"
-      ? `admin/${dataJson.page}/${dataJson.subFolder ? dataJson.subFolder : ""}`
-      : `${dataJson.page}${dataJson.subFolder ? dataJson.subFolder : ""}`;
+    dataJson.type === 'admin'
+      ? `admin/${dataJson.page}/${dataJson.subFolder ? dataJson.subFolder : ''}`
+      : `${dataJson.page}${dataJson.subFolder ? dataJson.subFolder : ''}`;
   const baseFolderPath = path.resolve(
     currentFileDir,
     `../src/pages/${pathFOlder}`
@@ -451,7 +439,7 @@ const createFolderStructure = (dataJson) => {
 
   let folderName = capitalcase(dataJson.namaFile);
 
-  const foldersToCreate = ["redux", "service", "model", "ui"];
+  const foldersToCreate = ['redux', 'service', 'model', 'ui'];
 
   try {
     // Buat folder utama
@@ -466,60 +454,60 @@ const createFolderStructure = (dataJson) => {
           fs.mkdirSync(subFolderPath, { recursive: true });
         }
 
-        const indexPath = path.join(subFolderPath, "index.ts");
+        const indexPath = path.join(subFolderPath, 'index.ts');
         if (!fs.existsSync(indexPath)) {
-          fs.writeFileSync(indexPath, ``, "utf8");
+          fs.writeFileSync(indexPath, ``, 'utf8');
         }
 
         // Tambahkan file request.dto.ts dan response.dto.ts di folder model
-        if (subFolder === "model") {
-          const requestDtoPath = path.join(subFolderPath, "request.dto.ts");
-          const responseDtoPath = path.join(subFolderPath, "response.dto.ts");
+        if (subFolder === 'model') {
+          const requestDtoPath = path.join(subFolderPath, 'request.dto.ts');
+          const responseDtoPath = path.join(subFolderPath, 'response.dto.ts');
           if (!fs.existsSync(requestDtoPath)) {
             const entries = Object.entries(dataJson.dto.request_dto);
             const dtoFields = entries
               .map(([key, type]) => ` ${key}: ${type};`)
-              .join("\n");
+              .join('\n');
             const dtoFieldsIsi = entries
               .map(([key]) => ` ${key}:"",`)
-              .join("\n");
+              .join('\n');
             fs.writeFileSync(
               requestDtoPath,
               `export interface Request${folderName}Dto {\n ${dtoFields}\n}\n\nexport const initial${folderName}: Request${folderName}Dto = {\n ${dtoFieldsIsi} \n};\n`,
-              "utf8"
+              'utf8'
             );
           }
           if (!fs.existsSync(responseDtoPath)) {
             const entries = Object.entries(dataJson.dto.response_dto);
             const dtoFields = entries
               .map(([key, type]) => `${key}: ${type};`)
-              .join("\n");
+              .join('\n');
             fs.writeFileSync(
               responseDtoPath,
               `export interface Response${folderName}Dto {\n ${dtoFields}\n}\n`,
-              "utf8"
+              'utf8'
             );
           }
-          const modelIndexPath = path.join(subFolderPath, "index.ts");
+          const modelIndexPath = path.join(subFolderPath, 'index.ts');
           fs.writeFileSync(
             modelIndexPath,
             `export * from "./request.dto";\nexport * from "./response.dto";\n`,
-            "utf8"
+            'utf8'
           );
         }
-        if (subFolder === "redux") {
-          const typePathRedux = path.join(subFolderPath, "type.ts");
+        if (subFolder === 'redux') {
+          const typePathRedux = path.join(subFolderPath, 'type.ts');
           if (!fs.existsSync(typePathRedux)) {
             const typeContent = `import { Response${folderName}Dto } from "../model";\nexport interface Get${folderName}Dto {\n  data: Response${folderName}Dto[];\n  meta : {total : number\npage : number\nlimit : number\n}\n}\n\nexport interface ${folderName} {\n  get${folderName}: Get${folderName}Dto;\n}\n\nexport const initialState: ${folderName} = {\n  get${folderName}: {\n    data: [],\n    meta: { total : 0,\n page:0,\n limit : 0 }\n  }\n};\n`;
-            fs.writeFileSync(typePathRedux, typeContent, "utf8");
+            fs.writeFileSync(typePathRedux, typeContent, 'utf8');
           }
-          const reduxIndex = path.join(subFolderPath, "index.ts");
+          const reduxIndex = path.join(subFolderPath, 'index.ts');
           const indexReduxContent = `import { createSlice, PayloadAction } from "@reduxjs/toolkit";\nimport { Get${folderName}Dto, initialState } from "./type";\n\nconst ${folderName}Reducer = createSlice({\n  name: "${folderName}",\n  initialState,\n  reducers: {\n    set${folderName}(state, action: PayloadAction<Get${folderName}Dto>) {\n      state.get${folderName} = action.payload;\n    }\n  }\n});\n\nconst { set${folderName} } = ${folderName}Reducer.actions;\n\nexport { set${folderName} };\n\nexport default ${folderName}Reducer.reducer;\n`;
-          fs.writeFileSync(reduxIndex, indexReduxContent, "utf8");
+          fs.writeFileSync(reduxIndex, indexReduxContent, 'utf8');
         }
 
-        if (subFolder === "service") {
-          const serviceIndex = path.join(subFolderPath, "index.ts");
+        if (subFolder === 'service') {
+          const serviceIndex = path.join(subFolderPath, 'index.ts');
           const serviceIndexContent = `
         import { AppDispatch, AppThunk, utilityActions } from "@/reduxStore";
         import { apiInstance, NotifInfo, NotifSuccess, urlApi } from '@/components';
@@ -618,20 +606,20 @@ const createFolderStructure = (dataJson) => {
 
 
           `;
-          fs.writeFileSync(serviceIndex, serviceIndexContent, "utf8");
+          fs.writeFileSync(serviceIndex, serviceIndexContent, 'utf8');
         }
 
-        if (subFolder === "ui") {
-          const uiIndex = path.join(subFolderPath, "index.ts");
+        if (subFolder === 'ui') {
+          const uiIndex = path.join(subFolderPath, 'index.ts');
           fs.writeFileSync(
             uiIndex,
             `import ${folderName} from "./form${folderName}";\nexport * from "./form";\nexport { ${folderName} };\n`,
-            "utf8"
+            'utf8'
           );
 
-          const formFolderPath = path.join(subFolderPath, "form");
-          const tableFolderPath = path.join(subFolderPath, "table");
-          const validateFolderPath = path.join(subFolderPath, "validate");
+          const formFolderPath = path.join(subFolderPath, 'form');
+          const tableFolderPath = path.join(subFolderPath, 'table');
+          const validateFolderPath = path.join(subFolderPath, 'validate');
 
           if (!fs.existsSync(formFolderPath)) {
             fs.mkdirSync(formFolderPath, { recursive: true });
@@ -647,7 +635,7 @@ const createFolderStructure = (dataJson) => {
 
           // Buat file index.tsx di dalam folder form
           // Buat file index.tsx di dalam folder form
-          const validateIndexPath = path.join(validateFolderPath, "index.tsx");
+          const validateIndexPath = path.join(validateFolderPath, 'index.tsx');
 
           fs.writeFileSync(
             validateIndexPath,
@@ -658,37 +646,37 @@ const createFolderStructure = (dataJson) => {
               // Tentukan tipe validasi berdasarkan value.type
               let validationType;
               switch (value.type) {
-                case "email":
-                  validationType = "email"; // Validasi email
+                case 'email':
+                  validationType = 'email'; // Validasi email
                   break;
-                case "number":
-                  validationType = "number"; // Validasi number
+                case 'number':
+                  validationType = 'number'; // Validasi number
                   break;
-                case "date":
-                  validationType = "date"; // Validasi date
+                case 'date':
+                  validationType = 'date'; // Validasi date
                   break;
-                case "boolean":
-                  validationType = "boolean"; // Validasi boolean
+                case 'boolean':
+                  validationType = 'boolean'; // Validasi boolean
                   break;
                 default:
-                  validationType = "string"; // Default validasi string
+                  validationType = 'string'; // Default validasi string
               }
 
               // Tentukan aturan validasi berdasarkan value.validation
               const validationRule =
-                value.validation === "required"
+                value.validation === 'required'
                   ? `.required("${toPascalCase(key)} is required")`
-                  : ".nullable()"; // Null jika optional
+                  : '.nullable()'; // Null jika optional
 
               return `${key}: yup.${validationType}()${validationRule}`;
             })
-            .join(",\n")}
+            .join(',\n')}
           });`,
-            "utf8"
+            'utf8'
           );
 
           // Buat file index.tsx di dalam folder form
-          const formIndexPath = path.join(formFolderPath, "index.tsx");
+          const formIndexPath = path.join(formFolderPath, 'index.tsx');
           fs.writeFileSync(
             formIndexPath,
             `import { Button, FormPanel, RenderField } from "@/components";
@@ -734,7 +722,7 @@ const createFolderStructure = (dataJson) => {
                                />
                                `;
                              })
-                             .join("\n")}
+                             .join('\n')}
                            <Button
                              type="submit"
                              className="mt-2"
@@ -751,11 +739,11 @@ const createFolderStructure = (dataJson) => {
           
              export default ${folderName};
             `,
-            "utf8"
+            'utf8'
           );
 
           // Buat file index.tsx di dalam folder table
-          const tableIndexPath = path.join(tableFolderPath, "index.tsx");
+          const tableIndexPath = path.join(tableFolderPath, 'index.tsx');
           fs.writeFileSync(
             tableIndexPath,
             `import { DataTable } from "@/components";
@@ -793,11 +781,11 @@ const createFolderStructure = (dataJson) => {
           
           export default Table${capitalcase(folderName)};
           `,
-            "utf8"
+            'utf8'
           );
 
           // Buat file column.tsx di dalam folder table
-          const tableColumnPath = path.join(tableFolderPath, "column.tsx");
+          const tableColumnPath = path.join(tableFolderPath, 'column.tsx');
           fs.writeFileSync(
             tableColumnPath,
             `/* eslint-disable react-hooks/rules-of-hooks */
@@ -831,7 +819,7 @@ const createFolderStructure = (dataJson) => {
               header: "${toPascalCase(key)}"
             }`
               )
-              .join(",\n")},
+              .join(',\n')},
 
                {
                   id: 'actions',
@@ -876,55 +864,55 @@ const createFolderStructure = (dataJson) => {
                 }
           ];
           \n`,
-            "utf8"
+            'utf8'
           );
           const formData = path.join(subFolderPath, `form${folderName}.tsx`);
           const masterFormIndex = `import { ModalGlobal, PanelAdmin } from "@/components";\nimport Form${folderName} from "./form";\nimport { useAppSelector } from "@/reduxStore";\nimport Table${folderName} from "./table";\n\nconst ${folderName} = () => {\n  const modal = useAppSelector((state) => state.utility.getModal);\n\n  return (\n    <PanelAdmin>\n      <Table${folderName} />\n      <ModalGlobal\n        title={\`\${modal.isEdit ? "Edit" : "Tambah"} Data\`}>\n        <Form${folderName} />\n      </ModalGlobal>\n    </PanelAdmin>\n  );\n};\n\nexport default ${folderName};\n`;
-          fs.writeFileSync(formData, masterFormIndex, "utf8");
+          fs.writeFileSync(formData, masterFormIndex, 'utf8');
         }
       });
 
       // Buat file index.ts di dalam folder utama
-      const mainIndexPath = path.join(baseFolderPath, "index.ts");
+      const mainIndexPath = path.join(baseFolderPath, 'index.ts');
       if (!fs.existsSync(mainIndexPath)) {
         fs.writeFileSync(
           mainIndexPath,
           `import { ${capitalcase(folderName)} } from "./ui";\nexport * from "./model";\nexport * from "./redux";\nexport * from "./ui";\nexport * from "./service";\nexport { ${capitalcase(folderName)} }`,
-          "utf8"
+          'utf8'
         );
       }
       const urlApiPath = path.resolve(
         currentFileDir,
-        "../src/shared/urlApi/index.ts"
+        '../src/shared/urlApi/index.ts'
       );
       if (fs.existsSync(urlApiPath)) {
-        const urlApiContent = fs.readFileSync(urlApiPath, "utf8");
+        const urlApiContent = fs.readFileSync(urlApiPath, 'utf8');
         const updatedUrlApiContent = urlApiContent.replace(
           /};\s*$/,
           `,\n  ${folderName.toLowerCase()}:"${folderName.toLowerCase()}",\n};`
         );
-        fs.writeFileSync(urlApiPath, updatedUrlApiContent, "utf8");
+        fs.writeFileSync(urlApiPath, updatedUrlApiContent, 'utf8');
       }
       console.log(`Folder structure for ${folderName} created successfully.`);
 
       rl.close();
     }
   } catch (err) {
-    console.error("Error:", err);
+    console.error('Error:', err);
     rl.close();
   }
 };
 
 function capitalcase(str) {
-  if (typeof str !== "string") {
-    throw new Error("Input harus berupa string");
+  if (typeof str !== 'string') {
+    throw new Error('Input harus berupa string');
   }
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 function toPascalCase(str) {
   return str
-    .replace(/_/g, " ") // Ganti underscore dengan spasi
-    .replace(/([a-z])([A-Z])/g, "$1 $2") // Menambahkan spasi antara huruf kecil dan kapital
+    .replace(/_/g, ' ') // Ganti underscore dengan spasi
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // Menambahkan spasi antara huruf kecil dan kapital
     .replace(/\b\w/g, (char) => char.toUpperCase()); // Ubah huruf pertama setiap kata menjadi kapital
 }

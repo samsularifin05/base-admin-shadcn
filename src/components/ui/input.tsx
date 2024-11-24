@@ -1,5 +1,5 @@
-import * as React from "react";
-import { cn } from "@/components/lib/utils";
+import * as React from 'react';
+import { cn } from '@/components/lib/utils';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -10,7 +10,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       const { value, type } = event.target;
 
       // Handle type conversion for number input
-      const newValue = type === "number" ? String(value) : value;
+      const newValue = type === 'number' ? String(value) : value;
 
       // Invoke onChange callback passed from parent component
       if (onChange) {
@@ -18,8 +18,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ...event,
           target: {
             ...event.target,
-            value: newValue,
-          },
+            value: newValue
+          }
         });
       }
     };
@@ -28,17 +28,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
-          className,
+          'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+          className
         )}
         ref={ref}
         onChange={handleChange}
         {...props}
       />
     );
-  },
+  }
 );
 
-Input.displayName = "Input";
+Input.displayName = 'Input';
 
 export { Input };

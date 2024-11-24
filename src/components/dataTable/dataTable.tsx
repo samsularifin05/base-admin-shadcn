@@ -8,8 +8,8 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+  useReactTable
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -17,18 +17,18 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { useState } from "react";
-import { GlobalFilter } from "./globalFilter";
-import { AppDispatch, useAppSelector, utilityActions } from "@/reduxStore";
-import { useDispatch } from "react-redux";
-import { PlusIcon } from "@radix-ui/react-icons";
-import { Button } from "../custom";
-import { DataTableViewOptions } from "./dataTableViewOptions";
-import { DataTablePagination } from "./dataTablePagination";
-import { Loader2 } from "lucide-react";
-import { cn } from "../lib/utils";
+  TableRow
+} from '@/components/ui/table';
+import { useState } from 'react';
+import { GlobalFilter } from './globalFilter';
+import { AppDispatch, useAppSelector, utilityActions } from '@/reduxStore';
+import { useDispatch } from 'react-redux';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { Button } from '../custom';
+import { DataTableViewOptions } from './dataTableViewOptions';
+import { DataTablePagination } from './dataTablePagination';
+import { Loader2 } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,7 +47,7 @@ export function DataTable<TData, TValue>({
   page,
   limit,
   onPageChange,
-  titleButton,
+  titleButton
 }: DataTableProps<TData, TValue>) {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -70,8 +70,8 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
-    },
+      rowSelection
+    }
   });
   const loading = useAppSelector((state) => state.utility.getLoading);
 
@@ -90,8 +90,8 @@ export function DataTable<TData, TValue>({
                   isModalShow: true,
                   isEdit: false,
                   data: [],
-                  namaForm: "",
-                }),
+                  namaForm: ''
+                })
               )
             }
             className="hidden h-8 ml-2 lg:flex"
@@ -116,7 +116,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -134,7 +134,7 @@ export function DataTable<TData, TValue>({
                   <div className="flex justify-center">
                     <Loader2
                       className={cn(
-                        "h-5 w-5 text-primary/60 animate-spin mr-2",
+                        'h-5 w-5 text-primary/60 animate-spin mr-2'
                       )}
                     />
                     Loading...
@@ -145,13 +145,13 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

@@ -1,12 +1,12 @@
-import React from "react";
-import { Layout, LayoutBody, LayoutHeader } from "../ui";
-import { Search } from "../theme/search";
-import ThemeSwitch from "../theme/theme-switch";
-import { UserNav } from "../theme/user-nav";
+import React from 'react';
+import { Layout, LayoutBody, LayoutHeader } from '../ui';
+import { Search } from '../theme/search';
+import ThemeSwitch from '../theme/theme-switch';
+import { UserNav } from '../theme/user-nav';
 
-import { Breadcrumbs } from "../theme/BreadcrumbGenerate";
-import { useLocation } from "react-router-dom";
-import ThemeSelector from "../theme/themeSelector";
+import { Breadcrumbs } from '../theme/BreadcrumbGenerate';
+import { useLocation } from 'react-router-dom';
+import ThemeSelector from '../theme/themeSelector';
 interface Props {
   children: React.ReactNode;
 }

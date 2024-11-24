@@ -2,9 +2,9 @@ import {
   AppDispatch,
   AppThunk,
   formActions,
-  themesActions,
-} from "@/reduxStore";
-import { toast } from "react-toastify";
+  themesActions
+} from '@/reduxStore';
+import { toast } from 'react-toastify';
 
 export const serviceLogin = () => {
   const login = (): AppThunk => {
@@ -12,16 +12,16 @@ export const serviceLogin = () => {
       const state = getState();
       const data = state.form.LoginForm;
 
-      if (data.email === "admin@gmail.com" && data.password === "admin1234") {
-        dispatch(formActions.resetForm("LoginForm"));
+      if (data.email === 'admin@gmail.com' && data.password === 'admin1234') {
+        dispatch(formActions.resetForm('LoginForm'));
         dispatch(themesActions.setIsLogin(true));
       } else {
-        toast.info("Username password salah");
+        toast.info('Username password salah');
       }
     };
   };
 
   return {
-    login,
+    login
   };
 };
