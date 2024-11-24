@@ -57,34 +57,43 @@ const editUrlApi = async (dataJson) => {
     // Ambil data dari dataJson
     const { page, subFolder, endpoin } = dataJson;
 
-    // Nama properti baru untuk ditambahkan
-    const newProperty = `
+    // Regex untuk mendeteksi apakah properti `page` sudah ada
+    const pageRegex = new RegExp(`${page}:\\s*{([\\s\\S]*?)}`, 'm');
+
+    if (pageRegex.test(data)) {
+      // Jika `page` sudah ada, periksa apakah `subFolder` juga ada
+      data = data.replace(pageRegex, (match, innerContent) => {
+        const subFolderRegex = new RegExp(`${subFolder}:`);
+        if (subFolderRegex.test(innerContent)) {
+          console.log(
+            `Properti untuk page "${page}" dan subFolder "${subFolder}" sudah ada. Tidak ada perubahan.`
+          );
+          return match; // Tidak ada perubahan
+        }
+
+        // Tambahkan subFolder baru di dalam page
+        const newSubFolder = `  ${subFolder}: '${endpoin}',`;
+        return `${page}: {\n${innerContent.trim()},\n${newSubFolder}\n}`;
+      });
+    } else {
+      // Jika `page` belum ada, tambahkan keseluruhan page baru
+      const newProperty = `
   ${page}: {
     ${subFolder}: '${endpoin}',
   },`;
-
-    // Regex untuk mendeteksi apakah properti page sudah ada
-    const pageRegex = new RegExp(`${page}:\\s*{[\\s\\S]*?${subFolder}:`, 'm');
-
-    if (pageRegex.test(data)) {
-      console.log(
-        `Properti untuk page "${page}" dan subFolder "${subFolder}" sudah ada. Tidak ada perubahan.`
-      );
-    } else {
-      // Tambahkan properti baru sebelum penutup objek urlApi
-      const updatedData = data.replace(
+      data = data.replace(
         /export const urlApi = \{([\s\S]*?)\};/,
         (match, innerContent) => {
           return `export const urlApi = {${innerContent.trim()},${newProperty}\n};`;
         }
       );
-
-      // Tulis perubahan kembali ke file urlApi.ts
-      await fs.promises.writeFile(baseFolderPath, updatedData, 'utf8');
-      console.log('File urlApi.ts berhasil diperbarui.');
     }
+
+    // Tulis perubahan kembali ke file urlApi.ts
+    await fs.promises.writeFile(baseFolderPath, data, 'utf8');
+    console.log('File urlApi.ts berhasil diperbarui.');
   } catch (err) {
-    console.error('Error editing urlApi.ts:', err);
+    console.error('Error editing urlApi.ts:', err.message);
   }
 };
 const editReducer = async (dataJson) => {
