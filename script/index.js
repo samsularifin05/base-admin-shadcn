@@ -28,7 +28,6 @@ rl.question(
       const dataJson = JSON.parse(fileContent);
 
       await generateFormState(dataJson);
-      await editFileIndexPage(dataJson);
       createFolderStructure(dataJson);
       await editRouterFile(dataJson);
       await editReducer(dataJson);
@@ -913,41 +912,6 @@ const createFolderStructure = (dataJson) => {
   } catch (err) {
     console.error("Error:", err);
     rl.close();
-  }
-};
-const editFileIndexPage = async (dataJson) => {
-  const folderName = dataJson.namaFile;
-  const currentFileDir = path.dirname(new URL(import.meta.url).pathname);
-
-  // Tentukan path index.ts berdasarkan tipe (admin atau umum)
-  const indexPath =
-    dataJson.type === "admin"
-      ? path.resolve(currentFileDir, "../src/pages/admin/index.ts")
-      : path.resolve(currentFileDir, "../src/pages/index.ts");
-
-  try {
-    // Baca isi file index.ts
-    let data = await fs.promises.readFile(indexPath, "utf8");
-
-    // Tentukan subFolder jika ada
-    const subFolder = dataJson.subFolder ? `${dataJson.page}/` : "";
-
-    // Format ekspor yang akan ditambahkan
-    const exportStatement = `export * from './${subFolder}${folderName}';`;
-
-    // Periksa apakah ekspor sudah ada
-    if (data.includes(exportStatement)) {
-      console.log(
-        `Export "${exportStatement}" already exists. No changes made.`
-      );
-    } else {
-      // Tambahkan ekspor di bagian akhir file
-      data += `\n${exportStatement}`;
-      await fs.promises.writeFile(indexPath, data, "utf8");
-      console.log(`Export "${exportStatement}" added successfully.`);
-    }
-  } catch (err) {
-    console.error("Error editing file index.ts:", err);
   }
 };
 
