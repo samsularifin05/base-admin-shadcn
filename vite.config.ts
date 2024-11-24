@@ -6,6 +6,7 @@ import * as path from "path";
 import Inspect from "vite-plugin-inspect";
 import viteImagemin from "@vheemstra/vite-plugin-imagemin";
 import imageminWebp from "imagemin-webp";
+
 const isProduction = process.env.NODE_ENV === "production";
 
 export default defineConfig(() => {
@@ -14,28 +15,30 @@ export default defineConfig(() => {
   return {
     plugins: [
       react(),
-      compression({
-        algorithm: "gzip"
-      }),
       ...(isProduction
-        ? []
+        ? [
+            // Hanya aktif di mode produksi
+            compression({
+              algorithm: "gzip"
+            }),
+            viteImagemin({
+              plugins: {
+                jpg: imageminWebp(),
+                png: imageminWebp()
+              }
+            })
+          ]
         : [
+            // Hanya aktif di mode pengembangan
             Inspect({
               build: true,
               outputDir: ".vite-inspect"
             })
-          ]),
-      viteImagemin({
-        plugins: {
-          jpg: imageminWebp(),
-          png: imageminWebp()
-        }
-      })
+          ])
     ],
     define: {
       "process.env": process.env
     },
-    cacheControl: "max-age=3600",
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),
@@ -57,7 +60,9 @@ export default defineConfig(() => {
       cssCodeSplit: true,
       modulePreload: true,
       chunkSizeWarningLimit: 1000000,
-      cacheControl: "max-age=3600",
+      ...(isProduction && {
+        cacheControl: "max-age=3600" // Cache control hanya saat production
+      }),
       rollupOptions: {
         output: {
           manualChunks(id) {
@@ -72,7 +77,7 @@ export default defineConfig(() => {
               return `assets/images/${name}`;
             }
             if (/\.(ttf|woff2|svg)$/.test(name ?? "")) {
-              return `assets/font/[hash]-${timestamp}[extname]`;
+              return `assets/font/${name}`;
             }
             if (/\.css$/.test(name ?? "")) {
               return `assets/css/[hash]-${timestamp}[extname]`;
@@ -83,7 +88,7 @@ export default defineConfig(() => {
       }
     },
     server: {
-      open: true 
+      open: true
     }
   };
 });
