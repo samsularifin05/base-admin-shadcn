@@ -5,7 +5,7 @@ import { Button, buttonVariants } from "../custom/button";
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger
+  CollapsibleTrigger,
 } from "../ui/collapsible";
 import {
   DropdownMenu,
@@ -13,13 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
+  TooltipTrigger,
 } from "../ui/tooltip";
 import { cn } from "@/components/lib/utils";
 import useCheckActiveNav from "@/hooks/use-check-active-nav";
@@ -36,7 +36,7 @@ export default function Nav({
   links,
   isCollapsed,
   className,
-  closeNav
+  closeNav,
 }: NavProps) {
   const renderLink = ({ sub, ...rest }: SideLink) => {
     const key = `${rest.title}-${rest.href}`;
@@ -97,7 +97,7 @@ export default function Nav({
       data-collapsed={isCollapsed}
       className={cn(
         "group border-b bg-background py-2 transition-[max-height,padding] duration-500 data-[collapsed=true]:py-2 md:border-none",
-        className
+        className,
       )}
     >
       <TooltipProvider delayDuration={0}>
@@ -120,7 +120,7 @@ function NavLink({
   label,
   href,
   closeNav,
-  subLink = false
+  subLink = false,
 }: NavLinkProps) {
   const { checkActiveNav } = useCheckActiveNav();
   return (
@@ -130,10 +130,10 @@ function NavLink({
       className={cn(
         buttonVariants({
           variant: checkActiveNav(href) ? "secondary" : "ghost",
-          size: "sm"
+          size: "sm",
         }),
         "h-12 justify-start text-wrap rounded-none px-6",
-        subLink && "h-10 w-full border-l border-l-slate-500 px-2"
+        subLink && "h-10 w-full border-l border-l-slate-500 px-2",
       )}
       aria-current={checkActiveNav(href) ? "page" : undefined}
     >
@@ -154,7 +154,7 @@ function NavLinkDropdown({
   label,
   sub,
   closeNav,
-  subLink
+  subLink,
 }: NavLinkProps) {
   const { checkActiveNav } = useCheckActiveNav();
   const isChildActive = !!sub?.find((s) => checkActiveNav(s.href));
@@ -166,7 +166,7 @@ function NavLinkDropdown({
           buttonVariants({ variant: "ghost", size: "sm" }),
           "group h-12 w-full justify-start rounded-none",
           subLink ? " pr-6" : " px-6",
-          subLink && "h-10 border-l border-l-slate-500"
+          subLink && "h-10 border-l border-l-slate-500",
         )}
         aria-current={checkActiveNav("") ? "page" : undefined}
       >
@@ -179,7 +179,7 @@ function NavLinkDropdown({
         )}
         <span
           className={cn(
-            'ml-auto transition-all group-data-[state="open"]:-rotate-180'
+            'ml-auto transition-all group-data-[state="open"]:-rotate-180',
           )}
         >
           <IconChevronDown stroke={1} />
@@ -218,9 +218,9 @@ function NavLinkIcon({ title, icon, label, href }: NavLinkProps) {
           className={cn(
             buttonVariants({
               variant: checkActiveNav(href) ? "secondary" : "ghost",
-              size: "icon"
+              size: "icon",
             }),
-            "h-12 w-12"
+            "h-12 w-12",
           )}
         >
           {icon}

@@ -1,25 +1,19 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import { useNavigate } from "react-router-dom";
-// import { FormLoginDto } from "../dto";
 import {
   AppDispatch,
   AppThunk,
+  formActions,
   themesActions,
-  utilityController
 } from "@/reduxStore";
 import { toast } from "react-toastify";
 
 export const serviceLogin = () => {
-  const utility = utilityController();
-  const navigate = useNavigate();
   const login = (): AppThunk => {
     return async (dispatch: AppDispatch, getState) => {
       const state = getState();
       const data = state.form.LoginForm;
 
-      if (data.email === "admin@admin.com" && data.password === "admin1234") {
-        navigate("/admin/dashboard");
-        dispatch(utility.resetForm("LoginForm"));
+      if (data.email === "admin@gmail.com" && data.password === "admin1234") {
+        dispatch(formActions.resetForm("LoginForm"));
         dispatch(themesActions.setIsLogin(true));
       } else {
         toast.info("Username password salah");
@@ -28,6 +22,6 @@ export const serviceLogin = () => {
   };
 
   return {
-    login
+    login,
   };
 };

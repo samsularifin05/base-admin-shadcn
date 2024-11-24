@@ -1,12 +1,12 @@
 import {
   DropdownMenu,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import {
   Avatar,
   AvatarFallback,
   DropdownMenuContent,
-  DropdownMenuLabel
+  DropdownMenuLabel,
 } from "../ui";
 import { cn } from "../lib/utils";
 import { AppDispatch, themesActions, useAppSelector } from "@/reduxStore";
@@ -21,12 +21,12 @@ const ThemeSelector = () => {
     theme === "zinc"
       ? "bg-zinc-950"
       : theme === "orange"
-      ? "bg-orange-400"
-      : theme === "green"
-      ? "bg-green-600"
-      : theme === "rose"
-      ? "bg-rose-600"
-      : "bg-blue-600";
+        ? "bg-orange-400"
+        : theme === "green"
+          ? "bg-green-600"
+          : theme === "rose"
+            ? "bg-rose-600"
+            : "bg-blue-600";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

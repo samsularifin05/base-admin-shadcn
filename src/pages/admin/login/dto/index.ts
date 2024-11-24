@@ -4,5 +4,5 @@ export interface FormLoginDto {
 }
 export const intitalFormLogin: FormLoginDto = {
   email: "",
-  password: ""
+  password: "",
 };

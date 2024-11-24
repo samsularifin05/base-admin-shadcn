@@ -8,7 +8,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable
+  useReactTable,
 } from "@tanstack/react-table";
 
 import {
@@ -17,7 +17,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
 import { GlobalFilter } from "./globalFilter";
@@ -47,7 +47,7 @@ export function DataTable<TData, TValue>({
   page,
   limit,
   onPageChange,
-  titleButton
+  titleButton,
 }: DataTableProps<TData, TValue>) {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -70,8 +70,8 @@ export function DataTable<TData, TValue>({
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection
-    }
+      rowSelection,
+    },
   });
   const loading = useAppSelector((state) => state.utility.getLoading);
 
@@ -90,8 +90,8 @@ export function DataTable<TData, TValue>({
                   isModalShow: true,
                   isEdit: false,
                   data: [],
-                  namaForm: ""
-                })
+                  namaForm: "",
+                }),
               )
             }
             className="hidden h-8 ml-2 lg:flex"
@@ -116,7 +116,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -134,7 +134,7 @@ export function DataTable<TData, TValue>({
                   <div className="flex justify-center">
                     <Loader2
                       className={cn(
-                        "h-5 w-5 text-primary/60 animate-spin mr-2"
+                        "h-5 w-5 text-primary/60 animate-spin mr-2",
                       )}
                     />
                     Loading...
@@ -151,7 +151,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

@@ -2,7 +2,8 @@ import { type ClassValue, clsx } from "clsx";
 // import { DeepPartial } from "redux";
 import { twMerge } from "tailwind-merge";
 import { getItem } from "./localStroage";
-import { IResponseLoginDto } from "@/interface";
+import { IResponseLoginDto, ResponseLoginDto } from "@/interface";
+import CryptoJS from "crypto-js";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -39,8 +40,45 @@ export const formatToIndonesianDate = (dateString: string) => {
     hour: "numeric",
     minute: "numeric",
     second: "numeric",
-    timeZoneName: "short"
+    timeZoneName: "short",
   });
 
   return formatter.format(date);
+};
+
+export const { VITE_APP_SECRETKEY, VITE_APP_KEY, VITE_APP_BE_URL } = import.meta
+  .env;
+
+export const timoutDelay = (time: number = 100): Promise<void> => {
+  return new Promise((resolve) => setTimeout(resolve, time));
+};
+
+export const generateSignature = (timestampApp: string) => {
+  const userData = getItem<ResponseLoginDto>("userdata");
+
+  const signature = CryptoJS.SHA256(
+    VITE_APP_KEY +
+      VITE_APP_SECRETKEY +
+      (userData?.access_token || "") +
+      timestampApp,
+  ).toString();
+
+  return signature;
+};
+export const generateSecret = () => {
+  const seCret = CryptoJS.SHA256(VITE_APP_SECRETKEY).toString();
+
+  return seCret;
+};
+
+export const calculateWindowSize = (windowWidth: number): string => {
+  if (windowWidth >= 1200) {
+    return "lg";
+  } else if (windowWidth >= 992) {
+    return "md";
+  } else if (windowWidth >= 768) {
+    return "sm";
+  } else {
+    return "xs";
+  }
 };

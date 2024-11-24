@@ -10,14 +10,14 @@ import {
   // FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "../ui";
 import { Input } from "../ui/input";
 import {
   ChangeEvent,
   HTMLInputTypeAttribute,
   TextareaHTMLAttributes,
-  useEffect
+  useEffect,
 } from "react";
 
 interface TypedFieldProps<FormValues extends FieldValues> {
@@ -32,6 +32,7 @@ interface TypedFieldProps<FormValues extends FieldValues> {
   className?: string;
   note?: string;
   rows?: number;
+  tabIndex?: number;
   maxLength?: number;
   value?: string | number;
   onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
@@ -52,12 +53,13 @@ const ReanderField = <FormValues extends Record<string, any>>({
   className = "",
   note = "",
   rows = 4,
+  tabIndex,
   value,
   onChange,
   onClickIcon,
   icon,
   maxLength,
-  iconPosition = "right"
+  iconPosition = "right",
 }: TypedFieldProps<FormValues>) => {
   return (
     <FormField
@@ -71,7 +73,7 @@ const ReanderField = <FormValues extends Record<string, any>>({
         }, [field, value]);
         return (
           <FormItem className="space-y-1">
-            {type !== "checkbox" && (
+            {type !== "checkbox" && type !== "hidden" && (
               <FormLabel className="gap-2">
                 {label}
                 {note && (
@@ -154,6 +156,7 @@ const ReanderField = <FormValues extends Record<string, any>>({
                     {...field}
                     type={type}
                     readOnly={readOnly}
+                    tabIndex={tabIndex}
                     placeholder={placeholder}
                     value={field.value || ""}
                     maxLength={maxLength}

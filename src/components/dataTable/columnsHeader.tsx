@@ -4,14 +4,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@components";
 import { Column } from "@tanstack/react-table";
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   CaretSortIcon,
-  EyeNoneIcon
+  EyeNoneIcon,
 } from "@radix-ui/react-icons";
 
 interface DataTableColumnHeaderProps<TData, TValue>
@@ -23,10 +23,10 @@ interface DataTableColumnHeaderProps<TData, TValue>
 export function DataTableColumnHeader<TData, TValue>({
   column,
   title,
-  className
+  className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   const triggerClass = cn("-ml-3 h-8", {
-    "data-[state=open]:bg-accent": column.getIsSorted()
+    "data-[state=open]:bg-accent": column.getIsSorted(),
   });
 
   return (

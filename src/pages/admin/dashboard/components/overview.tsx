@@ -13,11 +13,11 @@ const data = Array.from({ length: 12 }, (_, i) => {
     "Sep",
     "Oct",
     "Nov",
-    "Dec"
+    "Dec",
   ];
   return {
     name: monthNames[i],
-    total: Math.floor(Math.random() * 5000) + 1000
+    total: Math.floor(Math.random() * 5000) + 1000,
   };
 });
 

@@ -21,7 +21,7 @@ export const setItem = <T>(nama: string, data: T) => {
   if (typeof window !== "undefined") {
     const item: LocalStorageItem<T> = {
       nama: nama,
-      data: data
+      data: data,
     };
     localStorage.setItem(item.nama, JSON.stringify(item.data));
   }

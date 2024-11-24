@@ -8,7 +8,7 @@ import storage from "redux-persist/lib/storage";
 const persistConfig: PersistConfig<ReturnType<typeof rootReducer>> = {
   blacklist: ["form", "utility"],
   key: "root",
-  storage
+  storage,
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -18,8 +18,8 @@ const store = configureStore({
   // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false
-    }).concat(thunk)
+      serializableCheck: false,
+    }).concat(thunk),
 });
 
 export const persistor = persistStore(store);

@@ -19,7 +19,7 @@ const initialState: ThemeState = {
   appSidebarEndMobileToggled: false,
   appSidebarMinify: false,
   getIsLogin: false,
-  themeColor: "zinc"
+  themeColor: "zinc",
 };
 
 const themeSlice = createSlice({
@@ -49,8 +49,8 @@ const themeSlice = createSlice({
     },
     setThemeColor(state, action: PayloadAction<string>) {
       state.themeColor = action.payload;
-    }
-  }
+    },
+  },
 });
 
 const {
@@ -61,7 +61,7 @@ const {
   toggleSidebar,
   minifySidebar,
   setIsLogin,
-  setThemeColor
+  setThemeColor,
 } = themeSlice.actions;
 
 export const themesActions = {
@@ -72,7 +72,7 @@ export const themesActions = {
   toggleSidebar,
   minifySidebar,
   setIsLogin,
-  setThemeColor
+  setThemeColor,
 };
 
 export default themeSlice.reducer;

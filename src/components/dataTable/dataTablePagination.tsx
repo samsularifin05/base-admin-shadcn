@@ -2,7 +2,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   DoubleArrowLeftIcon,
-  DoubleArrowRightIcon
+  DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
@@ -12,7 +12,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@components";
 import { useState } from "react";
 
@@ -29,7 +29,7 @@ export function DataTablePagination<TData>({
   total,
   page,
   limit,
-  onPageChange
+  onPageChange,
 }: DataTablePaginationProps<TData>) {
   const totalPages = Math.ceil(total / limit);
 

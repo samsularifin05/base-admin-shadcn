@@ -8,7 +8,7 @@ interface GeneralErrorProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function GeneralError({
   className,
-  minimal = false
+  minimal = false,
 }: GeneralErrorProps) {
   const navigate = useNavigate();
   return (

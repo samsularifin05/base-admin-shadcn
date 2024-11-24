@@ -1,10 +1,10 @@
-import { AppDispatch, useAppSelector } from "@/reduxStore";
-import { intitalFormLogin } from "../dto";
+import { AppDispatch, formActions, useAppSelector } from "@/reduxStore";
 import { validLoginSchema } from "../validate";
 import { FormPanel, Button, RenderField, cn } from "@/components";
 import { Navigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { serviceLogin } from "../redux";
+import { useEffect } from "react";
 
 const FormLogin = () => {
   const utility = useAppSelector((state) => state.utility);
@@ -16,6 +16,18 @@ const FormLogin = () => {
     dispatch(service.login());
   };
 
+  useEffect(() => {
+    dispatch(
+      formActions.setValue({
+        form: "LoginForm",
+        values: {
+          email: "admin@gmail.com",
+          password: "admin1234",
+        },
+      }),
+    );
+  }, [dispatch]);
+
   if (theme.getIsLogin) {
     return <Navigate to={"/admin/dashboard"} />;
   }
@@ -26,7 +38,6 @@ const FormLogin = () => {
         formName={"LoginForm"}
         onSubmit={handleSubmit}
         validate={validLoginSchema}
-        initialValues={intitalFormLogin}
       >
         {({ form }) => (
           <>

@@ -6,7 +6,7 @@ import React, {
   useContext,
   useRef,
   ReactNode,
-  useCallback
+  useCallback,
 } from "react";
 import { Path, UseFormSetValue } from "react-hook-form";
 
@@ -18,11 +18,11 @@ interface FormResetContextProps {
 }
 
 const FormResetContext = createContext<FormResetContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 export const FormResetProvider: React.FC<{ children: ReactNode }> = ({
-  children
+  children,
 }) => {
   const resetRef = useRef<() => void>(() => {});
   const setValueRef = useRef<UseFormSetValue<any> | null>(null);

@@ -5,11 +5,11 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import React from "react";
 export const Breadcrumbs: React.FC<{ currentPath: string }> = ({
-  currentPath
+  currentPath,
 }) => {
   const findBreadcrumbPath = (menu: SideLink[], path: string): SideLink[] => {
     for (const item of menu) {

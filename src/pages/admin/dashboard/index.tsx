@@ -9,7 +9,7 @@ import {
   Tabs,
   TabsContent,
   TabsList,
-  TabsTrigger
+  TabsTrigger,
 } from "@/components";
 import { Overview } from "./components/overview";
 import { RecentSales } from "./components/recent-sales";

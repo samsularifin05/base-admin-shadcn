@@ -15,9 +15,9 @@ const initialState: MasterUserState = {
     meta: {
       limit: 0,
       page: 0,
-      total: 0
-    }
-  }
+      total: 0,
+    },
+  },
 };
 
 interface actionPayload {
@@ -31,16 +31,16 @@ const MasterUserSlice = createSlice({
     setMasterUser(state, action: PayloadAction<actionPayload>) {
       state.getMasterUser = {
         data: action.payload.data,
-        meta: action.payload.meta
+        meta: action.payload.meta,
       };
-    }
-  }
+    },
+  },
 });
 
 const { setMasterUser } = MasterUserSlice.actions;
 
 export const MasterUserAction = {
-  setMasterUser
+  setMasterUser,
 };
 
 export default MasterUserSlice.reducer;

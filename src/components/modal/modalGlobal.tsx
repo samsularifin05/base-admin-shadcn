@@ -54,7 +54,7 @@ const ModalGlobal = (props: Props) => {
           style={{ top: modalTop, paddingBottom: padding }}
           className={cn(
             `overflow-auto max-h-screen overflow-y-auto no-scrollbar`,
-            className
+            className,
           )}
           onClick={() => {
             dispatch(
@@ -62,8 +62,8 @@ const ModalGlobal = (props: Props) => {
                 isModalShow: false,
                 isEdit: false,
                 data: [],
-                namaForm: ""
-              })
+                namaForm: "",
+              }),
             );
           }}
         >

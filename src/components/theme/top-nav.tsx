@@ -4,7 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../custom/button";
 import { IconMenu } from "@tabler/icons-react";
@@ -45,7 +45,7 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
       <nav
         className={cn(
           "hidden items-center space-x-4 md:flex lg:space-x-6",
-          className
+          className,
         )}
         {...props}
       >
