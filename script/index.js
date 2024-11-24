@@ -204,31 +204,46 @@ const editSideLink = async (dataJson) => {
         const pageSection = match[0];
         const existingSubLinks = match[2].trim();
 
-        // Cek jika subfolder sudah ada dalam subLinks
-        const subFolderRegex = new RegExp(`title:\\s*'${title}'`, 'g');
-        if (!subFolderRegex.test(existingSubLinks)) {
-          // Jika subfolder belum ada, tambahkan ke sub
-          const updatedSubLinks = [
-            existingSubLinks.trim(),
-            JSON.stringify(newSubLinks, null, 2).slice(1, -1) // Hilangkan tanda kutip ganda luar JSON
-          ].join(',\n');
+        // Mengubah format subLinks yang sudah ada menjadi array objek JS
+        const existingSubLinksArray = existingSubLinks
+          .split(',\n')
+          .map((subLink) => {
+            const matchTitle = subLink.match(/title:\s*'(.*?)'/);
+            const matchHref = subLink.match(/href:\s*'(.*?)'/);
+            return matchTitle && matchHref
+              ? { title: matchTitle[1], href: matchHref[1] }
+              : null;
+          })
+          .filter(Boolean); // Menghapus null values yang tidak valid
 
-          // Perbarui data dengan menambahkan subfolder baru
-          const updatedData = data.replace(
-            pageSection,
-            `${pageSection.slice(0, -1)},\n${updatedSubLinks}\n  ]`
-          );
+        // Menggabungkan subLinks baru dengan yang sudah ada tanpa duplikasi
+        const uniqueSubLinks = [
+          ...existingSubLinksArray,
+          ...newSubLinks.filter(
+            (newSubLink) =>
+              !existingSubLinksArray.some(
+                (existing) =>
+                  existing.title === newSubLink.title &&
+                  existing.href === newSubLink.href
+              )
+          )
+        ];
 
-          // Tulis perubahan kembali ke file sidelinks.tsx
-          await fs.promises.writeFile(baseFolderPath, updatedData, 'utf8');
-          console.log(
-            `Subfolder "${title}" berhasil ditambahkan ke page "${toPascalCase(page)}".`
-          );
-        } else {
-          console.log(
-            `Subfolder "${title}" sudah ada di page "${toPascalCase(page)}".`
-          );
-        }
+        // Jika ada perubahan pada subLinks, update data
+        const updatedSubLinks = uniqueSubLinks
+          .map((subLink) => JSON.stringify(subLink, null, 2).slice(1, -1))
+          .join(',\n');
+
+        const updatedData = data.replace(
+          pageSection,
+          `${pageSection.slice(0, -1)},{\n${updatedSubLinks}\n}  ]`
+        );
+
+        // Tulis perubahan kembali ke file sidelinks.tsx
+        await fs.promises.writeFile(baseFolderPath, updatedData, 'utf8');
+        console.log(
+          `Subfolder "${title}" berhasil ditambahkan ke page "${toPascalCase(page)}".`
+        );
       }
     } else {
       // Jika `page` belum ada, tambahkan page baru dengan subfolder
