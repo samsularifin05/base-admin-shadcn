@@ -17,16 +17,6 @@ const router = createBrowserRouter([
         lazy: async () => ({
           Component: (await import('../pages/admin/dashboard')).default
         })
-      },
-      {
-        path: 'master-bank',
-        lazy: async () => ({
-          Component: (
-            await import(
-              '@/pages/admin/masterData/masterBank/ui/formMasterBank'
-            )
-          ).default
-        })
       }
     ]
   },
