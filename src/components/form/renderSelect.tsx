@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Control, FieldValues, Path } from 'react-hook-form';
+import { Control, FieldValues, Path, PathValue } from 'react-hook-form';
 import {
   FormControl,
   FormField,
@@ -8,17 +8,29 @@ import {
   FormMessage
 } from '../ui';
 import Select from 'react-select';
-// import { OptionTypeBase, Props as SelectProps } from "react-select";
+import AsyncSelect from 'react-select/async';
+import { useState } from 'react';
+export type OptionAsyn<FormValues> = {
+  value: NonNullable<PathValue<FormValues, Path<FormValues>>>;
+  label: NonNullable<PathValue<FormValues, Path<FormValues>>>;
+};
+export type Option = {
+  value: string;
+  label: string;
+};
 
 interface TypedSelectProps<FormValues extends FieldValues> {
   name: Path<FormValues>;
   label: string;
   control: Control<FormValues>;
   options: { value: string; label: string }[];
+  className?: string;
   placeholder?: string;
   readOnly?: boolean;
-  onChange?: (value: { value: string; label: string } | null) => void;
+  onChange?: (value: string | null) => void; // Accept null for clearable
   primaryColor?: string;
+  pagination?: boolean;
+  promiseOptions?: (inputValue: string) => Promise<OptionAsyn<FormValues>[]>;
 }
 
 const RenderSelect = <FormValues extends Record<string, any>>({
@@ -27,79 +39,203 @@ const RenderSelect = <FormValues extends Record<string, any>>({
   control,
   options,
   placeholder,
-  onChange
+  className,
+  onChange,
+  pagination,
+  promiseOptions
 }: TypedSelectProps<FormValues>) => {
+  const [loading, setLoading] = useState(false);
   return (
     <FormField
       control={control}
       name={name}
       render={({ field }) => {
-        // Convert options to the format required by react-select
-        const selectOptions = options.map((option) => ({
-          value: option.value,
-          label: option.label
-        }));
+        const selectOptions = pagination
+          ? options
+              .filter(
+                (list) =>
+                  list.value !== '' &&
+                  list.value !== null &&
+                  list.value === field.value
+              )
+              .map((option) => ({
+                value: option.value,
+                label: option.label
+              }))
+          : options.map((option) => ({
+              value: option.value,
+              label: option.label
+            }));
 
         return (
-          <FormItem className="space-y-1">
+          <FormItem className={`space-y-1 ${className}`}>
             <FormLabel>{label}</FormLabel>
             <FormControl>
-              <Select
-                value={
-                  selectOptions.find(
-                    (option) => option.value === field.value
-                  ) || null
-                }
-                onChange={(selected) => {
-                  if (selected) {
-                    field.onChange(selected.value); // Update form state
-                    if (onChange) {
-                      onChange(selected);
-                    }
-                  } else {
-                    field.onChange(null);
+              {pagination ? (
+                <AsyncSelect
+                  cacheOptions={false}
+                  defaultOptions={options
+                    .filter(
+                      (cek) =>
+                        cek.value !== null &&
+                        cek.value !== '' &&
+                        cek.label !== ''
+                    )
+                    .map((option) => ({
+                      value: option.value as NonNullable<
+                        PathValue<FormValues, Path<FormValues>>
+                      >,
+                      label: option.label as NonNullable<
+                        PathValue<FormValues, Path<FormValues>>
+                      >
+                    }))}
+                  value={
+                    field.value
+                      ? { value: field.value, label: field.value }
+                      : null
                   }
-                }}
-                options={selectOptions}
-                placeholder={placeholder}
-                // isDisabled={readOnly}
-                styles={{
-                  control: (provided) => ({
-                    ...provided,
-                    width: '100%',
-                    borderColor: '',
-                    boxShadow: 'none',
-                    '&:hover': {
-                      borderColor: 'gray'
+                  onChange={(selected) => {
+                    if (selected) {
+                      field.onChange(selected.value); // Update form state
+                      if (onChange) {
+                        onChange(selected.value);
+                      }
+                    } else {
+                      field.onChange(null); // Clear selection
+                      if (onChange) {
+                        onChange(null);
+                      }
                     }
-                  }),
-                  menu: (provided) => ({
-                    ...provided,
-                    zIndex: 9999
-                  }),
-                  option: (provided, state) => ({
-                    ...provided,
-                    backgroundColor: state.isSelected
-                      ? '#35A576'
-                      : provided.backgroundColor,
-                    color: state.isSelected ? 'white' : 'black'
-                  }),
-                  singleValue: (provided) => ({
-                    ...provided,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '16rem' // Adjust width as needed
-                  }),
-                  placeholder: (provided) => ({
-                    ...provided,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '16rem' // Adjust width as needed
-                  })
-                }}
-              />
+                  }}
+                  isLoading={loading}
+                  placeholder={placeholder}
+                  isClearable // Enable clearable feature
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      width: '100%',
+                      borderColor: '',
+                      boxShadow: 'none',
+                      height: '42px',
+                      '&:hover': {
+                        borderColor: 'gray'
+                      }
+                    }),
+                    menu: (provided) => ({
+                      ...provided,
+                      zIndex: 9999
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: state.isSelected
+                        ? '#3994EE'
+                        : provided.backgroundColor,
+                      color: state.isSelected ? 'white' : 'black'
+                    }),
+                    singleValue: (provided) => ({
+                      ...provided,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '16rem' // Adjust width as needed
+                    }),
+                    placeholder: (provided) => ({
+                      ...provided,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '16rem' // Adjust width as needed
+                    })
+                  }}
+                  loadOptions={(inputValue, callback) => {
+                    if (promiseOptions) {
+                      setLoading(true);
+                      promiseOptions(inputValue)
+                        .then((options) => {
+                          if (options.length === 0) {
+                            // Reset value if no options are returned
+                            field.onChange(null);
+                            callback([]); // Handle any errors by returning an empty array
+                            setLoading(false);
+                            return false;
+                          }
+                          callback(
+                            options.filter(
+                              (cek) => cek.value !== '' && cek.label !== ''
+                            )
+                          );
+                          setLoading(false);
+                        })
+                        .catch(() => {
+                          setLoading(false);
+                          callback([]); // Handle any errors by returning an empty array
+                        });
+                    }
+                  }}
+                />
+              ) : (
+                <Select
+                  className={className}
+                  value={
+                    selectOptions.find(
+                      (option) => option.value === field.value
+                    ) || null
+                  }
+                  onChange={(selected) => {
+                    if (selected) {
+                      field.onChange(selected.value); // Update form state
+                      if (onChange) {
+                        onChange(selected.value);
+                      }
+                    } else {
+                      field.onChange(null); // Clear selection
+                      if (onChange) {
+                        onChange(null);
+                      }
+                    }
+                  }}
+                  options={selectOptions}
+                  placeholder={`${placeholder ? placeholder : `Select ${label}`}`}
+                  isClearable // Enable clearable feature
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      width: '100%',
+                      borderColor: '',
+                      boxShadow: 'none',
+                      height: '42px',
+                      '&:hover': {
+                        borderColor: 'gray'
+                      }
+                    }),
+                    menu: (provided) => ({
+                      ...provided,
+                      zIndex: 9999
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      backgroundColor: state.isSelected
+                        ? '#3994EE'
+                        : provided.backgroundColor,
+                      color: state.isSelected ? 'white' : 'black'
+                    }),
+                    singleValue: (provided) => ({
+                      ...provided,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '16rem' // Adjust width as needed
+                    }),
+                    placeholder: (provided) => ({
+                      ...provided,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      maxWidth: '16rem' // Adjust width as needed
+                    })
+                  }}
+                />
+              )}
             </FormControl>
             <FormMessage />
           </FormItem>
