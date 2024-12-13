@@ -1,7 +1,7 @@
 import { Action, configureStore } from '@reduxjs/toolkit';
 import { ThunkAction, ThunkDispatch, thunk } from 'redux-thunk';
 import { rootReducer } from './reducers';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
@@ -25,6 +25,7 @@ const store = configureStore({
 export const persistor = persistStore(store);
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = ThunkDispatch<RootState, unknown, Action>;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,

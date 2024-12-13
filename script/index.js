@@ -704,7 +704,7 @@ const createFolderStructure = (dataJson) => {
           fs.writeFileSync(
             formIndexPath,
             `import { Button, FormPanel, RenderField } from "@/components";
-             import { AppDispatch, useAppSelector } from '@/reduxStore';
+             import { AppDispatch, useAppSelector,useAppDispatch } from '@/reduxStore';
              import { validate${capitalcase(folderName)} } from "../validate";
              import { save${folderName}, update${folderName}ById } from '../../service';
              import { Request${capitalcase(folderName)}Dto } from '../../model';
@@ -713,7 +713,7 @@ const createFolderStructure = (dataJson) => {
              const ${folderName} = () => { 
                const utility = useAppSelector((state) => state.utility);  
                const formValues = useAppSelector((state) => state.utility.getModal.data) as Request${capitalcase(folderName)}Dto;
-               const dispatch = useDispatch<AppDispatch>();
+               const dispatch = useAppDispatch();
               function onSubmit() {
                 if (utility.getModal.isEdit) {
                   dispatch(update${folderName}ById());
@@ -771,11 +771,11 @@ const createFolderStructure = (dataJson) => {
             tableIndexPath,
             `import { DataTable } from "@/components";
             import { columns } from "./column";
-            import { AppDispatch, useAppSelector } from "@/reduxStore";
+            import { AppDispatch, useAppSelector,useAppDispatch } from "@/reduxStore";
             import { get${capitalcase(folderName)} } from "../../service";
           
           const Table${capitalcase(folderName)} = () => {
-            const dispatch = useDispatch<AppDispatch>();
+            const dispatch = useAppDispatch();
           
             useEffect(() => {
               dispatch(get${capitalcase(folderName)}());
@@ -821,7 +821,7 @@ const createFolderStructure = (dataJson) => {
             } from '@/components';
             import { Response${capitalcase(folderName)}Dto } from "../../model";
             import { MoreHorizontal } from 'lucide-react';
-            import { AppDispatch, utilityActions } from '@/reduxStore';
+            import { AppDispatch, utilityActions,useAppDispatch } from '@/reduxStore';
             import { delete${capitalcase(folderName)}ById } from '../../service';
 
             
@@ -845,7 +845,7 @@ const createFolderStructure = (dataJson) => {
                   id: 'actions',
                   enableHiding: false,
                   cell: ({ row }) => {
-                    const dispatch = useDispatch<AppDispatch>();
+                    const dispatch = useAppDispatch();
                     return (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

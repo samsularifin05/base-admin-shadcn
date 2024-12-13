@@ -1,4 +1,4 @@
-import { AppDispatch, formActions, useAppSelector } from '@/reduxStore';
+import { formActions, useAppDispatch, useAppSelector } from '@/reduxStore';
 import { validLoginSchema } from '../validate';
 import { FormPanel, Button, RenderField, cn } from '@/components';
 import { serviceLogin } from '../redux';
@@ -6,7 +6,7 @@ import { serviceLogin } from '../redux';
 const FormLogin = () => {
   const utility = useAppSelector((state) => state.utility);
   const theme = useAppSelector((state) => state.theme);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const service = serviceLogin();
 
   const handleSubmit = () => {
