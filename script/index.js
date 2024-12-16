@@ -704,7 +704,7 @@ const createFolderStructure = (dataJson) => {
           fs.writeFileSync(
             formIndexPath,
             `import { Button, FormPanel, RenderField } from "@/components";
-             import { AppDispatch, useAppSelector,useAppDispatch } from '@/reduxStore';
+             import {  useAppSelector,useAppDispatch } from '@/reduxStore';
              import { validate${capitalcase(folderName)} } from "../validate";
              import { save${folderName}, update${folderName}ById } from '../../service';
              import { Request${capitalcase(folderName)}Dto } from '../../model';
@@ -712,7 +712,6 @@ const createFolderStructure = (dataJson) => {
 
              const ${folderName} = () => { 
                const utility = useAppSelector((state) => state.utility);  
-               const formValues = useAppSelector((state) => state.utility.getModal.data) as Request${capitalcase(folderName)}Dto;
                const dispatch = useAppDispatch();
               function onSubmit() {
                 if (utility.getModal.isEdit) {
@@ -771,7 +770,7 @@ const createFolderStructure = (dataJson) => {
             tableIndexPath,
             `import { DataTable } from "@/components";
             import { columns } from "./column";
-            import { AppDispatch, useAppSelector,useAppDispatch } from "@/reduxStore";
+            import {  useAppSelector,useAppDispatch } from "@/reduxStore";
             import { get${capitalcase(folderName)} } from "../../service";
           
           const Table${capitalcase(folderName)} = () => {
@@ -821,7 +820,7 @@ const createFolderStructure = (dataJson) => {
             } from '@/components';
             import { Response${capitalcase(folderName)}Dto } from "../../model";
             import { MoreHorizontal } from 'lucide-react';
-            import { AppDispatch, utilityActions,useAppDispatch } from '@/reduxStore';
+            import { utilityActions,useAppDispatch } from '@/reduxStore';
             import { delete${capitalcase(folderName)}ById } from '../../service';
 
             

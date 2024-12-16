@@ -90,7 +90,7 @@ export default function Nav({
       }
     });
 
-    document.title = (appTitle ? `${appTitle} | ` : '') + ' Nagagold Store';
+    document.title = appTitle ? `${appTitle} | ` : '';
   };
   return (
     <div
