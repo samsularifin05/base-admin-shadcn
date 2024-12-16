@@ -1,5 +1,5 @@
 {
-    "type": "admin", // Type ini
+    "type": "admin",
     "page": "masterData",
     "subFolder": "masterBank",
     "namaFile": "masterBank",

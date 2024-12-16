@@ -27,6 +27,7 @@ rl.question(
       // Reading the JSON file
       const fileContent = await readFile(filePath, 'utf8');
       const dataJson = JSON.parse(fileContent);
+      // console.log(dataJson);
 
       await generateFormState(dataJson);
       createFolderStructure(dataJson);
