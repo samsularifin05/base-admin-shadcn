@@ -23,7 +23,8 @@
     "form": {
       "_id": {
         "type": "hidden",
-        "validation" : "optional"
+        "validation" : "optional",
+        "primaryKey" : true
       },
       "nomor_akun": {
         "type": "text",
@@ -36,7 +37,6 @@
       "kode_bank": {
         "type": "text",
         "validation" : "required",
-        "primaryKey" : true,
         "readOnly" : {
           "create" : false, 
           "edit" : true
