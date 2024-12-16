@@ -8,7 +8,7 @@
     "build": "tsc && vite build && npm run obfuscate",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "ganerate": "cd script && node index.js && cd .. && npm run format",
+    "generate": "cd script && node index.js && cd .. && npm run format",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,json,css,md}\"",
     "obfuscate": "node ./script/obfuscate.js"
   },

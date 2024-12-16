@@ -819,6 +819,9 @@ const createFolderStructure = (dataJson) => {
 
           // Buat file column.tsx di dalam folder table
           const tableColumnPath = path.join(tableFolderPath, 'column.tsx');
+          let primaryKeyObject = Object.entries(dataJson.form).find(
+            ([key, value]) => value.primaryKey === true
+          );
           fs.writeFileSync(
             tableColumnPath,
             `/* eslint-disable react-hooks/rules-of-hooks */
@@ -889,7 +892,7 @@ const createFolderStructure = (dataJson) => {
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="cursor-pointer"
-                           onClick={() => dispatch(delete${capitalcase(folderName)}ById(row.original._id))}
+                           onClick={() => dispatch(delete${capitalcase(folderName)}ById(row.original.${primaryKeyObject[0]}))}
                           >
                             Delete
                           </DropdownMenuItem>
