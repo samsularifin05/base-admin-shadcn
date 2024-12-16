@@ -5,15 +5,17 @@
     "namaFile": "masterBank",
     "route": "master-bank",
     "title": "Master Bank",
-    "endpoin": "bank",
+    "endpoin": "banks",
     "dto": {
       "request_dto": {
         "_id": "string",
+        "nomor_akun": "string",
         "kode_bank": "string",
         "nama_bank": "string"
       },
       "response_dto": {
         "_id": "string",
+        "nomor_akun": "string",
         "kode_bank": "string",
         "nama_bank": "string"
       }
@@ -21,12 +23,24 @@
     "form": {
       "_id": {
         "type": "hidden",
-        "validation" : "optional",
-        "primaryKey" : true
+        "validation" : "optional"
+      },
+      "nomor_akun": {
+        "type": "text",
+        "validation" : "required",
+        "readOnly" : {
+          "create" : false, 
+          "edit" : true
+        }
       },
       "kode_bank": {
         "type": "text",
-        "validation" : "required"
+        "validation" : "required",
+        "primaryKey" : true,
+        "readOnly" : {
+          "create" : false, 
+          "edit" : true
+        }
       },
       "nama_bank": {
         "type": "text",
@@ -35,6 +49,7 @@
     },
     "table": {
       "column": {
+        "nomor_akun": "string",
         "kode_bank": "string",
         "nama_bank": "string"
       },

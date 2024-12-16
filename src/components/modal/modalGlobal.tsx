@@ -1,6 +1,12 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui';
-import { AppDispatch, useAppSelector, utilityActions } from '@/reduxStore';
+import {
+  AppDispatch,
+  formActions,
+  FormStateReduxFom,
+  useAppSelector,
+  utilityActions
+} from '@/reduxStore';
 import { DialogDescription, DialogOverlay } from '@radix-ui/react-dialog';
 import { useDispatch } from 'react-redux';
 import { cn } from '../lib/utils';
@@ -10,10 +16,17 @@ interface Props {
   children: React.ReactNode;
   className?: string; // Optional width prop
   isFullScreen?: boolean;
+  formName?: keyof FormStateReduxFom;
 }
 
 const ModalGlobal = (props: Props) => {
-  const { title, children, className = 'max-w-lg', isFullScreen } = props;
+  const {
+    title,
+    formName,
+    children,
+    className = 'max-w-lg',
+    isFullScreen
+  } = props;
 
   const utility = useAppSelector((state) => state.utility);
   const dispatch = useDispatch<AppDispatch>();
@@ -57,6 +70,9 @@ const ModalGlobal = (props: Props) => {
             className
           )}
           onClick={() => {
+            if (formName) {
+              dispatch(formActions.resetForm(formName));
+            }
             dispatch(
               utilityActions.showModal({
                 isModalShow: false,

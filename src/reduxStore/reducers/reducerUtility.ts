@@ -8,9 +8,9 @@ interface LoadingState {
 
 interface ModalState<T> {
   isModalShow: boolean;
-  isEdit: boolean;
-  data: T | T[];
-  namaForm: string;
+  isEdit?: boolean;
+  data?: T | T[];
+  namaForm?: string;
 }
 
 interface UtilityState<T> {

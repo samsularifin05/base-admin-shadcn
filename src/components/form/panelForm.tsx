@@ -22,32 +22,36 @@ interface FormPanelProps<FormValues extends FieldValues> {
   onSubmit: (values: FormValues) => void;
   children: (props: { form: UseFormReturn<FormValues> }) => React.ReactNode;
   validate: yup.ObjectSchema<FormValues>;
+  initialValues?: DefaultValues<FormValues>;
 }
 
 const FormPanel = <FormValues extends FieldValues>({
   onSubmit,
   children,
   validate,
-  formName
+  formName,
+  initialValues
 }: FormPanelProps<FormValues>): JSX.Element => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const initialValues = useAppSelector(
+  const initialValuesWithForm = useAppSelector(
     (state) => state.form[formName as keyof FormStateReduxFom]
   ) as unknown as DefaultValues<FormValues>;
 
   const form = useForm<FormValues>({
     resolver: yupResolver(validate) as unknown as Resolver<FormValues>,
-    defaultValues: initialValues,
+    defaultValues: initialValues ? initialValues : initialValuesWithForm,
     mode: 'onChange'
   });
 
   useEffect(() => {
     const currentValues = form.getValues();
-    if (JSON.stringify(currentValues) !== JSON.stringify(initialValues)) {
-      form.reset(initialValues);
+    if (
+      JSON.stringify(currentValues) !== JSON.stringify(initialValuesWithForm)
+    ) {
+      form.reset(initialValuesWithForm);
     }
-  }, [initialValues, form]);
+  }, [initialValuesWithForm, form]);
 
   useEffect(() => {
     const watchSubscription = form.watch(async (values) => {

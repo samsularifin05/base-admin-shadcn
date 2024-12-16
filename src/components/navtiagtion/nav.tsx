@@ -71,17 +71,19 @@ export default function Nav({
   const setTitle = (path: string, routeArray: SideLink[]) => {
     let appTitle;
 
+    const newPath = path.replace('/admin/', '');
     routeArray.forEach((row: SideLink) => {
-      if (row.href === path) {
+      if (row.href === newPath) {
         appTitle = row.title;
       } else if (row.sub && row.sub.length > 0) {
         row.sub.forEach((el: any) => {
-          if (el.href === path) {
+          console.log(el.href);
+          if (el.href === newPath) {
             appTitle = el.title;
           }
           if (el.sub?.length > 0) {
             el.sub.forEach((el: any) => {
-              if (el.href === path) {
+              if (el.href === newPath) {
                 appTitle = el.title;
               }
             });
@@ -90,7 +92,7 @@ export default function Nav({
       }
     });
 
-    document.title = appTitle ? `${appTitle} | ` : '';
+    document.title = appTitle ? `${appTitle} ` : '';
   };
   return (
     <div

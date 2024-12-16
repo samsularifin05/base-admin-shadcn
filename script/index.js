@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef */
 import { readFile } from 'fs/promises';
 import path from 'path';
@@ -532,9 +533,12 @@ const createFolderStructure = (dataJson) => {
 
         if (subFolder === 'service') {
           const serviceIndex = path.join(subFolderPath, 'index.ts');
+          let primaryKeyObject = Object.entries(dataJson.form).find(
+            ([key, value]) => value.primaryKey === true
+          );
           const serviceIndexContent = `
-        import { AppDispatch, AppThunk, utilityActions } from "@/reduxStore";
-        import { apiInstance, NotifInfo, NotifSuccess, urlApi } from '@/components';
+        import { AppDispatch, AppThunk, utilityActions,formActions } from "@/reduxStore";
+        import { apiInstance, NotifInfo, NotifSuccess, urlApi,removeFormObject } from '@/components';
         import { Response${folderName}Dto } from "../model";
         import { set${folderName} } from "../redux";
         
@@ -578,10 +582,11 @@ const createFolderStructure = (dataJson) => {
             try {
               const state = getState();
               const formValues = state.form.${folderName};
-              await apiInstance.post(urlApi.${dataJson.page}.${dataJson.subFolder}, formValues);
+              await apiInstance.post(urlApi.${dataJson.page}.${dataJson.subFolder},removeFormObject(formValues, ['${primaryKeyObject[0]}']));
               dispatch(get${folderName}());
               NotifSuccess("${dataJson.title} Berhasil Ditambahkan");
               dispatch(utilityActions.stopLoading());
+              dispatch(formActions.resetForm('${folderName}'));
               dispatch(utilityActions.hideModal());
             } catch (error) {
               NotifInfo(error);
@@ -612,14 +617,16 @@ const createFolderStructure = (dataJson) => {
             dispatch(utilityActions.setLoading({ table: true }));
             try {
               const state = getState();
-              const formValues = state.form.${folderName};
+              
+              const { ${primaryKeyObject[0]}, ...formValuesWithoutId } = state.form.${folderName};
               await apiInstance.put(
-                urlApi.${dataJson.page}.${dataJson.subFolder} + '/' + formValues._id,
-                formValues
+                urlApi.${dataJson.page}.${dataJson.subFolder} + '/' + ${primaryKeyObject[0]},
+                formValuesWithoutId
               );
               dispatch(get${folderName}());
-              NotifSuccess('Master Bank berhasil di update');
+              NotifSuccess('Data berhasil di update');
               dispatch(utilityActions.stopLoading());
+              dispatch(formActions.resetForm('${folderName}'));
               dispatch(utilityActions.hideModal());
             } catch (error) {
               NotifInfo(error);
@@ -709,9 +716,9 @@ const createFolderStructure = (dataJson) => {
              import { save${folderName}, update${folderName}ById } from '../../service';
              import { Request${capitalcase(folderName)}Dto } from '../../model';
 
-
              const ${folderName} = () => { 
                const utility = useAppSelector((state) => state.utility);  
+              const formValues = utility.getModal.data as Request${capitalcase(folderName)}Dto;
                const dispatch = useAppDispatch();
               function onSubmit() {
                 if (utility.getModal.isEdit) {
@@ -726,7 +733,8 @@ const createFolderStructure = (dataJson) => {
                    <FormPanel        
                      formName={"${capitalcase(folderName)}"}        
                      onSubmit={onSubmit}        
-                     validate={validate${folderName}}        
+                     validate={validate${folderName}}  
+                     initialValues={formValues}
                     >
                      {({ form }) => (
                        <>
@@ -738,6 +746,11 @@ const createFolderStructure = (dataJson) => {
                                  control={form.control}
                                  tabIndex={${index}}
                                  label="${toPascalCase(key)}"
+                                 ${
+                                   value.readOnly
+                                     ? `readOnly={utility.getModal.isEdit ? ${value.readOnly.edit} : ${value.readOnly.create}}`
+                                     : ''
+                                 }
                                  placeholder="Masukkan ${toPascalCase(key)}"
                                  name="${key}"
                                  type="${value.type}"
@@ -820,7 +833,7 @@ const createFolderStructure = (dataJson) => {
             } from '@/components';
             import { Response${capitalcase(folderName)}Dto } from "../../model";
             import { MoreHorizontal } from 'lucide-react';
-            import { utilityActions,useAppDispatch } from '@/reduxStore';
+            import { utilityActions,useAppDispatch,formActions } from '@/reduxStore';
             import { delete${capitalcase(folderName)}ById } from '../../service';
 
             
@@ -857,16 +870,20 @@ const createFolderStructure = (dataJson) => {
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem
                             className="cursor-pointer"
-                            onClick={() =>
+                            onClick={() => {
                               dispatch(
                                 utilityActions.showModal({
                                   isModalShow: true,
-                                  isEdit: true,
-                                  data: row.original,
-                                  namaForm: ''
+                                  isEdit: true
                                 })
-                              )
-                            }
+                              );
+                              dispatch(
+                                formActions.setValue({
+                                  form: '${capitalcase(folderName)}',
+                                  values: row.original
+                                })
+                              );
+                            }}
                           >
                             Edit
                           </DropdownMenuItem>
@@ -886,7 +903,8 @@ const createFolderStructure = (dataJson) => {
             'utf8'
           );
           const formData = path.join(subFolderPath, `form${folderName}.tsx`);
-          const masterFormIndex = `import { ModalGlobal, PanelAdmin } from "@/components";\nimport Form${folderName} from "./form";\nimport { useAppSelector } from "@/reduxStore";\nimport Table${folderName} from "./table";\n\nconst ${folderName} = () => {\n  const modal = useAppSelector((state) => state.utility.getModal);\n\n  return (\n    <PanelAdmin>\n      <Table${folderName} />\n      <ModalGlobal\n        title={\`\${modal.isEdit ? "Edit" : "Tambah"} Data\`}>\n        <Form${folderName} />\n      </ModalGlobal>\n    </PanelAdmin>\n  );\n};\n\nexport default ${folderName};\n`;
+          const masterFormIndex = `import { ModalGlobal, PanelAdmin } from "@/components";\nimport Form${folderName} from "./form";\nimport { useAppSelector } from "@/reduxStore";\nimport Table${folderName} from "./table";\n\nconst ${folderName} = () => {\n  const modal = useAppSelector((state) => state.utility.getModal);\n\n  return (\n    <PanelAdmin>\n      <Table${folderName} />\n      <ModalGlobal formName="${folderName}"
+          \n        title={\`\${modal.isEdit ? "Edit" : "Tambah"} Data\`}>\n        <Form${folderName} />\n      </ModalGlobal>\n    </PanelAdmin>\n  );\n};\n\nexport default ${folderName};\n`;
           fs.writeFileSync(formData, masterFormIndex, 'utf8');
         }
       });

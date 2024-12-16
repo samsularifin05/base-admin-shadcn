@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ClassValue, clsx } from 'clsx';
 // import { DeepPartial } from "redux";
 import { twMerge } from 'tailwind-merge';
@@ -82,3 +83,12 @@ export const calculateWindowSize = (windowWidth: number): string => {
     return 'xs';
   }
 };
+
+export function removeFormObject<
+  T extends Record<string, any>,
+  K extends keyof T
+>(obj: T, keys: K[]): Omit<T, K> {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !keys.includes(key as K))
+  ) as Omit<T, K>;
+}

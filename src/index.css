@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+body {
+  pointer-events: auto !important;
+}
 @layer base {
   :root {
     /* Custom CSS Variables */

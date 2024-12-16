@@ -16,7 +16,7 @@ export const sidelinks: SideLink[] = [
   {
     title: 'Dashboard',
     label: '',
-    href: '/admin/dashboard',
+    href: 'dashboard',
     icon: <IconUserShield size={18} />
   }
 ];
