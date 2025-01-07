@@ -40,33 +40,33 @@ const FormPanel = <FormValues extends FieldValues>({
 
   const form = useForm<FormValues>({
     resolver: yupResolver(validate) as unknown as Resolver<FormValues>,
-    defaultValues: initialValues ? initialValues : initialValuesWithForm,
+    defaultValues: initialValues || initialValuesWithForm,
     mode: 'onChange'
   });
 
   useEffect(() => {
-    const currentValues = form.getValues();
-    if (
-      JSON.stringify(currentValues) !== JSON.stringify(initialValuesWithForm)
-    ) {
+    if (initialValuesWithForm) {
       form.reset(initialValuesWithForm);
     }
   }, [initialValuesWithForm, form]);
 
   useEffect(() => {
-    const watchSubscription = form.watch(async (values) => {
-      try {
-        const validValues = await validate.validate(values);
-        dispatch(formActions.setValue({ form: formName, values: validValues }));
-      } catch (error) {
-        console.log(error);
+    const subscription = form.watch((values) => {
+      const currentValues = JSON.stringify(values);
+      const previousValues = JSON.stringify(initialValuesWithForm);
+
+      if (currentValues !== previousValues) {
+        dispatch(
+          formActions.setValue({
+            form: formName,
+            values: values as FormValues
+          })
+        );
       }
     });
 
-    return () => {
-      watchSubscription.unsubscribe();
-    };
-  }, [form, dispatch, validate, formName]);
+    return () => subscription.unsubscribe();
+  }, [form.watch, dispatch, formName, initialValuesWithForm, form]);
 
   return (
     <Form {...form}>

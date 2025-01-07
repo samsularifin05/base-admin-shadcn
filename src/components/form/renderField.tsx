@@ -165,7 +165,11 @@ const ReanderField = <FormValues extends Record<string, any>>({
                       if (onChange) onChange(e);
                     }}
                     className={`block ${
-                      iconPosition === 'left' ? 'pl-10' : 'pr-10'
+                      type !== 'date'
+                        ? iconPosition === 'left'
+                          ? 'pl-10'
+                          : 'pr-10'
+                        : ''
                     } ${
                       readOnly
                         ? 'bg-gray-200 outline-gray-200'

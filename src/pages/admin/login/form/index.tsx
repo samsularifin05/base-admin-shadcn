@@ -1,6 +1,12 @@
 import { formActions, useAppDispatch, useAppSelector } from '@/reduxStore';
 import { validLoginSchema } from '../validate';
-import { FormPanel, Button, RenderField, cn } from '@/components';
+import {
+  FormPanel,
+  Button,
+  RenderField,
+  cn,
+  RenderFileUpload
+} from '@/components';
 import { serviceLogin } from '../redux';
 
 const FormLogin = () => {
@@ -19,7 +25,8 @@ const FormLogin = () => {
         form: 'LoginForm',
         values: {
           email: 'admin@gmail.com',
-          password: 'admin1234'
+          password: 'admin1234',
+          tanggalPastiKeberangkatan: '2025-01-07'
         }
       })
     );
@@ -51,6 +58,20 @@ const FormLogin = () => {
                 placeholder="Masukan Password"
                 name="password"
                 hiddenText
+              />
+              <RenderField
+                control={form.control}
+                label="Tanggal Pasti Keberangkatan Tubel"
+                name="tanggalPastiKeberangkatan"
+                type="date"
+                tabIndex={17}
+              />
+
+              <RenderFileUpload
+                control={form.control}
+                label=""
+                tabIndex={15}
+                name="curriculumnVitae"
               />
 
               <Button

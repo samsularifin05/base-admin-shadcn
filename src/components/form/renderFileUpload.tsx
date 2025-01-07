@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Control, FieldValues, Path } from 'react-hook-form';
 import {
@@ -9,20 +9,28 @@ import {
   FormMessage,
   FormControl
 } from '../ui';
-import { IconCheck, IconCloudUpload } from '@tabler/icons-react';
+import { IconCheck, IconCloudUpload, IconLoader } from '@tabler/icons-react';
 
 interface RenderFileUploadProps<FormValues extends FieldValues> {
   name: Path<FormValues>;
   control: Control<FormValues>;
-  label: string;
+  label?: string;
+  placeholder?: string;
+  accept?: string;
   tabIndex?: number;
+  onChange?: (file: File) => void;
+  loading?: boolean;
 }
 
 const RenderFileUpload = <FormValues extends FieldValues>({
   name,
   control,
   label,
-  tabIndex
+  tabIndex,
+  placeholder,
+  accept,
+  onChange,
+  loading = false
 }: RenderFileUploadProps<FormValues>) => {
   const [fileName, setFileName] = useState<string | null>(null);
 
@@ -33,7 +41,23 @@ const RenderFileUpload = <FormValues extends FieldValues>({
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop
+    onDrop,
+    accept: accept
+      ? accept.split(',').reduce(
+          (acc, type) => {
+            const trimmed = type.trim();
+            if (trimmed.startsWith('.')) {
+              acc['application/octet-stream'] =
+                acc['application/octet-stream'] || [];
+              acc['application/octet-stream'].push(trimmed);
+            } else {
+              acc[trimmed] = [];
+            }
+            return acc;
+          },
+          {} as Record<string, string[]>
+        )
+      : undefined
   });
 
   return (
@@ -42,16 +66,16 @@ const RenderFileUpload = <FormValues extends FieldValues>({
       control={control}
       render={({ field }) => {
         useEffect(() => {
-          if (field.value !== undefined) {
-            field.onChange(field.value || '');
+          if (!field.value) {
+            setFileName(null); // Reset fileName if field.value is null
+          } else if (field.value as File) {
+            setFileName(field.value.name);
           }
-        }, [field]);
-
+        }, [field.value]);
         return (
           <FormItem className="space-y-1">
             <FormLabel>{label}</FormLabel>
             <FormControl>
-              {/* Tambahkan wrapper di sini */}
               <div>
                 <div
                   {...getRootProps()}
@@ -67,23 +91,40 @@ const RenderFileUpload = <FormValues extends FieldValues>({
                       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                         const files = e.target.files;
                         if (files?.[0]) {
-                          setFileName(files[0].name); // Set nama file
-                          field.onChange(files[0]); // Update nilai form
+                          setFileName(files[0].name);
+                          if (onChange) onChange(files[0]);
+                          field.onChange(files[0]); // Update form value
                         }
                       }
                     })}
                   />
                   <div className="flex flex-col items-center">
-                    <IconCloudUpload />
-                    <p className="mt-2 text-sm text-gray-600">
-                      {fileName ? (
-                        <div className="flex items-center gap-2">
-                          File Upload {fileName} <IconCheck size={20} />{' '}
+                    {loading ? (
+                      <div className="flex items-center gap-2">
+                        <IconLoader className="animate-spin" size={20} />
+                        <span className="text-sm text-gray-600">
+                          Uploading...
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <IconCloudUpload />
+                        <div className="mt-2 text-sm text-gray-600">
+                          {fileName ? (
+                            <div className="flex items-center gap-2">
+                              File Upload {fileName} <IconCheck size={20} />
+                            </div>
+                          ) : (
+                            placeholder || (
+                              <p>
+                                Drag and drop files here, or click to select
+                                files
+                              </p>
+                            )
+                          )}
                         </div>
-                      ) : (
-                        'Drag here or click to upload'
-                      )}
-                    </p>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
