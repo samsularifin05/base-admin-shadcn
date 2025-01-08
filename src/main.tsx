@@ -8,25 +8,28 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './reduxStore/store.ts';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ErrorBoundary from './pages/errors/errorBoundary.tsx';
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-        <RouterProvider router={router} />
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-        <Toaster />
-      </ThemeProvider>
-    </PersistGate>
-  </Provider>
+  <ErrorBoundary>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+          <RouterProvider router={router} />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+          <Toaster />
+        </ThemeProvider>
+      </PersistGate>
+    </Provider>
+  </ErrorBoundary>
 );

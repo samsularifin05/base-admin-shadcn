@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../navtiagtion/sidebar';
 import useIsCollapsed from '@/hooks/use-is-collapsed';
 import { ProtectedRoute } from '../panelAdmin/ProtectedRoute';
+import React from 'react';
 
 export default function AppShell() {
   const [isCollapsed, setIsCollapsed] = useIsCollapsed();
@@ -15,7 +16,9 @@ export default function AppShell() {
             isCollapsed ? 'md:ml-14' : 'md:ml-64'
           } h-full`}
         >
-          <Outlet />
+          <React.Suspense fallback="loading">
+            <Outlet />
+          </React.Suspense>
         </main>
       </div>
     </ProtectedRoute>

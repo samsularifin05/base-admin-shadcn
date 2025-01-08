@@ -1,5 +1,6 @@
 import ViteLogo from '@/assets/react.svg';
-import FormLogin from './form';
+import { lazy } from 'react';
+const FormLogin = lazy(() => import('./form'));
 
 const LoginForm = () => {
   document.title = 'Login';
