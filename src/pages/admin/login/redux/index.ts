@@ -12,6 +12,7 @@ export const serviceLogin = () => {
       const state = getState();
       const data = state.form.LoginForm;
 
+      console.log(data);
       dispatch(formActions.resetForm('LoginForm'));
       if (data.email === 'admin@gmail.com' && data.password === 'admin1234') {
         dispatch(themesActions.setIsLogin(true));

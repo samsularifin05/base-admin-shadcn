@@ -50,6 +50,13 @@ const FormPanel = <FormValues extends FieldValues>({
     }
   }, [initialValuesWithForm, form]);
 
+  const { errors } = form.formState;
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      console.log('Fields errors:', errors);
+    }
+  }, [errors]);
   useEffect(() => {
     const subscription = form.watch((values) => {
       const currentValues = JSON.stringify(values);

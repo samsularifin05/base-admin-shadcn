@@ -10,12 +10,11 @@ const persistConfig: PersistConfig<ReturnType<typeof rootReducer>> = {
   key: 'root',
   storage
 };
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
   reducer: persistedReducer,
-
-  devTools: true,
-  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+  devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Control, FieldValues, Path } from 'react-hook-form';
 import {
@@ -9,7 +10,12 @@ import {
   FormMessage,
   FormControl
 } from '../ui';
-import { IconCheck, IconCloudUpload, IconLoader } from '@tabler/icons-react';
+import {
+  IconCheck,
+  IconCloudUpload,
+  IconLoader,
+  IconTrash
+} from '@tabler/icons-react';
 
 interface RenderFileUploadProps<FormValues extends FieldValues> {
   name: Path<FormValues>;
@@ -18,8 +24,9 @@ interface RenderFileUploadProps<FormValues extends FieldValues> {
   placeholder?: string;
   accept?: string;
   tabIndex?: number;
-  onChange?: (file: File) => void;
+  onChange?: (files: File[]) => void;
   loading?: boolean;
+  isMultiple?: boolean;
 }
 
 const RenderFileUpload = <FormValues extends FieldValues>({
@@ -30,18 +37,33 @@ const RenderFileUpload = <FormValues extends FieldValues>({
   placeholder,
   accept,
   onChange,
-  loading = false
+  loading = false,
+  isMultiple = false
 }: RenderFileUploadProps<FormValues>) => {
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
 
-  const onDrop = (acceptedFiles: File[]) => {
-    if (acceptedFiles[0]) {
-      setFileName(acceptedFiles[0].name);
+  const handleRemoveFile = (index: number, field: any) => {
+    const updatedFileNames = [...fileNames];
+    const updatedFiles = [...files];
+
+    // Remove the selected file
+    updatedFileNames.splice(index, 1);
+    updatedFiles.splice(index, 1);
+
+    // Update state
+    setFileNames(updatedFileNames);
+    setFiles(updatedFiles);
+
+    // Update form value
+    if (onChange) {
+      onChange(updatedFiles);
     }
+    field.onChange(isMultiple ? updatedFiles : updatedFiles[0] || null);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
+    // onDrop,
     accept: accept
       ? accept.split(',').reduce(
           (acc, type) => {
@@ -57,7 +79,8 @@ const RenderFileUpload = <FormValues extends FieldValues>({
           },
           {} as Record<string, string[]>
         )
-      : undefined
+      : undefined,
+    multiple: isMultiple
   });
 
   return (
@@ -67,19 +90,25 @@ const RenderFileUpload = <FormValues extends FieldValues>({
       render={({ field }) => {
         useEffect(() => {
           if (!field.value) {
-            setFileName(null); // Reset fileName if field.value is null
-          } else if (field.value as File) {
-            setFileName(field.value.name);
+            setFileNames([]);
+            setFiles([]);
+          } else if (isMultiple && Array.isArray(field.value)) {
+            setFileNames(field.value.map((file: File) => file.name));
+            setFiles(field.value);
+          } else if (!isMultiple && (field.value as File)) {
+            setFileNames([field.value.name]);
+            setFiles([field.value]);
           }
         }, [field.value]);
+
         return (
           <FormItem className="space-y-1">
-            <FormLabel>{label}</FormLabel>
+            {label && <FormLabel>{label}</FormLabel>}
             <FormControl>
               <div>
                 <div
                   {...getRootProps()}
-                  className={`border-2 border-dashed h-40 flex justify-center items-center rounded-lg p-4 text-center ${
+                  className={`border-2 border-dashed ${fileNames.length > 0 ? 'h-auto' : 'h-40'} flex rounded-lg p-5${
                     isDragActive
                       ? 'border-blue-500 bg-blue-50'
                       : 'border-gray-300 bg-gray-100'
@@ -89,16 +118,40 @@ const RenderFileUpload = <FormValues extends FieldValues>({
                     tabIndex={tabIndex}
                     {...getInputProps({
                       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                        const files = e.target.files;
-                        if (files?.[0]) {
-                          setFileName(files[0].name);
-                          if (onChange) onChange(files[0]);
-                          field.onChange(files[0]); // Update form value
+                        const fileList = e.target.files;
+                        if (fileList) {
+                          const acceptedFiles = Array.from(fileList);
+
+                          setFileNames((prev) =>
+                            isMultiple
+                              ? [
+                                  ...prev,
+                                  ...acceptedFiles.map((file) => file.name)
+                                ]
+                              : [acceptedFiles[0].name]
+                          );
+                          setFiles((prev) =>
+                            isMultiple
+                              ? [...prev, ...acceptedFiles]
+                              : acceptedFiles
+                          );
+
+                          // Trigger onChange callbacks
+                          if (onChange) {
+                            onChange(
+                              isMultiple ? acceptedFiles : [acceptedFiles[0]]
+                            );
+                          }
+                          field.onChange(
+                            isMultiple
+                              ? [...files, ...acceptedFiles]
+                              : acceptedFiles[0]
+                          );
                         }
                       }
                     })}
                   />
-                  <div className="flex flex-col items-center">
+                  <div className="flex items-center w-full p-4">
                     {loading ? (
                       <div className="flex items-center gap-2">
                         <IconLoader className="animate-spin" size={20} />
@@ -107,12 +160,39 @@ const RenderFileUpload = <FormValues extends FieldValues>({
                         </span>
                       </div>
                     ) : (
-                      <>
-                        <IconCloudUpload />
-                        <div className="mt-2 text-sm text-gray-600">
-                          {fileName ? (
-                            <div className="flex items-center gap-2">
-                              File Upload {fileName} <IconCheck size={20} />
+                      <div className="flex flex-col w-full">
+                        <div className="flex items-center justify-center">
+                          <IconCloudUpload />
+                        </div>
+                        <div className="flex mt-2 text-sm text-gray-600">
+                          {fileNames.length > 0 ? (
+                            <div className="w-full space-y-2">
+                              {fileNames.map((name, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-center justify-between w-full gap-2 p-2 bg-white border border-gray-300 rounded-md shadow-sm"
+                                >
+                                  <span className="w-full text-left text-gray-700 truncate">
+                                    {name.slice(0, 30)}...
+                                  </span>
+                                  <div className="flex items-center flex-shrink-0 gap-2">
+                                    <IconCheck
+                                      size={20}
+                                      className="text-green-500"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation(); // Prevent event from bubbling to the file input
+                                        handleRemoveFile(index, field);
+                                      }}
+                                      className="text-red-500 hover:text-red-700"
+                                    >
+                                      <IconTrash size={20} />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           ) : (
                             placeholder || (
@@ -123,7 +203,7 @@ const RenderFileUpload = <FormValues extends FieldValues>({
                             )
                           )}
                         </div>
-                      </>
+                      </div>
                     )}
                   </div>
                 </div>
