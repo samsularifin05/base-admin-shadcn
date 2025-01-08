@@ -1,4 +1,4 @@
-import { formActions, useAppDispatch, useAppSelector } from '@/reduxStore';
+import { useAppDispatch, useAppSelector } from '@/reduxStore';
 import { validLoginSchema } from '../validate';
 import {
   FormPanel,
@@ -19,18 +19,18 @@ const FormLogin = () => {
     dispatch(service.login());
   };
 
-  useEffect(() => {
-    dispatch(
-      formActions.setValue({
-        form: 'LoginForm',
-        values: {
-          email: 'admin@gmail.com',
-          password: 'admin1234',
-          tanggalPastiKeberangkatan: '2025-01-07'
-        }
-      })
-    );
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(
+  //     formActions.setValue({
+  //       form: 'LoginForm',
+  //       values: {
+  //         email: 'admin@gmail.com',
+  //         password: 'admin1234',
+  //         tanggalPastiKeberangkatan: '2025-01-07'
+  //       }
+  //     })
+  //   );
+  // }, [dispatch]);
 
   if (theme.getIsLogin) {
     return <Navigate to={'/admin/dashboard'} />;

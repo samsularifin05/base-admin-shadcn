@@ -5,7 +5,7 @@ export interface FormLoginDto {
   curriculumnVitae: File | null;
 }
 export const intitalFormLogin: FormLoginDto = {
-  email: '',
+  email: 'sam@gmail.com',
   password: '',
   curriculumnVitae: null,
   tanggalPastiKeberangkatan: ''
