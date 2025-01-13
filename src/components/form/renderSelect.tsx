@@ -10,6 +10,7 @@ import {
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { useState } from 'react';
+import { getPrimaryColorFromTheme } from '../lib';
 export type OptionAsyn<FormValues> = {
   value: NonNullable<PathValue<FormValues, Path<FormValues>>>;
   label: NonNullable<PathValue<FormValues, Path<FormValues>>>;
@@ -128,7 +129,7 @@ const RenderSelect = <FormValues extends Record<string, any>>({
                     option: (provided, state) => ({
                       ...provided,
                       backgroundColor: state.isSelected
-                        ? '#3994EE'
+                        ? `${getPrimaryColorFromTheme()}`
                         : provided.backgroundColor,
                       color: state.isSelected ? 'white' : 'black'
                     }),
@@ -215,7 +216,7 @@ const RenderSelect = <FormValues extends Record<string, any>>({
                     option: (provided, state) => ({
                       ...provided,
                       backgroundColor: state.isSelected
-                        ? '#3994EE'
+                        ? `${getPrimaryColorFromTheme()}`
                         : provided.backgroundColor,
                       color: state.isSelected ? 'white' : 'black'
                     }),
