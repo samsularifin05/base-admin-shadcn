@@ -603,7 +603,7 @@ const createFolderStructure = (dataJson) => {
               await apiInstance.delete(urlApi.${dataJson.page}.${dataJson.subFolder}
                 + '/' + id);
               dispatch(get${folderName}());
-              NotifSuccess('Master Bank berhasil di hapus');
+              NotifSuccess('Data berhasil di hapus');
               dispatch(utilityActions.stopLoading());
             } catch (error) {
               NotifInfo(error);
@@ -694,13 +694,19 @@ const createFolderStructure = (dataJson) => {
                   validationType = 'string'; // Default validasi string
               }
 
-              // Tentukan aturan validasi berdasarkan value.validation
+              // // Tentukan aturan validasi berdasarkan value.validation
               const validationRule =
                 value.validation === 'required'
                   ? `.required("${toPascalCase(key)} is required")`
                   : '.nullable()'; // Null jika optional
 
-              return `${key}: yup.${validationType}()${validationRule}`;
+              let numberRequired =
+                validationType === 'number' &&
+                `.transform((value) => {
+                return value === 0 ? undefined : Number(value);
+              }),`;
+
+              return `${key}: yup.${validationType}()${numberRequired}${validationRule}`;
             })
             .join(',\n')}
           });`,

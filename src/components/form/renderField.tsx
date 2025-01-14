@@ -161,7 +161,12 @@ const ReanderField = <FormValues extends Record<string, any>>({
                     value={field.value || ''}
                     maxLength={maxLength}
                     onChange={(e) => {
-                      field.onChange(e?.target?.value);
+                      const numericValue =
+                        type === 'number'
+                          ? Number(e.target.value)
+                          : e.target.value;
+
+                      field.onChange(numericValue);
                       if (onChange) onChange(e);
                     }}
                     className={`block ${
