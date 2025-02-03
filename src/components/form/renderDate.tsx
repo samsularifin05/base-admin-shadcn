@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/rules-of-hooks */
 
-import { Control, FieldValues, Path } from 'react-hook-form';
+import { Control, FieldValues, Path, useFormContext } from 'react-hook-form';
 import {
   FormControl,
   FormField,
@@ -18,8 +18,8 @@ interface TypedDateProps<FormValues extends FieldValues> {
   placeholder?: string;
   readOnly?: boolean;
   className?: string;
+  position?: 'down' | 'up';
   dateFormat?: string; // Format tanggal yang diinginkan
-  value?: DateValueType; // Properti yang sesuai dengan react-tailwindcss-datepicker
   onChange?: (value: DateValueType) => void;
   useRange?: boolean; // Dukungan untuk range tanggal
 }
@@ -32,15 +32,33 @@ const ReanderDate = <FormValues extends Record<string, any>>({
   readOnly,
   className,
   dateFormat = 'YYYY-MM-DD',
-  value,
+  position = 'down',
   onChange,
   useRange = false // Default adalah single date
 }: TypedDateProps<FormValues>) => {
+  const [date, setDate] = useState<DateValueType>({
+    startDate: null,
+    endDate: null
+  });
+  const { getValues } = useFormContext<FormValues>();
+
+  useEffect(() => {
+    const fieldValue = getValues(name); // Access form values using getValues from context
+    setDate(
+      useRange ? fieldValue : { startDate: fieldValue, endDate: fieldValue }
+    );
+  }, [getValues, name, useRange]);
   return (
     <FormField
       name={name}
       control={control}
       render={({ field }) => {
+        const currentValue = useRange
+          ? date
+          : {
+              startDate: date?.startDate || null,
+              endDate: date?.endDate || null
+            };
         return (
           <FormItem className={`relative ${className}`}>
             <FormLabel>{label}</FormLabel>
@@ -49,13 +67,25 @@ const ReanderDate = <FormValues extends Record<string, any>>({
               <div className="relative">
                 <Datepicker
                   primaryColor={'blue'}
-                  value={value || field.value} // Pastikan nilai sesuai dengan tipe DateValueType
+                  value={currentValue} // Pastikan nilai sesuai dengan tipe DateValueType
                   onChange={(newValue) => {
-                    field.onChange(newValue);
-                    if (onChange) onChange(newValue);
+                    const formattedNewValue = newValue || {
+                      startDate: null,
+                      endDate: null
+                    };
+
+                    // Update local state
+                    setDate(formattedNewValue);
+
+                    // Update field value (react-hook-form state)
+                    field.onChange(formattedNewValue);
+
+                    // Trigger custom onChange if provided
+                    if (onChange) onChange(formattedNewValue);
                   }}
                   disabled={readOnly}
                   useRange={useRange}
+                  popoverDirection={position || 'down'}
                   asSingle={!useRange}
                   displayFormat={dateFormat}
                   inputClassName="peer w-full bg-white px-2 py-2 border border-input rounded outline-none focus:ring-1 focus:ring-primary"

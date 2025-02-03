@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -39,7 +40,9 @@ const FormPanel = <FormValues extends FieldValues>({
   ) as unknown as DefaultValues<FormValues>;
 
   const form = useForm<FormValues>({
-    resolver: yupResolver(validate) as unknown as Resolver<FormValues>,
+    resolver: validate
+      ? (yupResolver(validate) as unknown as Resolver<FormValues>)
+      : undefined,
     defaultValues: initialValues || initialValuesWithForm,
     mode: 'onChange'
   });
@@ -58,17 +61,36 @@ const FormPanel = <FormValues extends FieldValues>({
     }
   }, [errors]);
   useEffect(() => {
-    const subscription = form.watch((values) => {
+    const subscription = form.watch(async (values) => {
+      const validValues = await validate.validate(values);
+
       const currentValues = JSON.stringify(values);
       const previousValues = JSON.stringify(initialValuesWithForm);
 
       if (currentValues !== previousValues) {
-        dispatch(
-          formActions.setValue({
-            form: formName,
-            values: values as FormValues
-          })
-        );
+        if (validate) {
+          try {
+            dispatch(
+              formActions.setValue({
+                form: formName,
+                values: validValues
+              })
+            );
+          } catch (error) {
+            if (error instanceof yup.ValidationError) {
+              console.log('Validation Errors:', error.errors);
+            } else {
+              console.error('Unexpected Error:', error);
+            }
+          }
+        } else {
+          dispatch(
+            formActions.setValue({
+              form: formName,
+              values: values as FormValues
+            })
+          );
+        }
       }
     });
 
