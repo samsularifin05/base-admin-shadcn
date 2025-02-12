@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useLocation } from 'react-router-dom';
 import { IconChevronDown } from '@tabler/icons-react';
-import { Button, buttonVariants } from '../custom/button';
+import { Button } from '../custom/button';
+import { buttonVariants } from '../custom/button';
 import {
   Collapsible,
   CollapsibleContent,
@@ -77,7 +78,6 @@ export default function Nav({
         appTitle = row.title;
       } else if (row.sub && row.sub.length > 0) {
         row.sub.forEach((el: any) => {
-          console.log(el.href);
           if (el.href === newPath) {
             appTitle = el.title;
           }

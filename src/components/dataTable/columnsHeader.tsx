@@ -1,5 +1,6 @@
-import { Button, cn } from '@/components';
+import { Button } from '@/components/custom/button';
 import {
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,

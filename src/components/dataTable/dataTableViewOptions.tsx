@@ -3,13 +3,13 @@ import { MixerHorizontalIcon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
 
 import {
-  Button,
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator
 } from '@/components';
+import { Button } from '../custom/button';
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-hooks/rules-of-hooks */
 
 import { Control, FieldValues, Path, useFormContext } from 'react-hook-form';
 import {

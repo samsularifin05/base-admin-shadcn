@@ -643,11 +643,7 @@ const createFolderStructure = (dataJson) => {
 
         if (subFolder === 'ui') {
           const uiIndex = path.join(subFolderPath, 'index.ts');
-          fs.writeFileSync(
-            uiIndex,
-            `import ${folderName} from "./form${folderName}";\nexport * from "./form";\nexport { ${folderName} };\n`,
-            'utf8'
-          );
+          fs.writeFileSync(uiIndex, `\nexport * from "./form";\n`, 'utf8');
 
           const formFolderPath = path.join(subFolderPath, 'form');
           const tableFolderPath = path.join(subFolderPath, 'table');
@@ -665,8 +661,6 @@ const createFolderStructure = (dataJson) => {
             fs.mkdirSync(validateFolderPath, { recursive: true });
           }
 
-          // Buat file index.tsx di dalam folder form
-          // Buat file index.tsx di dalam folder form
           const validateIndexPath = path.join(validateFolderPath, 'index.tsx');
 
           fs.writeFileSync(
@@ -701,10 +695,11 @@ const createFolderStructure = (dataJson) => {
                   : '.nullable()'; // Null jika optional
 
               let numberRequired =
-                validationType === 'number' &&
-                `.transform((value) => {
+                validationType === 'number'
+                  ? `.transform((value) => {
                 return value === 0 ? undefined : Number(value);
-              }),`;
+              }),`
+                  : '';
 
               return `${key}: yup.${validationType}()${numberRequired}${validationRule}`;
             })
@@ -717,7 +712,8 @@ const createFolderStructure = (dataJson) => {
           const formIndexPath = path.join(formFolderPath, 'index.tsx');
           fs.writeFileSync(
             formIndexPath,
-            `import { Button, FormPanel, RenderField } from "@/components";
+            `import {  FormPanel, RenderField } from "@/components";
+             import { Button } from '@/components/custom/button';
              import {  useAppSelector,useAppDispatch } from '@/reduxStore';
              import { validate${capitalcase(folderName)} } from "../validate";
              import { save${folderName}, update${folderName}ById } from '../../service';
@@ -788,7 +784,7 @@ const createFolderStructure = (dataJson) => {
           const tableIndexPath = path.join(tableFolderPath, 'index.tsx');
           fs.writeFileSync(
             tableIndexPath,
-            `import { DataTable } from "@/components";
+            `import DataTable from '@/components/dataTable/dataTable';
             import { columns } from "./column";
             import {  useAppSelector,useAppDispatch } from "@/reduxStore";
             import { get${capitalcase(folderName)} } from "../../service";
@@ -833,8 +829,8 @@ const createFolderStructure = (dataJson) => {
             tableColumnPath,
             `/* eslint-disable react-hooks/rules-of-hooks */
             import { ColumnDef } from "@tanstack/react-table";\n
+            import { Button } from '@/components/custom/button';
             import {
-              Button,
               DropdownMenu,
               DropdownMenuContent,
               DropdownMenuItem,
@@ -924,7 +920,9 @@ const createFolderStructure = (dataJson) => {
       if (!fs.existsSync(mainIndexPath)) {
         fs.writeFileSync(
           mainIndexPath,
-          `import { ${capitalcase(folderName)} } from "./ui";\nexport * from "./model";\nexport * from "./redux";\nexport * from "./ui";\nexport * from "./service";\nexport { ${capitalcase(folderName)} }`,
+          `export * from "./model";\nexport * from "./redux";\nexport * from "./ui";\nexport * from "./service";\n
+            export { default as ${capitalcase(folderName)} } from './ui/form${capitalcase(folderName)}';
+          `,
           'utf8'
         );
       }

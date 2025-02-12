@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Control, FieldValues, Path } from 'react-hook-form';
-import { PasswordInput } from '../custom';
+import { PasswordInput } from '@/components/custom/password-input';
 import {
   Checkbox,
   FormControl,

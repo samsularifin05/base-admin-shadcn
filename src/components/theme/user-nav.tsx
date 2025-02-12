@@ -68,3 +68,5 @@ export function UserNav() {
     </DropdownMenu>
   );
 }
+
+export default UserNav;

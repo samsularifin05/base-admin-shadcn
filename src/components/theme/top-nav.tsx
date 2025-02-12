@@ -1,3 +1,4 @@
+import { memo, useMemo } from 'react';
 import { cn } from '@/components/lib/utils';
 import { Link } from 'react-router-dom';
 import {
@@ -17,9 +18,41 @@ interface TopNavProps extends React.HTMLAttributes<HTMLElement> {
   }[];
 }
 
-export function TopNav({ className, links, ...props }: TopNavProps) {
+const TopNav = ({ className, links, ...props }: TopNavProps) => {
+  // Memoize links rendering
+  const renderedLinks = useMemo(
+    () =>
+      links.map(({ title, href, isActive }) => (
+        <Link
+          key={`${title}-${href}`}
+          to={href}
+          className={cn(
+            'text-sm font-medium transition-colors hover:text-primary',
+            !isActive && 'text-muted-foreground'
+          )}
+        >
+          {title}
+        </Link>
+      )),
+    [links]
+  );
+
+  // Memoize dropdown menu rendering
+  const renderedDropdownLinks = useMemo(
+    () =>
+      links.map(({ title, href, isActive }) => (
+        <DropdownMenuItem key={`${title}-${href}`} asChild>
+          <Link to={href} className={!isActive ? 'text-muted-foreground' : ''}>
+            {title}
+          </Link>
+        </DropdownMenuItem>
+      )),
+    [links]
+  );
+
   return (
     <>
+      {/* Mobile Navigation */}
       <div className="md:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -28,20 +61,12 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="bottom" align="start">
-            {links.map(({ title, href, isActive }) => (
-              <DropdownMenuItem key={`${title}-${href}`} asChild>
-                <Link
-                  to={href}
-                  className={!isActive ? 'text-muted-foreground' : ''}
-                >
-                  {title}
-                </Link>
-              </DropdownMenuItem>
-            ))}
+            {renderedDropdownLinks}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
+      {/* Desktop Navigation */}
       <nav
         className={cn(
           'hidden items-center space-x-4 md:flex lg:space-x-6',
@@ -49,18 +74,10 @@ export function TopNav({ className, links, ...props }: TopNavProps) {
         )}
         {...props}
       >
-        {links.map(({ title, href, isActive }) => (
-          <Link
-            key={`${title}-${href}`}
-            to={href}
-            className={`text-sm font-medium transition-colors hover:text-primary ${
-              isActive ? '' : 'text-muted-foreground'
-            }`}
-          >
-            {title}
-          </Link>
-        ))}
+        {renderedLinks}
       </nav>
     </>
   );
-}
+};
+
+export default memo(TopNav);

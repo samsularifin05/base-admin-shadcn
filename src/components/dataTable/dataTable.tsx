@@ -24,7 +24,7 @@ import { GlobalFilter } from './globalFilter';
 import { AppDispatch, useAppSelector, utilityActions } from '@/reduxStore';
 import { useDispatch } from 'react-redux';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { Button } from '../custom';
+import { Button } from '@/components/custom/button';
 import { DataTableViewOptions } from './dataTableViewOptions';
 import { DataTablePagination } from './dataTablePagination';
 import { Loader2 } from 'lucide-react';
@@ -182,3 +182,5 @@ export function DataTable<TData, TValue>({
     </>
   );
 }
+
+export default DataTable;

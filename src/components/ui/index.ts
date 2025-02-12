@@ -1,5 +1,4 @@
 export * from './avatar';
-// export * from "./button";
 export * from './toast';
 export * from './toaster';
 export * from './layout';
@@ -12,5 +11,4 @@ export * from './dropdown-menu';
 export * from './input';
 export * from './select';
 export * from './dialog';
-export * from './toast';
 export * from './use-toast';

@@ -6,6 +6,7 @@ import Inspect from 'vite-plugin-inspect';
 import viteImagemin from '@vheemstra/vite-plugin-imagemin';
 import imageminWebp from 'imagemin-webp';
 import AutoImport from 'unplugin-auto-import/vite';
+import { createHtmlPlugin } from 'vite-plugin-html';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -16,6 +17,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
+      createHtmlPlugin({ minify: true }),
       AutoImport({
         imports: [
           'react',

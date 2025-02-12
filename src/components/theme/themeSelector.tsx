@@ -11,7 +11,7 @@ import {
 import { cn } from '../lib/utils';
 import { AppDispatch, themesActions, useAppSelector } from '@/reduxStore';
 import { useDispatch } from 'react-redux';
-import { Button } from '../custom';
+import { Button } from '@/components/custom/button';
 import { Paintbrush } from 'lucide-react';
 
 const ThemeSelector = () => {

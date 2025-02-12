@@ -9,12 +9,17 @@ import { store, persistor } from './reduxStore/store.ts';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ErrorBoundary from './pages/errors/errorBoundary.tsx';
+import { Suspense } from 'react';
+import SkeletonLoader from './pages/errors/skeletonLoading.tsx';
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <ErrorBoundary>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-          <RouterProvider router={router} />
+          <Suspense fallback={<SkeletonLoader />}>
+            <RouterProvider router={router} />
+          </Suspense>
           <ToastContainer
             position="top-right"
             autoClose={5000}

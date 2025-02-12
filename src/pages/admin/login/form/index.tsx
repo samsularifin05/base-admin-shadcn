@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from '@/reduxStore';
 import { validLoginSchema } from '../validate';
-import { FormPanel, Button, RenderField, cn } from '@/components';
+import { FormPanel, RenderField, cn } from '@/components';
 import { serviceLogin } from '../redux';
+import { Button } from '@/components/custom/button';
 
 const FormLogin = () => {
   const utility = useAppSelector((state) => state.utility);

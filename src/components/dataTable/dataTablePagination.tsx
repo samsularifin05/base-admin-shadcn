@@ -7,7 +7,6 @@ import {
 import { Table } from '@tanstack/react-table';
 
 import {
-  Button,
   Select,
   SelectContent,
   SelectItem,
@@ -15,6 +14,7 @@ import {
   SelectValue
 } from '@components';
 import { useState } from 'react';
+import { Button } from '../custom/button';
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;

@@ -1,35 +1,37 @@
-import { GeneralError, MaintenanceError, NotFoundError } from '@/pages';
+const GeneralError = lazy(() => import('@/pages/errors/general-error'));
+const MaintenanceError = lazy(() => import('@/pages/errors/maintenance-error'));
+const NotFoundError = lazy(() => import('@/pages/errors/not-found-error'));
+const LoginForm = lazy(() => import('../pages/admin/login/loginForm'));
+const AppShell = lazy(() => import('../components/theme/app-shell'));
+const Dashboard = lazy(() => import('../pages/admin/dashboard'));
+
 import { createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
     path: '/admin',
-    lazy: async () => {
-      const AppShell = await import('../components/theme/app-shell');
-      return { Component: AppShell.default };
-    },
+    element: <AppShell />,
     errorElement: <NotFoundError />,
     children: [
-      { path: '*', Component: NotFoundError },
+      { path: '*', element: <NotFoundError /> },
+      { index: true, path: 'dashboard', element: <Dashboard /> },
       {
-        index: true,
-        path: 'dashboard',
+        path: 'master-bank',
         lazy: async () => ({
-          Component: (await import('../pages/admin/dashboard')).default
+          Component: (
+            await import(
+              '@/pages/admin/masterData/masterBank/ui/formMasterBank'
+            )
+          ).default
         })
       }
     ]
   },
-  {
-    path: '/',
-    lazy: async () => ({
-      Component: (await import('../pages/admin/login/loginForm')).default
-    })
-  },
-  { path: '/500', Component: GeneralError },
-  { path: '/404', Component: NotFoundError },
-  { path: '/503', Component: MaintenanceError },
-  { path: '*', Component: NotFoundError }
+  { path: '/', element: <LoginForm /> },
+  { path: '/500', element: <GeneralError /> },
+  { path: '/404', element: <NotFoundError /> },
+  { path: '/503', element: <MaintenanceError /> },
+  { path: '*', element: <NotFoundError /> }
 ]);
 
 export default router;

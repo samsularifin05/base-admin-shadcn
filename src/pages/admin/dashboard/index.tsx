@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   CardContent,
   CardDescription,
@@ -13,7 +12,7 @@ import {
 } from '@/components';
 import { Overview } from './components/overview';
 import { RecentSales } from './components/recent-sales';
-// import { UserNav } from "@/components/user-nav";
+import { Button } from '@/components/custom/button';
 
 const Dashboard = () => {
   return (
