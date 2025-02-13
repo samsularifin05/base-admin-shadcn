@@ -66,6 +66,7 @@ const ReanderField = <FormValues extends Record<string, any>>({
       name={name}
       control={control}
       render={({ field }) => {
+        // console.log(field.value);
         useEffect(() => {
           if (value !== undefined) {
             field.onChange(value || field.value || '');

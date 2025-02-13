@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Control, FieldValues, Path, useFormContext } from 'react-hook-form';
@@ -58,6 +59,12 @@ const ReanderDate = <FormValues extends Record<string, any>>({
               startDate: date?.startDate || null,
               endDate: date?.endDate || null
             };
+
+        useEffect(() => {
+          if (field.value) {
+            setDate(field.value);
+          }
+        }, [field.value]);
         return (
           <FormItem className={`relative ${className}`}>
             <FormLabel>{label}</FormLabel>
