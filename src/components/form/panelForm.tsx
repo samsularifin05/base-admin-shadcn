@@ -62,35 +62,41 @@ const FormPanel = <FormValues extends FieldValues>({
   }, [errors]);
   useEffect(() => {
     const subscription = form.watch(async (values) => {
-      const validValues = await validate.validate(values);
+      // const validValues = await validate.validate(values);
 
       const currentValues = JSON.stringify(values);
       const previousValues = JSON.stringify(initialValuesWithForm);
 
       if (currentValues !== previousValues) {
-        if (validate) {
-          try {
-            dispatch(
-              formActions.setValue({
-                form: formName,
-                values: validValues
-              })
-            );
-          } catch (error) {
-            if (error instanceof yup.ValidationError) {
-              console.log('Validation Errors:', error.errors);
-            } else {
-              console.error('Unexpected Error:', error);
-            }
-          }
-        } else {
-          dispatch(
-            formActions.setValue({
-              form: formName,
-              values: values as FormValues
-            })
-          );
-        }
+        dispatch(
+          formActions.setValue({
+            form: formName,
+            values: values as FormValues
+          })
+        );
+        // if (validate) {
+        //   try {
+        //     dispatch(
+        //       formActions.setValue({
+        //         form: formName,
+        //         values: validValues
+        //       })
+        //     );
+        //   } catch (error) {
+        //     if (error instanceof yup.ValidationError) {
+        //       console.log('Validation Errors:', error.errors);
+        //     } else {
+        //       console.error('Unexpected Error:', error);
+        //     }
+        //   }
+        // } else {
+        //   dispatch(
+        //     formActions.setValue({
+        //       form: formName,
+        //       values: values as FormValues
+        //     })
+        //   );
+        // }
       }
     });
 
