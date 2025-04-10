@@ -177,18 +177,5 @@ export const sidelinks: SideLink[] = [
         icon: <IconLock size={18} />
       }
     ]
-  },
-  {
-    title: 'Master Data',
-    label: '',
-    href: '#',
-    icon: <IconUserShield size={18} />,
-    sub: [
-      {
-        title: 'Master Bank',
-        label: '',
-        href: 'master-bank'
-      }
-    ]
   }
 ];

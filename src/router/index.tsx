@@ -14,17 +14,7 @@ const router = createBrowserRouter([
     errorElement: <NotFoundError />,
     children: [
       { path: '*', element: <NotFoundError /> },
-      { index: true, path: 'dashboard', element: <Dashboard /> },
-      {
-        path: 'master-bank',
-        lazy: async () => ({
-          Component: (
-            await import(
-              '@/pages/admin/masterData/masterBank/ui/formMasterBank'
-            )
-          ).default
-        })
-      }
+      { index: true, path: 'dashboard', element: <Dashboard /> }
     ]
   },
   { path: '/', element: <LoginForm /> },
