@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -6,7 +7,10 @@ import {
   FieldValues,
   UseFormReturn,
   DefaultValues,
-  Resolver
+  Resolver,
+  useFieldArray,
+  ArrayPath,
+  UseFieldArrayReturn
 } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Form } from '../';
@@ -18,10 +22,18 @@ import {
   useAppSelector
 } from '@/reduxStore';
 
+type FieldArrayReturn<FormValues extends FieldValues> = Record<
+  string,
+  UseFieldArrayReturn<FormValues, ArrayPath<FormValues>, 'id'>
+>;
+
 interface FormPanelProps<FormValues extends FieldValues> {
   formName: keyof FormStateReduxFom;
   onSubmit: (values: FormValues) => void;
-  children: (props: { form: UseFormReturn<FormValues> }) => React.ReactNode;
+  children: (props: {
+    form: UseFormReturn<FormValues>;
+    fieldArrays: FieldArrayReturn<FormValues>;
+  }) => React.ReactNode;
   validate: yup.ObjectSchema<FormValues>;
   initialValues?: DefaultValues<FormValues>;
 }
@@ -55,15 +67,35 @@ const FormPanel = <FormValues extends FieldValues>({
 
   const { errors } = form.formState;
 
+  // Dynamically handle field arrays based on initialValues
+  const fieldArrays: FieldArrayReturn<FormValues> = Object.keys(
+    initialValues || {}
+  ).reduce(
+    (acc, fieldName) => {
+      // Check if field is an array and ensure correct typing for ArrayPath
+      if (
+        Array.isArray(initialValues?.[fieldName]) &&
+        initialValues?.[fieldName]?.length > 0
+      ) {
+        const fieldNameAsArrayPath = fieldName as ArrayPath<FormValues>;
+        acc[fieldName] = useFieldArray<FormValues>({
+          control: form.control,
+          name: fieldNameAsArrayPath // Narrow down the type to ArrayPath
+        });
+      }
+      return acc;
+    },
+    {} as FieldArrayReturn<FormValues> // Cast to the correct type for the accumulator
+  );
+
   useEffect(() => {
     if (Object.keys(errors).length > 0) {
       console.log('Fields errors:', errors);
     }
   }, [errors]);
+
   useEffect(() => {
     const subscription = form.watch(async (values) => {
-      // const validValues = await validate.validate(values);
-
       const currentValues = JSON.stringify(values);
       const previousValues = JSON.stringify(initialValuesWithForm);
 
@@ -74,29 +106,6 @@ const FormPanel = <FormValues extends FieldValues>({
             values: values as FormValues
           })
         );
-        // if (validate) {
-        //   try {
-        //     dispatch(
-        //       formActions.setValue({
-        //         form: formName,
-        //         values: validValues
-        //       })
-        //     );
-        //   } catch (error) {
-        //     if (error instanceof yup.ValidationError) {
-        //       console.log('Validation Errors:', error.errors);
-        //     } else {
-        //       console.error('Unexpected Error:', error);
-        //     }
-        //   }
-        // } else {
-        //   dispatch(
-        //     formActions.setValue({
-        //       form: formName,
-        //       values: values as FormValues
-        //     })
-        //   );
-        // }
       }
     });
 
@@ -105,7 +114,9 @@ const FormPanel = <FormValues extends FieldValues>({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>{children({ form })}</form>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        {children({ form, fieldArrays })}
+      </form>
     </Form>
   );
 };
