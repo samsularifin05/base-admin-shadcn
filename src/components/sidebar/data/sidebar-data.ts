@@ -24,8 +24,8 @@ import { type SidebarData } from '../types';
 
 export const sidebarData: SidebarData = {
   user: {
-    name: 'satnaing',
-    email: 'satnaingdev@gmail.com',
+    name: 'samsularifin05',
+    email: 'samsul026@gmail.com',
     avatar: '/avatars/shadcn.jpg'
   },
   teams: [
@@ -51,12 +51,12 @@ export const sidebarData: SidebarData = {
       items: [
         {
           title: 'Dashboard',
-          url: '/',
+          url: '/dashboard',
           icon: IconLayoutDashboard
         },
         {
-          title: 'Tasks',
-          url: '/tasks',
+          title: 'Users',
+          url: '/users',
           icon: IconChecklist
         },
         {

@@ -14,6 +14,7 @@ export { default as RenderField } from './form/renderField';
 export { default as RenderFileUpload } from './form/renderFileUpload';
 export { default as RenderSelect } from './form/renderSelect';
 export { default as ModalGlobal } from './modal/modalGlobal';
+export { default as SplashScreen } from './splashScreen';
 
 export * from './ui';
 export * from './lib';
