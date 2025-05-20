@@ -17,8 +17,8 @@ export default function AppShell() {
   const defaultOpen = Cookies.get('sidebar_state') !== 'false';
   return (
     <ProtectedRoute>
-      <SearchProvider>
-        <SidebarProvider defaultOpen={defaultOpen}>
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <SearchProvider>
           <AppSidebar />
           <React.Suspense fallback="loading">
             <div
@@ -45,8 +45,8 @@ export default function AppShell() {
               </Main>
             </div>
           </React.Suspense>
-        </SidebarProvider>
-      </SearchProvider>
+        </SearchProvider>
+      </SidebarProvider>
     </ProtectedRoute>
   );
 }

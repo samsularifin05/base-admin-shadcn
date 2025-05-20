@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from 'react';
 import { cn } from '../lib/utils';
-import './theme.css';
 import { useAppSelector } from '@/reduxStore';
 
 type Theme = 'dark' | 'light' | 'system';
