@@ -1,13 +1,9 @@
 import AppShell from './theme/app-shell';
-import PanelAdmin from './panelAdmin';
 import { ThemeProvider } from './theme/theme-provider';
 import ThemeSwitch from './theme/theme-switch';
 import { cn } from '@/components/lib/utils';
 
-export { ThemeProvider, ThemeSwitch, AppShell, cn, PanelAdmin };
-export { default as Search } from './theme/search';
-export { default as Nav } from './navtiagtion/sidebar';
-export { default as Sidebar } from './navtiagtion/sidebar';
+export { ThemeProvider, ThemeSwitch, AppShell, cn };
 export { default as UserNav } from './theme/user-nav';
 export { default as TopNav } from './theme/top-nav';
 export { default as DataTableGlobal } from './dataTable/dataTable';

@@ -64,7 +64,7 @@ export function ThemeProvider({
   useEffect(() => {
     const rootBody = window.document.body;
     rootBody.classList.add(theme); // Tambahkan kelas tema yang dipilih
-    rootBody.setAttribute('class', `theme-${themeColor}`); // Mengatur kelas pada elemen <body>
+    rootBody.setAttribute('class', `group/body theme-${themeColor}`); // Mengatur kelas pada elemen <body>
   }, [theme, themeColor]);
   return (
     <ThemeProviderContext.Provider {...props} value={value}>

@@ -1,26 +1,52 @@
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../navtiagtion/sidebar';
-import useIsCollapsed from '@/hooks/use-is-collapsed';
-import { ProtectedRoute } from '../panelAdmin/ProtectedRoute';
+import { AppSidebar } from '../sidebar/sidebar';
+import { ProtectedRoute } from '../header/ProtectedRoute';
 import React from 'react';
+import { SidebarProvider } from '../ui/sidebar';
+import Cookies from 'js-cookie';
+import { SearchProvider } from '../search-context';
+import { cn } from '../lib';
+import { Main } from '../header/main';
+import { Header } from '../header/header';
+import { Search } from './search';
+import ThemeSwitch from './theme-switch';
+import ThemeSelector from './themeSelector';
+import UserNav from './user-nav';
 
 export default function AppShell() {
-  const [isCollapsed, setIsCollapsed] = useIsCollapsed();
+  const defaultOpen = Cookies.get('sidebar_state') !== 'false';
   return (
     <ProtectedRoute>
-      <div className="relative h-full overflow-hidden bg-background">
-        <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-        <main
-          id="content"
-          className={`overflow-x-hidden pt-16 transition-[margin] md:overflow-y-hidden md:pt-0 ${
-            isCollapsed ? 'md:ml-14' : 'md:ml-64'
-          } h-full`}
-        >
+      <SearchProvider>
+        <SidebarProvider defaultOpen={defaultOpen}>
+          <AppSidebar />
           <React.Suspense fallback="loading">
-            <Outlet />
+            <div
+              className={cn(
+                'ml-auto w-full max-w-full',
+                'peer-data-[state=collapsed]:w-[calc(100%-var(--sidebar-width-icon)-1rem)]',
+                'peer-data-[state=expanded]:w-[calc(100%-var(--sidebar-width))]',
+                'sm:transition-[width] sm:duration-200 sm:ease-linear',
+                'flex h-svh flex-col',
+                'group-data-[scroll-locked=1]/body:h-full',
+                'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh'
+              )}
+            >
+              <Header fixed>
+                <Search />
+                <div className="flex items-center ml-auto space-x-4">
+                  <ThemeSwitch />
+                  <ThemeSelector />
+                  <UserNav />
+                </div>
+              </Header>
+              <Main>
+                <Outlet />
+              </Main>
+            </div>
           </React.Suspense>
-        </main>
-      </div>
+        </SidebarProvider>
+      </SearchProvider>
     </ProtectedRoute>
   );
 }

@@ -1,11 +1,16 @@
-const GeneralError = lazy(() => import('@/pages/errors/general-error'));
-const MaintenanceError = lazy(() => import('@/pages/errors/maintenance-error'));
-const NotFoundError = lazy(() => import('@/pages/errors/not-found-error'));
-const LoginForm = lazy(() => import('../pages/admin/login/loginForm'));
-const AppShell = lazy(() => import('../components/theme/app-shell'));
-const Dashboard = lazy(() => import('../pages/admin/dashboard'));
-
+import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
+
+const GeneralError = React.lazy(() => import('@/pages/errors/general-error'));
+const MaintenanceError = React.lazy(
+  () => import('@/pages/errors/maintenance-error')
+);
+const NotFoundError = React.lazy(
+  () => import('@/pages/errors/not-found-error')
+);
+const LoginForm = React.lazy(() => import('../pages/admin/login/loginForm'));
+const AppShell = React.lazy(() => import('../components/theme/app-shell'));
+const Dashboard = React.lazy(() => import('../pages/admin/dashboard'));
 
 const router = createBrowserRouter([
   {

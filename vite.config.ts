@@ -1,12 +1,8 @@
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { compression } from 'vite-plugin-compression2';
 import * as path from 'path';
-import Inspect from 'vite-plugin-inspect';
-import viteImagemin from '@vheemstra/vite-plugin-imagemin';
-import imageminWebp from 'imagemin-webp';
-import AutoImport from 'unplugin-auto-import/vite';
-import { createHtmlPlugin } from 'vite-plugin-html';
+
+import tailwindcss from '@tailwindcss/vite';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -15,39 +11,7 @@ export default defineConfig(({ mode }) => {
   const timestamp = new Date().getTime();
 
   return {
-    plugins: [
-      react(),
-      createHtmlPlugin({ minify: true }),
-      AutoImport({
-        imports: [
-          'react',
-          'react-router-dom',
-          {
-            '@reduxjs/toolkit': ['createSlice', 'configureStore'],
-            'react-redux': ['useDispatch', 'useSelector', 'Provider']
-          }
-        ],
-        dts: './src/auto-imports.d.ts'
-      }),
-      ...(isProduction
-        ? [
-            compression({
-              algorithm: 'gzip'
-            }),
-            viteImagemin({
-              plugins: {
-                jpg: imageminWebp(),
-                png: imageminWebp()
-              }
-            })
-          ]
-        : [
-            Inspect({
-              build: true,
-              outputDir: '.vite-inspect'
-            })
-          ])
-    ],
+    plugins: [react(), tailwindcss()],
     define: {
       'process.env': {
         ...env,
@@ -58,9 +22,11 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, 'src'),
         '@assets': path.resolve(__dirname, 'src/assets'),
-        '@components': path.resolve(__dirname, 'src/components/index.ts')
+        '@components': path.resolve(__dirname, 'src/components/index.ts'),
+        '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs'
       }
     },
+
     css: {
       modules: {
         localsConvention: 'camelCase',
