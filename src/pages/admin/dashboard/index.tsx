@@ -12,10 +12,14 @@ import {
 import { Overview } from './components/overview';
 import { RecentSales } from './components/recent-sales';
 import { Button } from '@/components/custom/button';
+import Grouping from './Grouping';
+import Normal from './Normal';
 
 const Dashboard = () => {
   return (
     <div>
+      <Grouping />
+      <Normal />
       <div className="flex items-center justify-between space-y-2">
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
           Dashboard
