@@ -1,24 +1,11 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Control, FieldValues, Path } from 'react-hook-form';
+import { useEffect } from 'react';
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
 import { PasswordInput } from '@/components/custom/password-input';
-import {
-  Checkbox,
-  FormControl,
-  FormField,
-  // FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '../ui';
 import { Input } from '../ui/input';
-import {
-  ChangeEvent,
-  HTMLInputTypeAttribute,
-  TextareaHTMLAttributes,
-  useEffect
-} from 'react';
+import { useFormName } from './formNameProvider';
+import { AppDispatch, formActions } from '@/reduxStore';
+import { useDispatch } from 'react-redux';
 
 interface TypedFieldProps<FormValues extends FieldValues> {
   name: Path<FormValues>;
@@ -28,7 +15,7 @@ interface TypedFieldProps<FormValues extends FieldValues> {
   hiddenText?: boolean;
   isTextarea?: boolean;
   readOnly?: boolean;
-  type?: HTMLInputTypeAttribute;
+  type?: React.HTMLInputTypeAttribute;
   className?: string;
   note?: string;
   rows?: number;
@@ -36,12 +23,12 @@ interface TypedFieldProps<FormValues extends FieldValues> {
   maxLength?: number;
   value?: string | number;
   onChange?: (value: React.ChangeEvent<HTMLInputElement>) => void;
-  icon?: JSX.Element | string; // Ikon yang akan ditampilkan
-  iconPosition?: 'left' | 'right' | 'none'; // Posisi ikon: kiri atau kanan
+  icon?: JSX.Element | string;
+  iconPosition?: 'left' | 'right';
   onClickIcon?: () => void;
 }
 
-const ReanderField = <FormValues extends Record<string, any>>({
+const RenderField = <FormValues extends Record<string, any>>({
   name,
   label,
   placeholder,
@@ -61,145 +48,150 @@ const ReanderField = <FormValues extends Record<string, any>>({
   maxLength,
   iconPosition = 'right'
 }: TypedFieldProps<FormValues>) => {
-  return (
-    <FormField
-      name={name}
-      control={control}
-      render={({ field }) => {
-        // console.log(field.value);
-        useEffect(() => {
-          if (value !== undefined) {
-            field.onChange(value || field.value || '');
-          }
-        }, [field, value]);
-        return (
-          <FormItem className="space-y-1">
-            {type !== 'checkbox' && type !== 'hidden' && (
-              <FormLabel className="gap-2">
-                {label}
-                {note && (
-                  <sub className="ml-2 italic text-red-600">* {note}</sub>
-                )}
-              </FormLabel>
-            )}
-            <FormControl>
-              {type === 'checkbox' ? (
-                <FormLabel className="flex items-center cursor-pointer">
-                  <Checkbox
-                    {...field}
-                    className={className}
-                    checked={field.value}
-                    onChange={(e) => {
-                      field.onChange(e);
-                    }}
-                  />
-                  <span
-                    className="ml-2"
-                    onClick={() => field.onChange(!field.value)}
-                  >
-                    {label}
-                  </span>
-                </FormLabel>
-              ) : type === 'file' ? (
-                <input
-                  type="file"
-                  readOnly={readOnly}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    if (e.target.files && e.target.files[0]) {
-                      field.onChange(e.target.files[0]);
-                      if (onChange) onChange(e);
-                    }
-                  }}
-                  className={`flex w-full h-10 px-3 py-2 text-sm border rounded-md border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus:border-primary focus:outline-none ${className}`}
-                />
-              ) : hiddenText ? (
-                <PasswordInput
-                  placeholder="********"
-                  {...field}
-                  readOnly={readOnly}
-                  onChange={(e) => {
-                    field.onChange(e.target.value);
-                    if (onChange) onChange(e); // Call onChange prop
-                  }}
-                  className={`block ${
-                    readOnly
-                      ? 'bg-gray-200 outline-gray-200'
-                      : 'bg-background focus:border-primary focus:outline-none'
-                  } w-full border rounded-md border-input   ${className}`}
-                  // className={`block w-full border rounded-md border-input bg-background focus:border-primary focus:outline-none ${className}`}
-                />
-              ) : isTextarea ? (
-                <textarea
-                  {...(field as TextareaHTMLAttributes<HTMLTextAreaElement>)}
-                  rows={rows}
-                  readOnly={readOnly}
-                  placeholder={placeholder}
-                  value={field.value ?? ''}
-                  className={`block ${
-                    readOnly
-                      ? 'bg-gray-200 outline-gray-200'
-                      : 'bg-background focus:border-primary focus:outline-none'
-                  } w-full border rounded-md border-input  px-3 py-2  ${className}`}
-                />
-              ) : (
-                <div className="relative flex items-center">
-                  {/* Kontainer untuk grup input */}
-                  {iconPosition === 'left' && (
-                    <button
-                      onClick={onClickIcon}
-                      type="button"
-                      className="absolute -translate-y-1/2 rounded-md right-1 top-1/2 text-muted-foreground"
-                    >
-                      {icon}
-                    </button>
-                  )}
-                  <Input
-                    {...field}
-                    type={type}
-                    readOnly={readOnly}
-                    tabIndex={tabIndex}
-                    placeholder={placeholder}
-                    value={field.value || ''}
-                    maxLength={maxLength}
-                    onChange={(e) => {
-                      const numericValue =
-                        type === 'number'
-                          ? Number(e.target.value)
-                          : e.target.value;
+  const {
+    field,
+    fieldState: { error }
+  } = useController({ name, control });
+  const dispatch = useDispatch<AppDispatch>();
 
-                      field.onChange(numericValue);
-                      if (onChange) onChange(e);
-                    }}
-                    className={`block ${
-                      type !== 'date'
-                        ? iconPosition === 'left'
-                          ? 'pl-10'
-                          : 'pr-10'
-                        : ''
-                    } ${
-                      readOnly
-                        ? 'bg-gray-200 outline-gray-200'
-                        : 'bg-background focus:border-primary focus:outline-none'
-                    } w-full border rounded-md border-input ${className}`}
-                  />
-                  {iconPosition === 'right' && (
-                    <button
-                      onClick={onClickIcon}
-                      type="button"
-                      className="absolute -translate-y-1/2 rounded-md right-1 top-1/2 text-muted-foreground"
-                    >
-                      {icon} {/* Menampilkan ikon di sebelah kanan */}
-                    </button>
-                  )}
-                </div>
-              )}
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        );
-      }}
-    />
+  const formName = useFormName();
+
+  useEffect(() => {
+    dispatch(
+      formActions.setValue({
+        form: formName,
+        values: { [name]: field.value }
+      })
+    );
+  }, [dispatch, field.value, formName, name]);
+
+  useEffect(() => {
+    if (value !== undefined && value !== field.value) {
+      field.onChange(value);
+    }
+  }, [field, value]);
+
+  const labelContent = (
+    <label htmlFor={name} className="block font-medium">
+      {label}
+      {note && <sub className="ml-2 italic text-red-600">* {note}</sub>}
+    </label>
+  );
+
+  const renderInput = () => {
+    if (type === 'checkbox') {
+      return (
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            {...field}
+            checked={!!field.value}
+            onChange={(e) => field.onChange(e.target.checked)}
+            className="accent-primary"
+          />
+          <span>{label}</span>
+        </label>
+      );
+    }
+
+    if (type === 'file') {
+      return (
+        <input
+          type="file"
+          id={name}
+          readOnly={readOnly}
+          onChange={(e) => {
+            if (e.target.files?.[0]) {
+              field.onChange(e.target.files[0]);
+              onChange?.(e);
+            }
+          }}
+          className={`block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90 ${className}`}
+        />
+      );
+    }
+
+    if (hiddenText) {
+      return (
+        <PasswordInput
+          {...field}
+          id={name}
+          placeholder={placeholder || '********'}
+          readOnly={readOnly}
+          onChange={(e) => {
+            field.onChange(e.target.value);
+            onChange?.(e);
+          }}
+          className={`w-full border rounded-md px-3 py-2 ${className}`}
+        />
+      );
+    }
+
+    if (isTextarea) {
+      return (
+        <textarea
+          {...field}
+          id={name}
+          rows={rows}
+          readOnly={readOnly}
+          placeholder={placeholder}
+          className={`w-full border rounded-md px-3 py-2 resize-none ${className}`}
+        />
+      );
+    }
+
+    return (
+      <div className="relative">
+        {icon && iconPosition === 'left' && (
+          <button
+            type="button"
+            onClick={onClickIcon}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+          >
+            {icon}
+          </button>
+        )}
+        <Input
+          {...field}
+          id={name}
+          type={type}
+          readOnly={readOnly}
+          tabIndex={tabIndex}
+          placeholder={placeholder}
+          value={field.value ?? ''}
+          maxLength={maxLength}
+          onChange={(e) => {
+            const val =
+              type === 'number' ? Number(e.target.value) : e.target.value;
+            field.onChange(val);
+            onChange?.(e);
+          }}
+          className={`w-full ${
+            icon ? (iconPosition === 'left' ? 'pl-10' : 'pr-10') : ''
+          } ${className}`}
+        />
+        {icon && iconPosition === 'right' && (
+          <button
+            type="button"
+            onClick={onClickIcon}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+          >
+            {icon}
+          </button>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-1">
+      {type !== 'checkbox' && type !== 'hidden' && labelContent}
+      {renderInput()}
+      {error?.message && (
+        <p className="text-sm text-red-600 mt-1">{error.message}</p>
+      )}
+    </div>
   );
 };
 
-export default ReanderField;
+export default RenderField;

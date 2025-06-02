@@ -8,7 +8,10 @@ export { default as UserNav } from './theme/user-nav';
 export { default as TopNav } from './theme/top-nav';
 export { default as DataTableGlobal } from './dataTable/dataTable';
 
-export { default as FormPanel } from './form/panelForm';
+export { Button } from './custom/button';
+
+export { default as FormNameProvider } from './form/formNameProvider';
+
 export { default as RenderDate } from './form/renderDate';
 export { default as RenderField } from './form/renderField';
 export { default as RenderFileUpload } from './form/renderFileUpload';

@@ -1,54 +1,55 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch, useAppSelector } from '@/reduxStore';
 import { validLoginSchema } from '../validate';
-import { FormPanel, RenderField, cn } from '@/components';
+import { Button, FormNameProvider, RenderField, cn } from '@/components';
 import { serviceLogin } from '../redux';
-import { Button } from '@/components/custom/button';
+import { useForm } from 'react-hook-form';
+import { intitalFormLogin } from '../dto';
 
 const FormLogin = () => {
-  const utility = useAppSelector((state) => state.utility);
   const dispatch = useAppDispatch();
+  const utility = useAppSelector((state) => state.utility);
   const service = serviceLogin();
 
-  const handleSubmit = () => {
+  const { control, handleSubmit } = useForm({
+    resolver: yupResolver(validLoginSchema),
+    defaultValues: intitalFormLogin
+  });
+
+  const onSubmit = () => {
     dispatch(service.login());
   };
 
   return (
-    <div className={cn('grid gap-6')}>
-      <FormPanel
-        formName={'LoginForm'}
-        onSubmit={handleSubmit}
-        validate={validLoginSchema}
-      >
-        {({ form }) => (
-          <>
-            <div className="grid gap-2">
-              <RenderField
-                control={form.control}
-                label="Email"
-                placeholder="Masukan Email"
-                name="email"
-              />
-              <RenderField
-                control={form.control}
-                label="Password"
-                placeholder="Masukan Password"
-                name="password"
-                hiddenText
-              />
+    <FormNameProvider
+      formName="LoginForm"
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid gap-2"
+    >
+      <div className={cn('grid gap-6')}>
+        <RenderField
+          control={control}
+          label="Email"
+          placeholder="Masukan Email"
+          name="email"
+        />
+        <RenderField
+          control={control}
+          label="Password"
+          placeholder="Masukan Password"
+          name="password"
+          hiddenText
+        />
 
-              <Button
-                type="submit"
-                className="mt-2"
-                loading={utility.getLoading.button}
-              >
-                Login
-              </Button>
-            </div>
-          </>
-        )}
-      </FormPanel>
-    </div>
+        <Button
+          type="submit"
+          className="mt-2"
+          loading={utility.getLoading.button}
+        >
+          Login
+        </Button>
+      </div>
+    </FormNameProvider>
   );
 };
 

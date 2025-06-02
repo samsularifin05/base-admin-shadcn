@@ -62,7 +62,7 @@
     "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",
-    "sweetalert2": "^11.14.5",
+    "sweetalert2": "^11.6.13",
     "tailwind-merge": "^2.3.0",
     "tailwindcss": "^4.1.7",
     "tw-animate-css": "^1.3.0",
