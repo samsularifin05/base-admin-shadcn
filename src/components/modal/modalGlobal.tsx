@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui';
+import { Dialog, DialogContent, DialogHeader } from '../ui';
 import {
   AppDispatch,
   formActions,
@@ -7,88 +7,75 @@ import {
   useAppSelector,
   utilityActions
 } from '@/reduxStore';
-import { DialogDescription, DialogOverlay } from '@radix-ui/react-dialog';
+import { DialogDescription, DialogOverlay, DialogTitle } from '../ui';
 import { useDispatch } from 'react-redux';
-import { cn } from '../lib/utils';
+import { cn } from '../lib';
 
 interface Props {
   title: string;
   children: React.ReactNode;
-  className?: string; // Optional width prop
-  isFullScreen?: boolean;
+  className?: string;
   formName?: keyof FormStateReduxFom;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  height?: string;
+  maxHeight?: string;
 }
 
-const ModalGlobal = (props: Props) => {
-  const {
-    title,
-    formName,
-    children,
-    className = 'max-w-lg',
-    isFullScreen
-  } = props;
+const sizeMap = {
+  sm: 'max-w-sm', // sekitar 24rem (384px)
+  md: 'max-w-md', // sekitar 28rem (448px)
+  lg: 'max-w-lg', // sekitar 32rem (512px)
+  xl: 'max-w-xl' // sekitar 36rem (576px)
+};
 
-  const utility = useAppSelector((state) => state.utility);
+const ModalGlobal = ({
+  title,
+  children,
+  formName,
+  size = 'md',
+  className
+}: Props) => {
   const dispatch = useDispatch<AppDispatch>();
-  const top = isFullScreen ? '3%' : '10%';
-  const padding = isFullScreen ? '5%' : '0%';
+  const utility = useAppSelector((state) => state.utility);
 
-  const [modalTop, setModalTop] = React.useState(top);
-
-  React.useEffect(() => {
-    const handleKeyboardShow = () => {
-      // const keyboardHeight = 200; // Adjust this based on your design
-      setModalTop(`9%`); // Add a small margin above the keyboard
-    };
-    const handleKeyboardHide = () => {
-      setModalTop(top); // Reset to default position
-    };
-
-    // Add event listeners for keyboard show and hide
-    window.addEventListener('resize', () => {
-      if (window.innerHeight < 500) {
-        handleKeyboardShow();
-      } else {
-        handleKeyboardHide();
-      }
-    });
-
-    return () => {
-      // Clean up listeners
-      window.removeEventListener('resize', handleKeyboardShow);
-      window.removeEventListener('resize', handleKeyboardHide);
-    };
-  }, [top]);
+  const handleClose = () => {
+    if (formName) {
+      dispatch(formActions.resetForm(formName));
+    }
+    dispatch(
+      utilityActions.showModal({
+        isModalShow: false,
+        isEdit: false,
+        data: [],
+        namaForm: ''
+      })
+    );
+  };
 
   return (
     <Dialog open={utility.getModal.isModalShow}>
-      <DialogOverlay className="grid place-items-center">
+      <DialogOverlay className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 grid place-items-center">
         <DialogContent
-          style={{ top: modalTop, paddingBottom: padding }}
+          onClose={handleClose}
           className={cn(
-            `overflow-auto max-h-screen overflow-y-auto no-scrollbar`,
+            'overflow-hidden w-full',
+            sizeMap[size], // atur max-width sesuai size
             className
           )}
-          onClick={() => {
-            if (formName) {
-              dispatch(formActions.resetForm(formName));
-            }
-            dispatch(
-              utilityActions.showModal({
-                isModalShow: false,
-                isEdit: false,
-                data: [],
-                namaForm: ''
-              })
-            );
-          }}
         >
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className="font-bold">{title}</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
-          <div className="mt-1 outline outline-[0.5px]"></div>
-          <div className="mt-5">{children}</div>
+          <div
+            className="overflow-auto no-scrollbar"
+            style={{
+              maxHeight: 'calc(90vh - 120px)',
+              overflowX: 'auto'
+            }}
+          >
+            {children}
+          </div>
         </DialogContent>
       </DialogOverlay>
     </Dialog>

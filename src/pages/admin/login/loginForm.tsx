@@ -1,9 +1,14 @@
 import ViteLogo from '@/assets/react.svg';
+import { ModalGlobal } from '@/components';
+import { AppDispatch, utilityActions } from '@/reduxStore';
 import { lazy } from 'react';
+import { useDispatch } from 'react-redux';
 const FormLogin = lazy(() => import('./form'));
 
 const LoginForm = () => {
   document.title = 'Login';
+
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <div className="container relative grid flex-col items-center justify-center h-svh lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -41,6 +46,22 @@ const LoginForm = () => {
           <FormLogin />
         </div>
       </div>
+
+      <button
+        onClick={() =>
+          dispatch(
+            utilityActions.showModal({
+              isModalShow: true,
+              data: []
+            })
+          )
+        }
+      >
+        Hallo
+      </button>
+      <ModalGlobal title={'TEST'} size="sm">
+        <FormLogin />
+      </ModalGlobal>
     </div>
   );
 };
