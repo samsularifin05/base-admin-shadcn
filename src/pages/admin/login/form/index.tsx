@@ -4,14 +4,14 @@ import { validLoginSchema } from '../validate';
 import { Button, FormNameProvider, RenderField, cn } from '@/components';
 import { serviceLogin } from '../redux';
 import { useForm } from 'react-hook-form';
-import { intitalFormLogin } from '../dto';
+import { FormLoginDto, intitalFormLogin } from '../dto';
 
 const FormLogin = () => {
   const dispatch = useAppDispatch();
   const utility = useAppSelector((state) => state.utility);
   const service = serviceLogin();
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit } = useForm<FormLoginDto>({
     resolver: yupResolver(validLoginSchema),
     defaultValues: intitalFormLogin
   });
